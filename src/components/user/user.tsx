@@ -1,8 +1,29 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
+import styled from '@emotion/styled'
 
 import Profile from './profile'
 
+const $UserContainer = styled.div`
+  // margin: 10px auto;
+  button {
+    --bg: rgba(100, 100, 100, 0.7);
+    color: var(--lightGray);
+    font-size: var(--fontS);
+    font-size: var(--fontS);
+    width: 100%;
+    padding: 10px 17px;
+    border: none;
+    background: none;
+    border-radius: var(--roundness);
+    :hover,
+    :focus-within,
+    :focus-visible,
+    :focus {
+      outline: none;
+      background: var(--bg);
+    }
+  }
+`
 function User() {
   const [showDialog, setShowDialog] = React.useState(false)
 
@@ -10,19 +31,18 @@ function User() {
   const closeDialog = () => setShowDialog(false)
 
   return (
-    <div style={{margin: '10px auto'}}>
-      <Button
+    <$UserContainer>
+      <button
         onClick={() => {
           openDialog()
         }}
-        variant="contained"
       >
         Profile
-      </Button>
+      </button>
       {showDialog && (
         <Profile showDialog={showDialog} closeDialog={closeDialog} />
       )}
-    </div>
+    </$UserContainer>
   )
 }
 export default User
