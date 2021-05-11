@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import EditIcon from '@material-ui/icons/Edit'
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import Button from '@material-ui/core/Button'
-
 import styled from '@emotion/styled'
 import {keyframes} from '@emotion/react'
 import {mqMax} from '../../shared/utils'
@@ -36,34 +35,30 @@ color: yellowgreen;
   color: var(--black);
 }
 `
-
+const $Label = styled.label`
+  letter-spacing: 0.3px;
+  text-transform: capitalize;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+`
 const $EditFormContainer = styled.div<{successful: boolean}>`
-  display: grid;
+  display: flex;
   align-items: center;
-  grid-template-areas: 'label input edit';
-  grid-template-columns: 2fr 4fr 1fr;
-  gap: 5px;
-  label,
+
   input {
     letter-spacing: 0.3px;
-  }
-  label {
-    text-transform: capitalize;
-    font-size: 20px;
-    font-weight: 400;
-    font-variant: petite-caps;
-    letter-spacing: 0.8px;
-    grid-area: label;
-  }
-  input {
-    grid-area: input;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    width: 320px;
     border: none;
-    border-bottom: 2px solid var(--black);
+    border-bottom: 3px solid var(--black);
     animation: ${successfulKeyframes} 1s linear;
     animation-iteration-count: 0;
-    background: white;
+    background: transparent;
     padding: 5px 3px;
     color: var(--black);
+    border-radius: var(--roundness);
     ${({successful}) => successful && `animation-iteration-count: 1;`}
     :focus-within {
       outline: none;
@@ -76,18 +71,17 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
       border-color: var(--red);
     }
     :read-only {
-      border-color: var(--blue);
+      border-color: var(--blackShade);
     }
   }
-  ${mqMax.s} {
-    width: 208px;
-    gap: 10px;
-    padding-bottom: 20px;
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas:
-      'label edit'
-      'input input';
+  button {
+    padding: 1px 0 0;
+    margin-bottom: 12px;
+    margin-left: -30px;
+    border: none;
+    background: transparent;
+    width: 25px;
+    cursor: pointer;
   }
 `
 
@@ -116,53 +110,53 @@ function SingleFieldForm({
   }
   const label = spacefy(name)
   return (
-    <div>
+    <>
       {isEditActive ? (
         <form onSubmit={handleSubmit}>
+          <$Label htmlFor={name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
-            <label htmlFor={name}>{label}</label>
             <input name={name} id={name} type={type} {...inputOverrides} />
-            <Button
+            <button
               disabled={isPending}
               type="submit"
-              id="edit-form-submit-button"
               style={{color: 'var(--green)'}}
             >
               <CheckCircleOutlineRoundedIcon />
-            </Button>
+            </button>
           </$EditFormContainer>
         </form>
       ) : (
-        <$EditFormContainer successful={isSuccess}>
-          <label htmlFor={name}>{label}</label>
-          <input
-            name={name}
-            id={name}
-            type={type}
-            readOnly
-            {...inputOverrides}
-            placeholder=""
-          />
-          <Button
-            disabled={isPending}
-            aria-label="Edit"
-            type="button"
-            style={{
-              gridArea: 'edit',
-            }}
-            onClick={() => {
-              setIsEditActive(true)
-              onEditStart()
-              if (passwordConfirmation) {
-                setShowDialog(true)
-              }
-            }}
-          >
-            <EditIcon style={{color: 'var(--blue)'}} />
-          </Button>
-        </$EditFormContainer>
+        <>
+          <$Label htmlFor={name}>{label}</$Label>
+          <$EditFormContainer successful={isSuccess}>
+            <input
+              name={name}
+              id={name}
+              type={type}
+              readOnly
+              {...inputOverrides}
+            />
+            <button
+              disabled={isPending}
+              aria-label="Edit"
+              type="button"
+              style={{
+                gridArea: 'edit',
+              }}
+              onClick={() => {
+                setIsEditActive(true)
+                onEditStart()
+                if (passwordConfirmation) {
+                  setShowDialog(true)
+                }
+              }}
+            >
+              <EditIcon style={{color: 'var(--blue)'}} />
+            </button>
+          </$EditFormContainer>
+        </>
       )}
-      {handleUserConfirmed && (
+      {handleUserConfirmed ? (
         <ConfirmPassword
           showDialog={!!showDialog}
           handleUserConfirmed={handleUserConfirmed}
@@ -178,8 +172,10 @@ function SingleFieldForm({
             setShowDialog(false)
           }}
         />
+      ) : (
+        <div />
       )}
-    </div>
+    </>
   )
 }
 
