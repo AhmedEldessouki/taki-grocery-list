@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import Button from '@material-ui/core/Button'
+import {nanoid} from 'nanoid'
 import React from 'react'
 import {mqMax} from '../shared/utils'
 import DeleteFromDB from './deleteFromDB'
@@ -62,6 +63,7 @@ function Items({data}: {data: Array<string>}) {
       {data.map(item => {
         return (
           <DeleteFromDB
+            key={nanoid()}
             deleteFn={deleteItem}
             dialogDeleting={item}
             dialogLabelledBy="delete-from-grocery-list"
