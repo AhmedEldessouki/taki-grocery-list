@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
-import {namePattern, telPattern} from '../../lib/patterns'
+import {namePattern} from '../../lib/patterns'
 import firebase from '../../lib/firebase'
 import {postOneLevelDeep} from '../../lib/post'
 import {notify} from '../../lib/notify'
@@ -194,14 +194,14 @@ function SignUpForm({
   )
 }
 
-function SignUp({isVerified}: {isVerified?: boolean}) {
+function SignUp() {
   const [showDialog, setShowDialog] = useState(false)
 
   const openDialog = () => setShowDialog(true)
 
   return (
     <>
-      <Button variant="contained" disabled={false} onClick={openDialog}>
+      <Button variant="contained" onClick={openDialog}>
         Sign Up
       </Button>
       {showDialog && (

@@ -1,10 +1,8 @@
 import React, {useState} from 'react'
 import EditIcon from '@material-ui/icons/Edit'
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded'
-import Button from '@material-ui/core/Button'
 import styled from '@emotion/styled'
 import {keyframes} from '@emotion/react'
-import {mqMax} from '../../shared/utils'
 import {spacefy} from '../../lib/spacefy'
 import ConfirmPassword from './confirmPassword'
 
