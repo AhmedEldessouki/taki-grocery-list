@@ -137,7 +137,6 @@ function SignUpForm({
           </$Field>
           <$Field>
             <input
-              pattern={telPattern}
               name="listName"
               id="listName"
               type="text"
