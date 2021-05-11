@@ -33,7 +33,6 @@ function Profile({
   const [nameST, setName] = useState<string>('')
   const [emailST, setEmail] = useState<string>('')
   const [listNameST, setListName] = useState<string>('')
-  const [photoUrlST, setPhotoURL] = useState<string>('')
   const [isPending, setPending] = useState(false)
   const [isEditActive, setIsEditActive] = useState(false)
   const [userConfirmed, setUserConfirmed] = useState(false)
@@ -123,7 +122,7 @@ function Profile({
       return status
     }
     setResponse({isSuccessful})
-    notify('✔', `phone number Updated!`, {
+    notify('✔', `List Name Updated!`, {
       color: 'var(--green)',
     })
     return status
@@ -182,41 +181,6 @@ function Profile({
     notify('✔', `Name Updated!`, {
       color: 'var(--green)',
     })
-    return status
-  }
-
-  async function handleImageUpdate() {
-    setResponse({error: undefined, isSuccessful: false})
-    if (user?.photoURL === photoUrlST) return 'unChanged'
-    let status: string = 'idle'
-    setPending(true)
-    await user
-      ?.updateProfile({
-        photoURL: photoUrlST,
-      })
-      .then(
-        () => {
-          notify('✔', `photo Updated!`, {
-            color: 'var(--green)',
-          })
-          setResponse({error: undefined, isSuccessful: true})
-          status = 'resolved'
-        },
-        err => {
-          setResponse({isSuccessful: false, error: err.message})
-          status = 'rejected'
-        },
-      )
-      .catch(err => {
-        setResponse({isSuccessful: false, error: err.message})
-        status = 'rejected'
-      })
-    setPending(false)
-    if (status === 'rejected') {
-      notify('❌', `Update Failed!`, {
-        color: 'var(--red)',
-      })
-    }
     return status
   }
 
@@ -305,18 +269,6 @@ function Profile({
               onEditEnd={onEditEnd}
               isSuccess={!!responseST.isSuccessful}
               isPending={isPending}
-              submitFunction={handleImageUpdate}
-              placeholder="Enter photoURL"
-              name="image"
-              type="url"
-              value={photoUrlST}
-              onChange={e => setPhotoURL(e.target.value)}
-            />
-            <SingleFieldForm
-              onEditStart={onEditStart}
-              onEditEnd={onEditEnd}
-              isSuccess={!!responseST.isSuccessful}
-              isPending={isPending}
               submitFunction={handleEmailUpdate}
               passwordConfirmation={true}
               placeholder="Enter email address"
@@ -336,8 +288,6 @@ function Profile({
               passwordConfirmation={true}
               name="listName"
               type="text"
-              minLength={11}
-              maxLength={15}
               value={listNameST}
               handleUserConfirmed={(arg: boolean) => setUserConfirmed(arg)}
               onChange={e => setListName(e.target.value)}
