@@ -116,7 +116,7 @@ const SignInForm = ({
                 variant="contained"
                 style={{
                   background: !isPending ? 'var(--green)' : 'var(--red)',
-                  color: 'var(--lightGray)',
+                  color: 'var(--white)',
                 }}
                 disabled={isPending}
               >

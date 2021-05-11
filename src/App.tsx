@@ -2,20 +2,21 @@ import * as React from 'react'
 import {ToastContainer} from 'react-toastify'
 import styled from '@emotion/styled'
 import {Helmet} from 'react-helmet'
+import {useQuery} from 'react-query'
+import {ReactQueryDevtools} from 'react-query/devtools'
+import type {UserDataType} from '../types/user'
 import {globalStyles} from './shared/styles'
 import {useAuth} from './context/auth'
 import SignIn from './components/forms/signIn'
 import SignUp from './components/forms/signUp'
 import {auth} from './lib/firebase'
-
-import 'react-toastify/dist/ReactToastify.css'
 import Layout from './components/layout'
-import AddStuff from './components/forms/addStuff'
-import User from './components/user/user'
-import Items from './components/items'
+import Grocery from './components/grocery'
+import 'react-toastify/dist/ReactToastify.css'
+import {getOneLevelDeepDoc} from './lib/get'
 
 const $AppContainer = styled.div`
-  background: var(--lightGray);
+  background: var(--white);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +27,7 @@ const $AppContainer = styled.div`
   }
 `
 const $AuthAppContainer = styled.div`
-  background: var(--lightGray);
+  background: var(--white);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -35,16 +36,18 @@ const $AuthAppContainer = styled.div`
 `
 
 function App() {
-  const {user, setUser} = useAuth()
+  const {user, setUser: setUserAuth} = useAuth()
+
+  // ADD ISDONE
 
   React.useEffect(() => {
     auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
-        return setUser(currentUser)
+        return setUserAuth(currentUser)
       }
-      return setUser(null)
+      return setUserAuth(null)
     })
-  }, [setUser])
+  }, [setUserAuth])
 
   return (
     <Layout>
@@ -57,13 +60,9 @@ function App() {
       </Helmet>
       {globalStyles}
       {user ? (
-        <>
-          <User />
-          <$AuthAppContainer>
-            <Items data={['asdasd', 'asdasd']} />
-            <AddStuff />
-          </$AuthAppContainer>
-        </>
+        <$AuthAppContainer>
+          <Grocery userId={user.uid} />
+        </$AuthAppContainer>
       ) : (
         <$AppContainer>
           <SignIn />
@@ -81,6 +80,7 @@ function App() {
         draggable
         pauseOnHover
       />
+      <ReactQueryDevtools />
     </Layout>
   )
 }

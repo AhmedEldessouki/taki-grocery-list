@@ -10,13 +10,13 @@ export default function Layout({children}: {children: React.ReactNode}) {
   return (
     <>
       <Nav />
-      <main style={{background: 'var(--lightGray)'}}>
+      <main style={{background: 'var(--white)'}}>
         {process.env.NODE_ENV !== 'production' && (
           <div>
             <button
               style={{
                 background:
-                  isEmulatorActive === 'true' ? `green` : 'var(--lightGray)',
+                  isEmulatorActive === 'true' ? `green` : 'var(--white)',
                 color: isEmulatorActive === 'true' ? `white` : 'var(--black)',
               }}
               onClick={() => {
@@ -31,7 +31,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
             <button
               style={{
                 background:
-                  isEmulatorActive === 'false' ? `red` : 'var(--lightGray)',
+                  isEmulatorActive === 'false' ? `red` : 'var(--white)',
                 color: isEmulatorActive === 'false' ? `white` : 'var(--black)',
               }}
               onClick={() => {

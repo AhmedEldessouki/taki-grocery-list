@@ -1,5 +1,5 @@
 import React from 'react'
-import firebase, {auth} from '../lib/firebase'
+import myFirebase, {auth} from '../lib/firebase'
 import {notify} from '../lib/notify'
 import type {MyResponseTypeWithData} from '../../types/api'
 import {useLocalStorageState} from '../lib/useLocalStorage'
@@ -8,11 +8,11 @@ type Credentials = {
   email: string
   password: string
 }
-type ResponseType = {user?: firebase.auth.UserCredential; error?: string}
+type ResponseType = {user?: myFirebase.auth.UserCredential; error?: string}
 type AuthContextType = {
-  user: firebase.User | null | undefined
+  user: myFirebase.User | null | undefined
   setUser: React.Dispatch<
-    React.SetStateAction<firebase.User | null | undefined>
+    React.SetStateAction<myFirebase.User | null | undefined>
   >
 }
 
@@ -21,8 +21,8 @@ const AuthContext = React.createContext<unknown>({})
 AuthContext.displayName = 'AuthContext'
 
 function AuthProvider({children}: {children: React.ReactNode}) {
-  const [user, setUser] = useLocalStorageState<
-    firebase.User | null | undefined
+  const {state: user, setState: setUser} = useLocalStorageState<
+    myFirebase.User | null | undefined
   >('______________TakisUser_______________', null)
 
   const value = {
@@ -44,7 +44,7 @@ async function signIn(credentials: Credentials) {
           '👋🏻',
           `Welcome, ${res.user?.displayName && res.user.displayName}!`,
           {
-            color: 'var(--lightGray)',
+            color: 'var(--white)',
           },
         )
         console.log(res.user)
@@ -84,7 +84,7 @@ function useAuth() {
 
   async function signOut() {
     notify('👋🏻', `Good Bye, ${user?.displayName && user.displayName}!`, {
-      color: 'var(--lightGray)',
+      color: 'var(--white)',
     })
     if (auth?.currentUser) await auth.signOut()
     setUser(null)
@@ -116,8 +116,8 @@ function useAuth() {
   }
   const reauthenticateUser = async (
     currentPassword: string,
-  ): Promise<MyResponseTypeWithData<firebase.auth.UserCredential>> => {
-    const response: MyResponseTypeWithData<firebase.auth.UserCredential> = {
+  ): Promise<MyResponseTypeWithData<myFirebase.auth.UserCredential>> => {
+    const response: MyResponseTypeWithData<myFirebase.auth.UserCredential> = {
       data: undefined,
       error: undefined,
       isSuccessful: false,
@@ -127,7 +127,7 @@ function useAuth() {
     if (user === null) return response
     if (typeof userXX?.email !== 'string') return response
     // eslint-disable-next-line import/no-named-as-default-member
-    const cred = firebase.auth.EmailAuthProvider.credential(
+    const cred = myFirebase.auth.EmailAuthProvider.credential(
       userXX?.email,
       currentPassword,
     )

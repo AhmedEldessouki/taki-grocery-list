@@ -32,7 +32,7 @@ function Arrow({
       <svg viewBox="0 0 320 512">
         <path
           d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-          fill="var(--lightGray)"
+          fill="var(--white)"
           className=""
           rotate="180deg"
         />
@@ -44,7 +44,7 @@ function Arrow({
 function XIcon() {
   return (
     <svg width="14" height="15" xmlns="http://www.w3.org/2000/svg">
-      <g fill="var(--lightGray)" fillRule="evenodd">
+      <g fill="var(--white)" fillRule="evenodd">
         <path d="M2.404.782l11.314 11.314-2.122 2.122L.282 2.904z" />
         <path d="M.282 12.096L11.596.782l2.122 2.122L2.404 14.218z" />
       </g>

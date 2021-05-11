@@ -1,4 +1,4 @@
-import firebase from 'firebase/app'
+import myFirebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/database'
@@ -17,11 +17,11 @@ const firebaseConfig = {
   measurementId: `G-${process.env.REACT_APP_FIREBASE_MEASUREMENT_ID}`,
 }
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig)
+if (!myFirebase.apps.length) {
+  myFirebase.initializeApp(firebaseConfig)
 }
-const db = firebase.firestore()
-const auth = firebase.auth()
+const db = myFirebase.firestore()
+const auth = myFirebase.auth()
 
 // For stopping Next.js from showing "useEmulator is already in use" Error
 const isEmulatorActive = window.localStorage.getItem('isEmulatorActive')
@@ -32,5 +32,5 @@ if (process.env.NODE_ENV !== 'production' && isEmulatorActive === 'true') {
   window.localStorage.setItem('isEmulatorActive', 'true')
 }
 
-export default firebase
+export default myFirebase
 export {db, auth}

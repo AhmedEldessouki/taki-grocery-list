@@ -60,7 +60,7 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
     ${({successful}) => successful && `animation-iteration-count: 1;`}
     :focus-within {
       outline: none;
-      border-color: var(--lightGray);
+      border-color: var(--white);
     }
     :valid {
       border-color: var(--green);
@@ -154,7 +154,7 @@ function SingleFieldForm({
           </$EditFormContainer>
         </>
       )}
-      {handleUserConfirmed ? (
+      {handleUserConfirmed && (
         <ConfirmPassword
           showDialog={!!showDialog}
           handleUserConfirmed={handleUserConfirmed}
@@ -170,8 +170,6 @@ function SingleFieldForm({
             setShowDialog(false)
           }}
         />
-      ) : (
-        <div />
       )}
     </>
   )

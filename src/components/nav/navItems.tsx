@@ -31,7 +31,7 @@ function NavItems({signOut}: {signOut: () => Promise<void> | null}) {
         <NavItem href="/" title="Home" />
         {user && (
           <>
-            <User />
+            <User user={user} />
             <NavItem onClick={signOut} title="SignOut" />
           </>
         )}

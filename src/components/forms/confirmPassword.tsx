@@ -93,7 +93,7 @@ export default function ConfirmPassword({
             variant="contained"
             style={{
               background: !isPending ? 'var(--green)' : 'var(--red)',
-              color: 'var(--lightGray)',
+              color: 'var(--white)',
             }}
             disabled={isPending}
           >

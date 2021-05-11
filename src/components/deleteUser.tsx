@@ -31,7 +31,7 @@ function DeleteUser() {
     })
     if (isSuccessful) {
       notify('👩🏻‍💻', `info Deleted!`, {
-        color: 'var(--lightGray)',
+        color: 'var(--white)',
       })
       setResponse({error: undefined, isSuccessful: true})
     } else if (error) {
@@ -47,19 +47,19 @@ function DeleteUser() {
       .then(
         () => {
           notify('👋🏻', `Welcome Bye!`, {
-            color: 'var(--lightGray)',
+            color: 'var(--white)',
           })
           setUser(null)
           setResponse({error: undefined, isSuccessful: true})
         },
-        err => {
+        (err: Error) => {
           setResponse({isSuccessful: false, error: err})
           notify('🤷🏻‍♀️', `something went Wrong`, {
             color: 'var(--red)',
           })
         },
       )
-      .catch(err => {
+      .catch((err: Error) => {
         setResponse({isSuccessful: false, error: err})
         notify('🤷🏻‍♀️', `something went Wrong`, {
           color: 'var(--red)',

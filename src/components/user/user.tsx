@@ -1,17 +1,17 @@
 import React from 'react'
 import styled from '@emotion/styled'
-
+import myFirebase from '../../lib/firebase'
 import Profile from './profile'
 
 const $UserContainer = styled.div`
   // margin: 10px auto;
   button {
-    --bg: rgba(100, 100, 100, 0.7);
-    color: var(--lightGray);
+    --bg: rgba(100, 100, 100, 0.29);
+    color: var(--white);
     font-size: var(--fontS);
     font-size: var(--fontS);
     width: 100%;
-    padding: 10px 17px;
+    padding: 10px 17px 13px;
     border: none;
     background: none;
     border-radius: var(--roundness);
@@ -24,7 +24,7 @@ const $UserContainer = styled.div`
     }
   }
 `
-function User() {
+function User({user}: {user: myFirebase.User}) {
   const [showDialog, setShowDialog] = React.useState(false)
 
   const openDialog = () => setShowDialog(true)
@@ -40,7 +40,11 @@ function User() {
         Profile
       </button>
       {showDialog && (
-        <Profile showDialog={showDialog} closeDialog={closeDialog} />
+        <Profile
+          showDialog={showDialog}
+          user={user}
+          closeDialog={closeDialog}
+        />
       )}
     </$UserContainer>
   )

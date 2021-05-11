@@ -13,7 +13,7 @@ function useLocalStorageState<TState>(
     deserialize = JSON.parse,
   }: UseLocalStorageOptions = {},
 ) {
-  const [state, setState] = React.useState(() => {
+  const [state, setState] = React.useState<TState>(() => {
     const valueInLocalStorage = window.localStorage.getItem(key)
     if (valueInLocalStorage) {
       return deserialize(valueInLocalStorage)
@@ -32,6 +32,6 @@ function useLocalStorageState<TState>(
     window.localStorage.setItem(key, serialize(state))
   }, [key, state, serialize])
 
-  return [state, setState]
+  return {state, setState}
 }
 export {useLocalStorageState}

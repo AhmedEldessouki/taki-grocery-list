@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
-import {Button} from '@material-ui/core'
 import React from 'react'
-import {postOneLevelDeep} from '../../lib/post'
+import {Button} from '@material-ui/core'
+import {useMutation, useQueryClient} from 'react-query'
+import {postTwoLevelDeep} from '../../lib/post'
 import {$Warning, mqMax} from '../../shared/utils'
+import type {GroceryItemType, MyResponseType} from '../../../types/api'
 import {$Field} from './sharedCss/field'
 
 const $Form = styled.form`
@@ -17,9 +19,34 @@ const $Form = styled.form`
   }
 `
 
-function AddStuff() {
+function AddStuff({listName}: {listName: string}) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
+  const [responseST, setResponse] = React.useState<MyResponseType>({
+    error: undefined,
+    isSuccessful: false,
+  })
+  const queryClient = useQueryClient()
+  const mutation = useMutation(
+    async (newData: string) => {
+      const response = await postTwoLevelDeep<GroceryItemType>({
+        collection: 'grocery',
+        doc: 'groceryList',
+        subCollection: listName,
+        subDoc: newData,
+        data: {name: newData, isDone: false},
+      })
+      setResponse({...response})
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('grocery')
+      },
+      onError: (error: Error) => {
+        setSubmitFailed(error.message)
+      },
+    },
+  )
 
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
@@ -32,18 +59,13 @@ function AddStuff() {
     const {item} = e.target as typeof e.target & {
       item: {value: string}
     }
-    const formData = {
-      add: item.value,
-    }
 
-    const {error} = await postOneLevelDeep({
-      collection: 'grocery',
-      data: formData,
-    })
-    if (error) {
-      setSubmitFailed(error.message)
-    }
+    mutation.mutateAsync(item.value)
+
     setPending(false)
+  }
+  if (listName.length === 0) {
+    return <div>Please Name your List</div>
   }
   return (
     <div>
@@ -63,16 +85,16 @@ function AddStuff() {
           variant="contained"
           style={{
             background: !isPending ? 'var(--green)' : 'var(--red)',
-            color: 'var(--lightGray)',
+            color: 'var(--white)',
             minWidth: '88px',
           }}
         >
           Add Item
         </Button>
       </$Form>
-      {submitFailed && (
+      {responseST.error && (
         <$Warning role="alert" marginBottom="10">
-          {submitFailed}
+          {responseST.error.message}
         </$Warning>
       )}
     </div>

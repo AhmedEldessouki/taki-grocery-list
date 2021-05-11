@@ -5,13 +5,14 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {postOneLevelDeep} from '../../lib/post'
+import myFirebase, {auth} from '../../lib/firebase'
+import {getOneLevelDeepDoc} from '../../lib/get'
+import {useAsync} from '../../lib/useAsync'
+import {notify} from '../../lib/notify'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
-import {useAsync} from '../../lib/useAsync'
-import {auth} from '../../lib/firebase'
-import {getOneLevelDeepDoc} from '../../lib/get'
-import {notify} from '../../lib/notify'
 import DeleteUser from '../deleteUser'
 import SingleFieldForm from '../forms/singleFieldForm'
 import ChangePassword from '../forms/changePassword'
@@ -22,12 +23,14 @@ import type {UserDataType} from '../../../types/user'
 // TODO: Find a good way to only do the success animation once after it succeeds not after it succeeds and when the next field is open
 function Profile({
   showDialog,
+  user,
   closeDialog,
 }: {
   showDialog: boolean
+  user: myFirebase.User
   closeDialog: () => void
 }) {
-  const {user, setUser: setUserAuth} = useAuth()
+  const {setUser: setUserAuth} = useAuth()
   const {status: statusST, dispatch} = useAsync()
 
   const [nameST, setName] = useState<string>('')
@@ -46,7 +49,24 @@ function Profile({
     listName: '',
     userId: '',
   })
-
+  const queryClient = useQueryClient()
+  const {mutateAsync} = useMutation(
+    async (newData: unknown) => {
+      const response = await postOneLevelDeep<unknown>({
+        collection: 'users',
+        doc: user?.uid,
+        data: newData,
+        merge: true,
+      })
+      // THIS IS A BLUFF ... Not Sure IF It Will [[[WORK]]]
+      setResponse({...response})
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('user')
+      },
+    },
+  )
   React.useEffect(() => {
     auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
@@ -56,19 +76,40 @@ function Profile({
     })
   }, [setUserAuth])
 
+  const {
+    data: userFetched,
+    isLoading,
+    isError,
+    isFetching,
+  } = useQuery('user', {
+    queryFn: async () => {
+      const {
+        isSuccessful,
+        data,
+        error: err,
+      } = await getOneLevelDeepDoc<UserDataType>({
+        collection: 'users',
+        doc: user.uid,
+      })
+      setResponse({isSuccessful, error: err})
+      return data
+    },
+    onSuccess: data => {
+      if (!data) return
+      setUser({...data})
+      setName(data.name ?? '')
+      setEmail(() => data.email ?? user.email)
+      setListName(data.listName ? data.listName : '')
+    },
+  })
   const fetchUser = useCallback(async () => {
     dispatch({type: 'pending'})
-    if (typeof user === 'undefined' || user === null) return
     const {uid} = user
     const {data, error} = await getOneLevelDeepDoc<UserDataType>({
       collection: 'users',
       doc: uid,
     })
     if (data) {
-      setUser({...data})
-      setName(data.name ?? '')
-      setEmail(() => data.email ?? user.email)
-      setListName(data.listName ? data.listName : '')
       dispatch({type: 'resolved'})
     } else if (error) {
       dispatch({type: 'rejected'})
@@ -103,25 +144,16 @@ function Profile({
 
     if (userST.listName === newListName) return 'unChanged'
 
-    const {error, isSuccessful} = await postOneLevelDeep<
-      Pick<UserDataType, 'listName'>
-    >({
-      collection: 'users',
-      doc: user?.uid,
-      data: {listName: newListName},
-      merge: true,
-    })
+    await mutateAsync({listName: newListName})
 
     setPending(false)
 
-    if (error) {
-      setResponse({isSuccessful, error})
+    if (responseST.error) {
       notify('❌', `Update Failed!`, {
         color: 'var(--red)',
       })
       return status
     }
-    setResponse({isSuccessful})
     notify('✔', `List Name Updated!`, {
       color: 'var(--green)',
     })
@@ -149,35 +181,35 @@ function Profile({
           setResponse({error: undefined, isSuccessful: true})
           status = 'resolved'
         },
-        err => {
+        (err: Error) => {
           setResponse({isSuccessful: false, error: err})
           status = 'rejected'
         },
       )
-      .catch(err => {
+      .catch((err: Error) => {
         setResponse({isSuccessful: false, error: err})
         status = 'rejected'
       })
+    await mutateAsync({name: name.value})
 
-    const {error, isSuccessful} = await postOneLevelDeep<
-      Pick<UserDataType, 'name'>
-    >({
-      collection: 'users',
-      doc: user?.uid,
-      data: {name: name.value},
-      merge: true,
-    })
+    // const {error, isSuccessful} = await postOneLevelDeep<
+    //   Pick<UserDataType, 'name'>
+    // >({
+    //   collection: 'users',
+    //   doc: user?.uid,
+    //   data: {name: name.value},
+    //   merge: true,
+    // })
 
     setPending(false)
 
-    if (error) {
-      setResponse({isSuccessful, error})
+    if (responseST.error) {
       notify('❌', `Update Failed!`, {
         color: 'var(--red)',
       })
       return status
     }
-    setResponse({isSuccessful})
+    // setResponse({isSuccessful})
     notify('✔', `Name Updated!`, {
       color: 'var(--green)',
     })
@@ -201,35 +233,34 @@ function Profile({
           setResponse({error: undefined, isSuccessful: true})
           status = 'resolved'
         },
-        err => {
-          setResponse({isSuccessful: false, error: err.message})
+        (err: Error) => {
+          setResponse({isSuccessful: false, error: err})
           status = 'rejected'
         },
       )
-      .catch(err => {
-        setResponse({isSuccessful: false, error: err.message})
+      .catch((err: Error) => {
+        setResponse({isSuccessful: false, error: err})
         status = 'rejected'
       })
+    await mutateAsync({email: email.value})
 
-    const {error, isSuccessful} = await postOneLevelDeep<
-      Pick<UserDataType, 'email'>
-    >({
-      collection: 'users',
-      doc: user?.uid,
-      data: {email: email.value},
-      merge: true,
-    })
+    // const {error, isSuccessful} = await postOneLevelDeep<
+    //   Pick<UserDataType, 'email'>
+    // >({
+    //   collection: 'users',
+    //   doc: user?.uid,
+    //   data: {email: email.value},
+    //   merge: true,
+    // })
 
     setPending(false)
 
-    if (error) {
-      setResponse({isSuccessful, error})
+    if (responseST.error) {
       notify('❌', `Update Failed!`, {
         color: 'var(--red)',
       })
       return status
     }
-    setResponse({isSuccessful})
     notify('✔', `email Updated!`, {
       color: 'var(--green)',
     })
@@ -285,7 +316,6 @@ function Profile({
               isPending={isPending}
               submitFunction={handleListNameUpdate}
               placeholder="enter grocery list name"
-              passwordConfirmation={true}
               name="listName"
               type="text"
               value={listNameST}

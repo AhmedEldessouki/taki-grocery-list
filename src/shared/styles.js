@@ -21,15 +21,15 @@ export const globalStyles = (
         --roundness: 3px;
         --opacity: 0.3;
 
-        --rgbLightGray: 211, 211, 211;
+        --rgbWhite: 245, 245, 245;
         --rgbBlack: 2, 0, 7;
 
         --red: tomato;
         --blue: #3f51b5;
         --green: #10c110;
         --yellow: #e3e355;
-        --lightGray: rgba(var(--rgbLightGray), 1);
-        --lightGrayShade: rgba(var(--rgbLightGray), var(--opacity));
+        --white: rgba(var(--rgbWhite), 1);
+        --whiteShade: rgba(var(--rgbWhite), var(--opacity));
         --black: rgba(var(--rgbBlack), 1);
         --blackShade: rgba(var(--rgbBlack), var(--opacity));
       }
@@ -87,7 +87,7 @@ export const globalStyles = (
       a {
         text-decoration: none;
         letter-spacing: 0.7px;
-        color: var(--lightGray);
+        color: var(--white);
         padding: 5px 4px;
         z-index: 10;
         position: relative;
@@ -102,7 +102,7 @@ export const globalStyles = (
           height: 4px;
           bottom: -3px;
           left: 0;
-          background: var(--lightGray);
+          background: var(--white);
           visibility: hidden;
           border-radius: 5px;
           transform: scaleX(0);

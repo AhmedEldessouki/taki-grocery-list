@@ -7,7 +7,7 @@ const $Logo = styled.h1`
   margin: 0;
   letter-spacing: 3px;
   font-weight: 500;
-  color: var(--lightGray);
+  color: var(--white);
   ${mqMax.xs} {
     font-size: 20px;
     margin: 30px auto;
@@ -18,8 +18,8 @@ const $Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: var(--black);
-  color: var(--lightGray);
+  background: green;
+  color: var(--white);
   height: var(--navHeight);
   ${mqMax.phoneLarge} {
     flex-direction: row;

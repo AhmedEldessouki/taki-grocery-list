@@ -7,12 +7,12 @@ const $ItemContainer = styled.div`
     padding: 0 4px;
   }
   button {
-    --bg: rgba(100, 100, 100, 0.7);
-    color: var(--lightGray);
+    --bg: rgba(100, 100, 100, 0.29);
+    color: var(--white);
     font-size: var(--fontS);
     font-size: var(--fontS);
     width: 100%;
-    padding: 10px 17px;
+    padding: 10px 17px 13px;
     border: none;
     background: none;
     border-radius: var(--roundness);

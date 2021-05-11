@@ -61,7 +61,7 @@ function ChangePassword() {
           status = 'resolved'
           setPasswordDialog(false)
         },
-        err => {
+        (err: Error) => {
           notify('❌', `Update Failed!`, {
             color: 'var(--red)',
           })
@@ -72,7 +72,7 @@ function ChangePassword() {
           }
         },
       )
-      .catch(err => {
+      .catch((err: Error) => {
         notify('❌', `Update Failed!`, {
           color: 'var(--red)',
         })
@@ -120,7 +120,7 @@ function ChangePassword() {
               type="submit"
               style={{
                 background: !isPending ? 'var(--green)' : 'var(--red)',
-                color: 'var(--lightGray)',
+                color: 'var(--white)',
               }}
               variant="contained"
               color="primary"

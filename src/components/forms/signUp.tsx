@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
 import {namePattern} from '../../lib/patterns'
-import firebase from '../../lib/firebase'
+import myFirebase from '../../lib/firebase'
 import {postOneLevelDeep} from '../../lib/post'
 import {notify} from '../../lib/notify'
 import type {UserDataType} from '../../../types/user'
@@ -78,7 +78,7 @@ function SignUpForm({
       return
     } else if (user) {
       notify('🙂', `Hello, ${name.value}!`, {
-        color: 'var(--lightGray)',
+        color: 'var(--white)',
       })
     }
     if (!user?.user?.uid) {
@@ -89,7 +89,7 @@ function SignUpForm({
       listName: listName.value,
       email: email.value,
       userId: user.user.uid,
-      timeStamp: firebase.firestore.Timestamp.now().toDate(),
+      timeStamp: myFirebase.firestore.Timestamp.now().toDate(),
     }
 
     await user.user.updateProfile({displayName: name.value})
@@ -173,7 +173,7 @@ function SignUpForm({
             type="submit"
             style={{
               background: !isPending ? 'var(--green)' : 'var(--red)',
-              color: 'var(--lightGray)',
+              color: 'var(--white)',
             }}
             variant="contained"
             color="primary"
