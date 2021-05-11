@@ -2,7 +2,8 @@ import React from 'react'
 import styled from '@emotion/styled'
 import {useAuth} from '../../context/auth'
 import {mqMax} from '../../shared/utils'
-import Item from './item'
+import User from '../user/user'
+import NavItem from './item'
 
 const $NavItemsContainer = styled.div`
   display: flex;
@@ -27,8 +28,13 @@ function NavItems({signOut}: {signOut: () => Promise<void> | null}) {
   return (
     <>
       <$NavItemsContainer>
-        <Item href="/" title="Home" />
-        {user && <Item onClick={signOut} title="SignOut" />}
+        <NavItem href="/" title="Home" />
+        {user && (
+          <>
+            <User />
+            <NavItem onClick={signOut} title="SignOut" />
+          </>
+        )}
       </$NavItemsContainer>
     </>
   )
