@@ -138,7 +138,7 @@ function Grocery({userId}: {userId: string}) {
   }
   return (
     <>
-      <ListName user={user} />
+      <ListName user={user} isLoading={isLoading || isFetching} />
       <Items listName={user.listName} />
       <AddStuff listName={user.listName} />
     </>

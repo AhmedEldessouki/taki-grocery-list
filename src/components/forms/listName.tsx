@@ -6,7 +6,7 @@ import {notify} from '../../lib/notify'
 import {postOneLevelDeep} from '../../lib/post'
 import SingleFieldForm from './singleFieldForm'
 
-function ListName({user}: {user: UserDataType}) {
+function ListName({user, isLoading}: {user: UserDataType; isLoading: boolean}) {
   const [listNameST, setListName] = React.useState<string>(user.listName)
   const [userConfirmed, setUserConfirmed] = React.useState(false)
   const [isPending, setPending] = React.useState(false)
@@ -14,17 +14,25 @@ function ListName({user}: {user: UserDataType}) {
     error: undefined,
     isSuccessful: false,
   })
+
   const queryClient = useQueryClient()
-  const {mutateAsync, error} = useMutation(
-    (newData: string) =>
-      postOneLevelDeep<Pick<UserDataType, 'listName'>>({
+  const {mutateAsync} = useMutation(
+    async (newData: string) => {
+      const response = await postOneLevelDeep<Pick<UserDataType, 'listName'>>({
         collection: 'users',
         doc: user.userId,
         data: {listName: newData},
         merge: true,
-      }),
+      })
+      if (response.error) {
+        setResponse({...response})
+      }
+    },
     {
       onSuccess: () => {
+        notify('✔', `List Name Updated!`, {
+          color: 'var(--green)',
+        })
         queryClient.invalidateQueries('user')
       },
     },
@@ -45,17 +53,13 @@ function ListName({user}: {user: UserDataType}) {
 
     setPending(false)
     await mutateAsync(newListName)
-    if (error) {
-      setResponse({isSuccessful: false, error: error as Error})
+    if (responseST.error) {
       notify('❌', `Update Failed!`, {
         color: 'var(--red)',
       })
       return status
     }
-    // setResponse({isSuccessful})
-    // notify('✔', `List Name Updated!`, {
-    //   color: 'var(--green)',
-    // })
+
     return status
   }
   return (
@@ -69,7 +73,7 @@ function ListName({user}: {user: UserDataType}) {
       passwordConfirmation={true}
       name="GroceryListName"
       type="text"
-      value={listNameST}
+      value={isLoading ? 'loading...' : listNameST}
       handleUserConfirmed={(arg: boolean) => setUserConfirmed(arg)}
       onChange={e => setListName(e.target.value)}
     />
