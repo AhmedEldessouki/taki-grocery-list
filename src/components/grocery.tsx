@@ -130,17 +130,16 @@ function Grocery({userId}: {userId: string}) {
     },
   })
 
-  if (isLoading || isFetching) {
-    return <div>loading...</div>
-  }
   if (isError || !user) {
     return <div>{errorST?.message}</div>
   }
   return (
     <>
       <ListName user={user} isLoading={isLoading || isFetching} />
-      <Items listName={user.listName} />
-      <AddStuff listName={user.listName} />
+      <Items listName={isLoading || isFetching ? 'loading' : user.listName} />
+      <AddStuff
+        listName={isLoading || isFetching ? 'loading' : user.listName}
+      />
     </>
   )
 }
