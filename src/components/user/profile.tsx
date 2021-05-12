@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -9,7 +9,6 @@ import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {postOneLevelDeep} from '../../lib/post'
 import myFirebase, {auth} from '../../lib/firebase'
 import {getOneLevelDeepDoc} from '../../lib/get'
-import {useAsync} from '../../lib/useAsync'
 import {notify} from '../../lib/notify'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
@@ -31,7 +30,6 @@ function Profile({
   closeDialog: () => void
 }) {
   const {setUser: setUserAuth} = useAuth()
-  const {status: statusST, dispatch} = useAsync()
 
   const [nameST, setName] = useState<string>('')
   const [emailST, setEmail] = useState<string>('')
@@ -76,12 +74,7 @@ function Profile({
     })
   }, [setUserAuth])
 
-  const {
-    data: userFetched,
-    isLoading,
-    isError,
-    isFetching,
-  } = useQuery('user', {
+  const {isLoading, isFetching} = useQuery('user', {
     queryFn: async () => {
       const {
         isSuccessful,
@@ -99,30 +92,9 @@ function Profile({
       setUser({...data})
       setName(data.name ?? '')
       setEmail(() => data.email ?? user.email)
-      setListName(data.listName ? data.listName : '')
+      setListName(data.listName ?? '')
     },
   })
-  const fetchUser = useCallback(async () => {
-    dispatch({type: 'pending'})
-    const {uid} = user
-    const {data, error} = await getOneLevelDeepDoc<UserDataType>({
-      collection: 'users',
-      doc: uid,
-    })
-    if (data) {
-      dispatch({type: 'resolved'})
-    } else if (error) {
-      dispatch({type: 'rejected'})
-      setResponse({error: error})
-    }
-  }, [dispatch, user])
-
-  useEffect(() => {
-    if (status === 'pending') return
-    if (status === 'resolved') return
-    fetchUser()
-    setListName(userST.listName)
-  }, [fetchUser, userST.listName])
 
   function onEditStart() {
     setIsEditActive(true)
@@ -192,15 +164,6 @@ function Profile({
       })
     await mutateAsync({name: name.value})
 
-    // const {error, isSuccessful} = await postOneLevelDeep<
-    //   Pick<UserDataType, 'name'>
-    // >({
-    //   collection: 'users',
-    //   doc: user?.uid,
-    //   data: {name: name.value},
-    //   merge: true,
-    // })
-
     setPending(false)
 
     if (responseST.error) {
@@ -209,7 +172,7 @@ function Profile({
       })
       return status
     }
-    // setResponse({isSuccessful})
+
     notify('✔', `Name Updated!`, {
       color: 'var(--green)',
     })
@@ -243,15 +206,6 @@ function Profile({
         status = 'rejected'
       })
     await mutateAsync({email: email.value})
-
-    // const {error, isSuccessful} = await postOneLevelDeep<
-    //   Pick<UserDataType, 'email'>
-    // >({
-    //   collection: 'users',
-    //   doc: user?.uid,
-    //   data: {email: email.value},
-    //   merge: true,
-    // })
 
     setPending(false)
 
@@ -335,6 +289,18 @@ function Profile({
               }}
             >
               <$Warning role="alert">{responseST.error.message}</$Warning>
+            </div>
+          )}
+          {(isLoading || isFetching) && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                width: '100%',
+                padding: '10px',
+              }}
+            >
+              <span role="alert">loading...</span>
             </div>
           )}
           <DialogActions
