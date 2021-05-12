@@ -2,9 +2,7 @@ import * as React from 'react'
 import {ToastContainer} from 'react-toastify'
 import styled from '@emotion/styled'
 import {Helmet} from 'react-helmet'
-import {useQuery} from 'react-query'
 import {ReactQueryDevtools} from 'react-query/devtools'
-import type {UserDataType} from '../types/user'
 import {globalStyles} from './shared/styles'
 import {useAuth} from './context/auth'
 import SignIn from './components/forms/signIn'
@@ -13,7 +11,6 @@ import {auth} from './lib/firebase'
 import Layout from './components/layout'
 import Grocery from './components/grocery'
 import 'react-toastify/dist/ReactToastify.css'
-import {getOneLevelDeepDoc} from './lib/get'
 
 const $AppContainer = styled.div`
   background: var(--white);
@@ -37,8 +34,6 @@ const $AuthAppContainer = styled.div`
 
 function App() {
   const {user, setUser: setUserAuth} = useAuth()
-
-  // ADD ISDONE
 
   React.useEffect(() => {
     auth.onAuthStateChanged(currentUser => {
