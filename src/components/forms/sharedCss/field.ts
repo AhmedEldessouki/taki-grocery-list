@@ -56,6 +56,7 @@ const $Field = styled.div`
     font-size: 1.2rem;
     font-weight: normal;
     letter-spacing: 0.5px;
+    text-transform: capitalize;
   }
   input::placeholder {
     color: transparent;

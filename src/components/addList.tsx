@@ -2,6 +2,7 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
+import styled from '@emotion/styled'
 import {postOneLevelDeep} from '../lib/post'
 import type {MyResponseType} from '../../types/api'
 import {useAuth} from '../context/auth'
@@ -32,6 +33,12 @@ function ListInput({
     </$Field>
   )
 }
+
+const $Form = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+`
 
 function NewList({
   listName,
@@ -110,9 +117,9 @@ function NewList({
           Add {listName} list
         </Button>
       </div>
-      <form onSubmit={handleSubmit}>
-        {listArray.length > 0 &&
-          listArray.map((item, i) => {
+      {listArray.length > 0 && (
+        <$Form onSubmit={handleSubmit}>
+          {listArray.map((item, i) => {
             return (
               <ListInput
                 key={i}
@@ -124,17 +131,19 @@ function NewList({
               />
             )
           })}
-        <Button
-          type="submit"
-          variant="outlined"
-          style={{
-            background: !isPending ? 'var(--green)' : 'var(--red)',
-            color: 'var(--white)',
-          }}
-        >
-          Submit
-        </Button>
-      </form>
+          <Button
+            type="submit"
+            variant="outlined"
+            style={{
+              background: !isPending ? 'var(--green)' : 'var(--red)',
+              color: 'var(--white)',
+              margin: '20px 0',
+            }}
+          >
+            Submit
+          </Button>
+        </$Form>
+      )}
     </>
   )
 }
