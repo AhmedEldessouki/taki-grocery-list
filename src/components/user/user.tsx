@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import myFirebase from '../../lib/firebase'
-import Profile from './profile'
+import Settings from './settings'
 
 const $UserContainer = styled.div`
-  // margin: 10px auto;
   button {
     --bg: rgba(100, 100, 100, 0.29);
     color: var(--white);
@@ -31,22 +30,24 @@ function User({user}: {user: myFirebase.User}) {
   const closeDialog = () => setShowDialog(false)
 
   return (
-    <$UserContainer>
-      <button
-        onClick={() => {
-          openDialog()
-        }}
-      >
-        Profile
-      </button>
+    <>
+      <$UserContainer>
+        <button
+          onClick={() => {
+            openDialog()
+          }}
+        >
+          Settings
+        </button>
+      </$UserContainer>
       {showDialog && (
-        <Profile
+        <Settings
           showDialog={showDialog}
           user={user}
           closeDialog={closeDialog}
         />
       )}
-    </$UserContainer>
+    </>
   )
 }
 export default User

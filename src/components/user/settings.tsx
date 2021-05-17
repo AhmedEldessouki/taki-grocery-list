@@ -19,7 +19,7 @@ import type {MyResponseType} from '../../../types/api'
 import type {UserDataType} from '../../../types/user'
 
 // TODO: Find a good way to only do the success animation once after it succeeds not after it succeeds and when the next field is open
-function Profile({
+function Settings({
   showDialog,
   user,
   closeDialog,
@@ -205,7 +205,7 @@ function Profile({
       ) : (
         <div>
           <DialogTitle style={{paddingBottom: '0'}} id="sign-in-dialog">
-            Profile
+            Settings
           </DialogTitle>
           <DialogContent style={{paddingTop: '0'}}>
             <SingleFieldForm
@@ -300,4 +300,4 @@ function Profile({
   )
 }
 
-export default Profile
+export default Settings
