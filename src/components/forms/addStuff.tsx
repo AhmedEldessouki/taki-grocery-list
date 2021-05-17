@@ -5,13 +5,16 @@ import {useMutation, useQueryClient} from 'react-query'
 import {postTwoLevelDeep} from '../../lib/post'
 import {$Warning, mqMax} from '../../shared/utils'
 import type {GroceryItemType, MyResponseType} from '../../../types/api'
+import {spacefy} from '../../lib/spacefy'
 import {$Field} from './sharedCss/field'
 
 const $Form = styled.form`
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 0.35fr 2fr 1fr;
+  gap: 10px;
   width: 500px;
   ${mqMax.s} {
+    grid-template-columns: 1fr 2fr;
     width: 300px;
   }
   ${mqMax.xs} {
@@ -28,19 +31,19 @@ function AddStuff({listName}: {listName: string}) {
   })
   const queryClient = useQueryClient()
   const mutation = useMutation(
-    async (newData: string) => {
+    async (newData: {name: string; quantity: number}) => {
       const response = await postTwoLevelDeep<GroceryItemType>({
         collection: 'grocery',
         doc: 'groceryList',
-        subCollection: listName,
-        subDoc: newData,
-        data: {name: newData, isDone: false},
+        subCollection: spacefy(listName, {reverse: true}),
+        subDoc: spacefy(newData.name, {reverse: true}),
+        data: {...newData, isDone: false},
       })
       setResponse({...response})
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('grocery')
+        queryClient.invalidateQueries(listName)
       },
       onError: (error: Error) => {
         setSubmitFailed(error.message)
@@ -56,11 +59,12 @@ function AddStuff({listName}: {listName: string}) {
       setSubmitFailed('')
     }
 
-    const {item} = e.target as typeof e.target & {
+    const {item, quantity} = e.target as typeof e.target & {
       item: {value: string}
+      quantity: {value: number}
     }
 
-    mutation.mutateAsync(item.value)
+    await mutation.mutateAsync({name: item.value, quantity: quantity.value})
 
     setPending(false)
   }
@@ -70,6 +74,15 @@ function AddStuff({listName}: {listName: string}) {
   return (
     <div>
       <$Form onSubmit={handleSubmit}>
+        <$Field>
+          <input
+            type="number"
+            name="quantity"
+            id="quantity"
+            placeholder="enter quantity"
+          />
+          <label htmlFor="quantity">Qty</label>
+        </$Field>
         <$Field>
           <input
             type="text"
