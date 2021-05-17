@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-
 import styled from '@emotion/styled'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -86,7 +85,7 @@ function SignUpForm({
     }
     const newUserData: UserDataType = {
       name: name.value,
-      listName: listName.value,
+      listName: [listName.value],
       email: email.value,
       userId: user.user.uid,
       timeStamp: myFirebase.firestore.Timestamp.now().toDate(),
