@@ -6,8 +6,8 @@ import {notify} from '../../lib/notify'
 import {postOneLevelDeep} from '../../lib/post'
 import SingleFieldForm from './singleFieldForm'
 
-function ListName({user, isLoading}: {user: UserDataType; isLoading: boolean}) {
-  const [listNameST, setListName] = React.useState<string>(user.listName)
+function ListName({user, index}: {user: UserDataType; index: number}) {
+  const [listNameST, setListName] = React.useState<string>(user.listName[index])
   const [userConfirmed, setUserConfirmed] = React.useState(false)
   const [isPending, setPending] = React.useState(false)
   const [responseST, setResponse] = React.useState<MyResponseType>({
@@ -17,11 +17,11 @@ function ListName({user, isLoading}: {user: UserDataType; isLoading: boolean}) {
 
   const queryClient = useQueryClient()
   const {mutateAsync} = useMutation(
-    async (newData: string) => {
+    async (newData: string[]) => {
       const response = await postOneLevelDeep<Pick<UserDataType, 'listName'>>({
         collection: 'users',
         doc: user.userId,
-        data: {listName: newData},
+        data: {listName: [...newData]},
         merge: true,
       })
       if (response.error) {
@@ -43,14 +43,14 @@ function ListName({user, isLoading}: {user: UserDataType; isLoading: boolean}) {
     if (!userConfirmed) return 'unChanged'
     setPending(true)
 
-    const {GroceryListName} = e.currentTarget as typeof e.currentTarget & {
-      GroceryListName: {value: string}
+    const {groceryListName} = e.currentTarget as typeof e.currentTarget & {
+      groceryListName: {value: string}
     }
+    if (user.listName[index] === groceryListName.value) return 'unChanged'
 
-    const newListName: string = GroceryListName.value
-
-    if (user.listName === newListName) return 'unChanged'
-
+    user.listName.splice(index, 1, groceryListName.value)
+    const newListName: string[] = user.listName
+    console.log('[[submitting]]', groceryListName, user.listName)
     setPending(false)
     await mutateAsync(newListName)
     if (responseST.error) {
@@ -63,20 +63,29 @@ function ListName({user, isLoading}: {user: UserDataType; isLoading: boolean}) {
     return status
   }
   return (
-    <SingleFieldForm
-      onEditStart={() => {}}
-      onEditEnd={() => {}}
-      isSuccess={!!responseST.isSuccessful}
-      isPending={isPending}
-      submitFunction={handleListNameUpdate}
-      placeholder="Enter Grocery List Name"
-      passwordConfirmation={true}
-      name="GroceryListName"
-      type="text"
-      value={isLoading ? 'loading...' : listNameST}
-      handleUserConfirmed={(arg: boolean) => setUserConfirmed(arg)}
-      onChange={e => setListName(e.target.value)}
-    />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+      }}
+    >
+      <SingleFieldForm
+        onEditStart={() => {}}
+        onEditEnd={() => {}}
+        isSuccess={!!responseST.isSuccessful}
+        isPending={isPending}
+        submitFunction={handleListNameUpdate}
+        placeholder="Enter Grocery List Name"
+        passwordConfirmation={true}
+        name="groceryListName"
+        type="text"
+        value={listNameST}
+        handleUserConfirmed={(arg: boolean) => setUserConfirmed(arg)}
+        onChange={e => setListName(e.target.value)}
+      />
+    </div>
   )
 }
 
