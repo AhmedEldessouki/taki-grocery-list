@@ -4,10 +4,12 @@ import Button from '@material-ui/core/Button'
 import {nanoid} from 'nanoid'
 import React from 'react'
 import {useQuery} from 'react-query'
-import {GroceryItemType} from '../../types/api'
-import {UserDataType} from '../../types/user'
+import type {GroceryItemType, MyResponseType} from '../../types/api'
+import type {UserDataType} from '../../types/user'
 import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
+import {spacefy} from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
+import NewList from './addList'
 import DeleteFromDB from './deleteFromDB'
 import AddStuff from './forms/addStuff'
 import ListName from './forms/listName'
@@ -22,8 +24,7 @@ text-decoration-line: line-through;
 `}
 `
 const $ItemContainer = styled.div<{isDone: boolean}>`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
+  display: flex;
   align-items: center;
   width: 500px;
   padding: 5px 10px;
@@ -45,7 +46,9 @@ function Item({item}: {item: GroceryItemType}) {
 
   return (
     <$ItemContainer isDone={isDone}>
-      <$Item isDone={isDone}>{item.name}</$Item>
+      <$Item style={{flex: 1}} isDone={isDone}>
+        {item.quantity && item.quantity} {item.name}
+      </$Item>
       <Button
         onClick={() => setDone(!isDone)}
         style={{width: '50px'}}
@@ -63,18 +66,29 @@ const $ItemsContainer = styled.div`
   padding: 20px 0;
 `
 function Items({listName}: {listName: string}) {
+  const [responseST, setResponse] = React.useState<MyResponseType>({
+    error: undefined,
+    isSuccessful: false,
+  })
   const {
     data: groceries,
-    isError,
-    error,
     isLoading,
-  } = useQuery('grocery', {
-    queryFn: () => {
-      return getTwoLevelDeep<GroceryItemType>({
+    isFetching,
+  } = useQuery(listName, {
+    queryFn: async () => {
+      const {
+        isSuccessful,
+        data,
+        error: err,
+      } = await getTwoLevelDeep<GroceryItemType>({
         collection: 'grocery',
         doc: 'groceryList',
-        subCollection: listName,
+        subCollection: spacefy(listName, {reverse: true}),
       })
+      if (!isSuccessful) {
+        setResponse({isSuccessful, error: err})
+      }
+      return data
     },
   })
   async function deleteItem() {}
@@ -82,37 +96,36 @@ function Items({listName}: {listName: string}) {
   if (listName.length === 0) {
     return <div>Please Name your List</div>
   }
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <div>Loading</div>
   }
-  if (isError) {
-    console.log(error)
-    return <$Warning>error</$Warning>
+  if (responseST.error) {
+    return <$Warning>{responseST.error.message}</$Warning>
   }
   return (
     <$ItemsContainer>
-      {groceries?.data &&
-        groceries.data.map(item => {
-          return (
-            <DeleteFromDB
-              key={nanoid()}
-              deleteFn={deleteItem}
-              dialogDeleting={item.name}
-              dialogLabelledBy="delete-from-grocery-list"
-            >
-              <Item item={item} />
-            </DeleteFromDB>
-          )
-        })}
+      {groceries?.map(item => {
+        return (
+          <DeleteFromDB
+            key={nanoid()}
+            deleteFn={deleteItem}
+            dialogDeleting={item.name}
+            dialogLabelledBy="delete-from-grocery-list"
+          >
+            <Item item={item} />
+          </DeleteFromDB>
+        )
+      })}
     </$ItemsContainer>
   )
 }
 
 function Grocery({userId}: {userId: string}) {
   const [errorST, setError] = React.useState<Error>()
+  const [arrayST, setArray] = React.useState<Array<string>>([])
 
   const {
-    data: user,
+    data: userData,
     isLoading,
     isError,
     isFetching,
@@ -130,16 +143,34 @@ function Grocery({userId}: {userId: string}) {
     },
   })
 
-  if (isError || !user) {
+  if (isError || !userData) {
     return <div>{errorST?.message}</div>
   }
+
   return (
     <>
-      <ListName user={user} isLoading={isLoading || isFetching} />
-      <Items listName={isLoading || isFetching ? 'loading' : user.listName} />
-      <AddStuff
-        listName={isLoading || isFetching ? 'loading' : user.listName}
+      <NewList
+        setArrayChange={setArray}
+        oldList={userData.listName}
+        listName="grocery"
+        listArray={arrayST}
       />
+
+      {userData.listName.map((item, i) => {
+        const list = isLoading || isFetching ? 'loading' : item
+        return (
+          <div
+            key={i}
+            style={{
+              margin: '30px 0',
+            }}
+          >
+            <ListName index={i} user={userData} />
+            <Items listName={list} />
+            <AddStuff listName={list} />
+          </div>
+        )
+      })}
     </>
   )
 }
