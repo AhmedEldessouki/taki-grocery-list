@@ -13,7 +13,6 @@ interface SingleFieldFormType
   onEditEnd: () => void
   passwordConfirmation?: boolean
   name: string
-  type?: string
   isPending: boolean
   isSuccess: boolean
   handleUserConfirmed?: (arg: boolean) => void
@@ -42,8 +41,9 @@ const $Label = styled.label`
 `
 const $EditFormContainer = styled.div<{successful: boolean}>`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-
+  width: 330px;
   input {
     letter-spacing: 0.3px;
     margin-bottom: 15px;
@@ -80,13 +80,15 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
     background: transparent;
     width: 25px;
     cursor: pointer;
+    :disabled {
+      cursor: no-drop;
+    }
   }
 `
 
 function SingleFieldForm({
   submitFunction,
   name,
-  type = 'text',
   isPending,
   isSuccess,
   passwordConfirmation,
@@ -100,7 +102,7 @@ function SingleFieldForm({
 
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
-
+    console.log('[[submit started]]')
     const status = await submitFunction(e)
     if (status === 'rejected') return
     onEditEnd()
@@ -113,7 +115,7 @@ function SingleFieldForm({
         <form onSubmit={handleSubmit}>
           <$Label htmlFor={name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
-            <input name={name} id={name} type={type} {...inputOverrides} />
+            <input name={name} id={name} {...inputOverrides} />
             <button
               disabled={isPending}
               type="submit"
@@ -127,13 +129,7 @@ function SingleFieldForm({
         <>
           <$Label htmlFor={name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
-            <input
-              name={name}
-              id={name}
-              type={type}
-              readOnly
-              {...inputOverrides}
-            />
+            <input name={name} id={name} readOnly {...inputOverrides} />
             <button
               disabled={isPending}
               aria-label="Edit"
