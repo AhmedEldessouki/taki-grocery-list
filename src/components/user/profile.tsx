@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, {useState} from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -33,7 +32,7 @@ function Profile({
 
   const [nameST, setName] = useState<string>('')
   const [emailST, setEmail] = useState<string>('')
-  const [listNameST, setListName] = useState<string>('')
+  const [listNameST, setListName] = useState<string[]>([''])
   const [isPending, setPending] = useState(false)
   const [isEditActive, setIsEditActive] = useState(false)
   const [userConfirmed, setUserConfirmed] = useState(false)
@@ -44,7 +43,7 @@ function Profile({
   const [userST, setUser] = useState<UserDataType>({
     email: '',
     name: '',
-    listName: '',
+    listName: [''],
     userId: '',
   })
   const queryClient = useQueryClient()
@@ -92,7 +91,7 @@ function Profile({
       setUser({...data})
       setName(data.name ?? '')
       setEmail(() => data.email ?? user.email)
-      setListName(data.listName ?? '')
+      setListName(data.listName ?? [''])
     },
   })
 
@@ -103,35 +102,6 @@ function Profile({
     setIsEditActive(false)
   }
 
-  async function handleListNameUpdate(e: React.SyntheticEvent) {
-    setResponse({error: undefined, isSuccessful: false})
-    if (!userConfirmed) return 'unChanged'
-    setPending(true)
-
-    const {listName} = e.currentTarget as typeof e.currentTarget & {
-      listName: {value: string}
-    }
-
-    const newListName: string = listName.value
-
-    if (userST.listName === newListName) return 'unChanged'
-
-    await mutateAsync({listName: newListName})
-
-    setPending(false)
-
-    if (responseST.error) {
-      notify('❌', `Update Failed!`, {
-        color: 'var(--red)',
-      })
-      return status
-    }
-    notify('✔', `List Name Updated!`, {
-      color: 'var(--green)',
-    })
-    return status
-  }
-
   async function handleNameUpdate(e: React.SyntheticEvent) {
     setResponse({error: undefined, isSuccessful: false})
 
@@ -139,7 +109,7 @@ function Profile({
       name: {value: string}
     }
 
-    if (user?.displayName === name.value) return 'unChanged'
+    if (userST.name === name.value) return 'unChanged'
 
     let status: string = 'idle'
     setPending(true)
@@ -181,12 +151,12 @@ function Profile({
 
   async function handleEmailUpdate(e: React.SyntheticEvent) {
     setResponse({error: undefined, isSuccessful: false})
+    if (!userConfirmed) return 'unChanged'
     let status: string = 'idle'
     const {email} = e.currentTarget as typeof e.currentTarget & {
       email: {value: string}
     }
-    if (user?.email === email.value) return 'unChanged'
-    if (!userConfirmed) return 'unChanged'
+    if (userST.email === email.value) return 'unChanged'
     setPending(true)
 
     await user
@@ -245,6 +215,7 @@ function Profile({
               isPending={isPending}
               submitFunction={handleNameUpdate}
               name="name"
+              type="text"
               placeholder="Enter name"
               value={nameST}
               onChange={e => setName(e.target.value)}
@@ -266,15 +237,15 @@ function Profile({
             <SingleFieldForm
               onEditStart={onEditStart}
               onEditEnd={onEditEnd}
-              isSuccess={!!responseST.isSuccessful}
-              isPending={isPending}
-              submitFunction={handleListNameUpdate}
-              placeholder="enter grocery list name"
+              isSuccess={false}
+              isPending={true}
+              submitFunction={async (e: React.SyntheticEvent) => {
+                return 'unchanged'
+              }}
+              placeholder="enter a grocery list name"
               name="listName"
               type="text"
-              value={listNameST}
-              handleUserConfirmed={(arg: boolean) => setUserConfirmed(arg)}
-              onChange={e => setListName(e.target.value)}
+              value={listNameST.join(', ')}
             />
           </DialogContent>
           <ChangePassword />
