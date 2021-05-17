@@ -1,0 +1,28 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "A027F4dcrRAelXZ5Tkic4emw6Fmq",
+      "createdAt": "1620815478684",
+      "lastLoginAt": "1620815478683",
+      "displayName": "nemo",
+      "passwordHash": "fakeHash:salt=fakeSaltShA5CmZkpbDNFPzJlBRR:password=123456",
+      "salt": "fakeSaltShA5CmZkpbDNFPzJlBRR",
+      "passwordUpdatedAt": 1621249559418,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "nemoahmed@hotmail.com",
+          "federatedId": "nemoahmed@hotmail.com",
+          "rawId": "nemoahmed@hotmail.com",
+          "displayName": "nemo"
+        }
+      ],
+      "validSince": "1621265000",
+      "email": "nemoahmed@hotmail.com",
+      "emailVerified": false,
+      "disabled": false,
+      "lastRefreshAt": "2021-05-17T19:19:50.617Z"
+    }
+  ]
+}
