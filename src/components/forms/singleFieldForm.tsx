@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import {keyframes} from '@emotion/react'
 import {spacefy} from '../../lib/spacefy'
 import {mqMax} from '../../shared/utils'
+import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'
 
 interface SingleFieldFormType
@@ -134,7 +135,11 @@ function SingleFieldForm({
               type="submit"
               style={{color: 'var(--green)'}}
             >
-              <CheckCircleOutlineRoundedIcon />
+              {isPending ? (
+                <Spinner mount={isPending} styling={{position: 'relative'}} />
+              ) : (
+                <CheckCircleOutlineRoundedIcon />
+              )}
             </button>
           </$EditFormContainer>
         </form>
