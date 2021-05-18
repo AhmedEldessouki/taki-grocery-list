@@ -68,9 +68,7 @@ function AddStuff({listName}: {listName: string}) {
 
     setPending(false)
   }
-  if (listName.length === 0) {
-    return <div>Please Name your List</div>
-  }
+
   return (
     <div>
       <$Form onSubmit={handleSubmit}>
