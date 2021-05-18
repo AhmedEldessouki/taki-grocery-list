@@ -244,7 +244,7 @@ function Settings({
               onEditEnd={onEditEnd}
               isSuccess={false}
               isPending={true}
-              submitFunction={async (e: React.SyntheticEvent) => {
+              submitFunction={async () => {
                 return 'unchanged'
               }}
               placeholder="enter a grocery list name"
