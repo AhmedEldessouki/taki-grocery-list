@@ -3,12 +3,12 @@ import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
-import {postOneLevelDeep} from '../lib/post'
-import type {MyResponseType} from '../../types/api'
-import {notify} from '../lib/notify'
-import {$Warning} from '../shared/utils'
-import {$Field} from './forms/sharedCss/field'
-import Spinner from './spinner'
+import {postOneLevelDeep} from '../../lib/post'
+import type {MyResponseType} from '../../../types/api'
+import {notify} from '../../lib/notify'
+import {$Warning} from '../../shared/utils'
+import {$Field} from './sharedCss/field'
+import Spinner from '../spinner'
 
 function ListInput({
   listName,
