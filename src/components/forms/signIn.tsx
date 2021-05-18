@@ -8,9 +8,9 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
+import Spinner from '../spinner'
 import {$Field} from './sharedCss/field'
 import ForgetPassword from './forgetPassword'
-import Spinner from '../spinner'
 
 const $Form = styled.form`
   width: 300px;

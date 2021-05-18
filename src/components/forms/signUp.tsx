@@ -12,9 +12,9 @@ import myFirebase from '../../lib/firebase'
 import {postOneLevelDeep} from '../../lib/post'
 import {notify} from '../../lib/notify'
 import type {UserDataType} from '../../../types/user'
+import Spinner from '../spinner'
 import {$Field} from './sharedCss/field'
 import PasswordFields from './passwordFields'
-import Spinner from '../spinner'
 
 const $Container = styled.form`
   font-weight: 300;
