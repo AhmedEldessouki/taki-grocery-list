@@ -9,7 +9,6 @@ function spacefy(str: string, {reverse}: {reverse?: boolean} = {}): string {
         return item
       })
       .join('')
-    console.log(camelCase)
     return camelCase
   }
   return str.replaceAll(/[A-Z]/g, _ => ' ' + _.toLowerCase())
