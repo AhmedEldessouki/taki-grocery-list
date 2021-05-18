@@ -14,6 +14,7 @@ import NewList from './addList'
 import DeleteFromDB from './deleteFromDB'
 import AddStuff from './forms/addStuff'
 import ListName from './forms/listName'
+import Spinner from './spinner'
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
@@ -118,14 +119,15 @@ function Items({listName}: {listName: string}) {
   if (listName.length === 0) {
     return <div>Please Name your List</div>
   }
-  if (isLoading || isFetching) {
-    return <div>Loading</div>
-  }
-  if (responseST.error) {
-    return <$Warning>{responseST.error.message}</$Warning>
+  if (isLoading) {
+    return <Spinner mount={isLoading} />
   }
   return (
     <$ItemsContainer>
+      <Spinner
+        mount={isFetching}
+        styling={{marginTop: '-98px', marginLeft: '-190px'}}
+      />
       {groceries?.map(item => {
         return (
           <DeleteFromDB
@@ -138,6 +140,7 @@ function Items({listName}: {listName: string}) {
           </DeleteFromDB>
         )
       })}
+      {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>
   )
 }
@@ -171,6 +174,7 @@ function Grocery({userId}: {userId: string}) {
 
   return (
     <>
+      <Spinner mount={isFetching} styling={{marginTop: '10px', left: '10px'}} />
       <NewList
         setArrayChange={setArray}
         oldList={userData.listName}
@@ -179,7 +183,7 @@ function Grocery({userId}: {userId: string}) {
       />
 
       {userData.listName.map((item, i) => {
-        const list = isLoading || isFetching ? 'loading' : item
+        const list = isLoading ? 'loading' : item
         return (
           <div
             key={i}

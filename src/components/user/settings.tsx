@@ -17,6 +17,7 @@ import ChangePassword from '../forms/changePassword'
 
 import type {MyResponseType} from '../../../types/api'
 import type {UserDataType} from '../../../types/user'
+import Spinner from '../spinner'
 
 // TODO: Find a good way to only do the success animation once after it succeeds not after it succeeds and when the next field is open
 function Settings({
@@ -206,6 +207,10 @@ function Settings({
         <div>
           <DialogTitle style={{paddingBottom: '0'}} id="sign-in-dialog">
             Settings
+            <Spinner
+              mount={isFetching || isLoading}
+              styling={{marginTop: '7px', marginLeft: '10px', zIndex: 9999999}}
+            />
           </DialogTitle>
           <DialogContent style={{paddingTop: '0'}}>
             <SingleFieldForm
@@ -250,7 +255,6 @@ function Settings({
           </DialogContent>
           <ChangePassword />
           <DeleteUser />
-
           {responseST.error && (
             <div
               style={{
@@ -260,18 +264,6 @@ function Settings({
               }}
             >
               <$Warning role="alert">{responseST.error.message}</$Warning>
-            </div>
-          )}
-          {(isLoading || isFetching) && (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%',
-                padding: '10px',
-              }}
-            >
-              <span role="alert">loading...</span>
             </div>
           )}
           <DialogActions

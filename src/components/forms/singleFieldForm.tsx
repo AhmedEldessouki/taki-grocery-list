@@ -4,6 +4,7 @@ import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutline
 import styled from '@emotion/styled'
 import {keyframes} from '@emotion/react'
 import {spacefy} from '../../lib/spacefy'
+import {mqMax} from '../../shared/utils'
 import ConfirmPassword from './confirmPassword'
 
 interface SingleFieldFormType
@@ -82,6 +83,18 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
     cursor: pointer;
     :disabled {
       cursor: no-drop;
+    }
+  }
+  ${mqMax.s} {
+    width: 268px;
+    input {
+      width: 258px;
+    }
+  }
+  ${mqMax.xs} {
+    width: 212px;
+    input {
+      width: 202px;
     }
   }
 `
