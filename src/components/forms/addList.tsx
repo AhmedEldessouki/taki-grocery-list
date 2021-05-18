@@ -3,11 +3,12 @@ import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
-import {postOneLevelDeep} from '../lib/post'
-import type {MyResponseType} from '../../types/api'
-import {useAuth} from '../context/auth'
-import {notify} from '../lib/notify'
-import {$Field} from './forms/sharedCss/field'
+import {postOneLevelDeep} from '../../lib/post'
+import type {MyResponseType} from '../../../types/api'
+import {notify} from '../../lib/notify'
+import {$Warning} from '../../shared/utils'
+import Spinner from '../spinner'
+import {$Field} from './sharedCss/field'
 
 function ListInput({
   listName,
@@ -34,24 +35,34 @@ function ListInput({
   )
 }
 
-const $Form = styled.div`
+const $Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 300px;
 `
+const $NoteContainer = styled.div`
+  color: var(--gray);
+  display: flex;
+  flex-direction: column;
+  span {
+    font-size: 14px;
+    line-height: 2;
+  }
+`
 
 function NewList({
   listName,
+  userId,
   listArray,
   oldList,
   setArrayChange,
 }: {
   listName: string
+  userId: string
   listArray: string[]
   oldList: string[]
   setArrayChange: React.Dispatch<React.SetStateAction<Array<string>>>
 }) {
-  const {user} = useAuth()
   const [isPending, setPending] = React.useState(false)
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
@@ -63,7 +74,7 @@ function NewList({
     async (newData: unknown) => {
       const response = await postOneLevelDeep<unknown>({
         collection: 'users',
-        doc: user?.uid,
+        doc: userId,
         data: newData,
         merge: true,
       })
@@ -79,12 +90,23 @@ function NewList({
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
     setResponse({error: undefined, isSuccessful: false})
+
+    if (listArray[listArray.length - 1] === '') {
+      // This Is for bypassing on enter submit because
+      // the value of Inputs is being set onBlur
+      return
+    } else if (
+      oldList.find(oldItem => listArray.find(newItem => newItem === oldItem))
+    ) {
+      setResponse({error: {message: 'List Already Exists.'} as Error})
+      return
+    }
+
     setPending(true)
 
-    const newList = new Set(listArray)
-    console.log(newList, [...(newList as unknown as string[])])
+    const newList = new Set([...oldList, ...listArray])
     await mutateAsync({
-      listName: [...oldList, ...(newList as unknown as string[])],
+      listName: [...(newList as unknown as string[])],
     })
 
     setPending(false)
@@ -101,11 +123,14 @@ function NewList({
     })
     setPending(false)
   }
+  const hasThreeItems = listArray.length + oldList.length > 3
+  const isThreeItems = listArray.length + oldList.length >= 3
   return (
     <>
       <div style={{margin: '5px auto'}}>
         <Button
           variant="outlined"
+          disabled={isThreeItems}
           style={{background: 'transparent', color: 'var(--black)'}}
           onClick={() => setArrayChange([...listArray.concat('')])}
         >
@@ -120,27 +145,49 @@ function NewList({
       {listArray.length > 0 && (
         <$Form onSubmit={handleSubmit}>
           {listArray.map((item, i) => {
-            return (
-              <ListInput
-                key={i}
-                handleBlur={e => {
-                  listArray[i] = e.target.value
-                  setArrayChange([...listArray])
-                }}
-                listName={listName}
-              />
-            )
+            if (oldList.length + i + 1 > 3) {
+              return void 0
+            } else {
+              return (
+                <ListInput
+                  key={i}
+                  handleBlur={e => {
+                    listArray[i] = e.target.value
+                    setArrayChange([...listArray])
+                  }}
+                  listName={listName}
+                />
+              )
+            }
           })}
+          <$NoteContainer>
+            <span>✖ Name should be unique.</span>
+            <span
+              style={{
+                color: hasThreeItems ? 'var(--red)' : 'inherit',
+              }}
+            >
+              ✖ Max of 3 lists per user.
+            </span>
+          </$NoteContainer>
+          {responseST.error && (
+            <$Warning marginBottom="10">{responseST.error.message}</$Warning>
+          )}
           <Button
             type="submit"
             variant="outlined"
+            disabled={isPending || hasThreeItems}
             style={{
-              background: !isPending ? 'var(--green)' : 'var(--red)',
+              background: 'var(--green)',
               color: 'var(--white)',
               margin: '20px 0',
             }}
           >
-            Submit
+            {isPending ? (
+              <Spinner mount={isPending} styling={{position: 'relative'}} />
+            ) : (
+              'Submit'
+            )}
           </Button>
         </$Form>
       )}

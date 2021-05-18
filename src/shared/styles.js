@@ -28,6 +28,7 @@ export const globalStyles = (
         --blue: #3f51b5;
         --green: #10c110;
         --yellow: #e3e355;
+        --gray: #a4a0a0;
         --white: rgba(var(--rgbWhite), 1);
         --whiteShade: rgba(var(--rgbWhite), var(--opacity));
         --black: rgba(var(--rgbBlack), 1);
@@ -115,6 +116,9 @@ export const globalStyles = (
           visibility: visible;
           transform: scaleX(1);
         }
+      }
+      button:disabled {
+        background: var(--gray) !important;
       }
     `}
   />

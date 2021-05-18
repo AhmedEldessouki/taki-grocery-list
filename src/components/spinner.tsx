@@ -11,7 +11,7 @@ function Spinner({
 }) {
   return (
     <Fade
-      in={true ?? mount}
+      in={mount}
       style={{position: 'absolute', color: 'green', ...styling}}
       unmountOnExit
     >

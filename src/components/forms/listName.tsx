@@ -50,7 +50,6 @@ function ListName({user, index}: {user: UserDataType; index: number}) {
 
     user.listName.splice(index, 1, groceryListName.value)
     const newListName: string[] = user.listName
-    console.log('[[submitting]]', groceryListName, user.listName)
     setPending(false)
     await mutateAsync(newListName)
     if (responseST.error) {

@@ -4,12 +4,12 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-
 import styled from '@emotion/styled'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
 import type {MyResponseType} from '../../../types/api'
 import {notify} from '../../lib/notify'
+import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'
 import PasswordFields from './passwordFields'
 
@@ -119,16 +119,20 @@ function ChangePassword() {
               disabled={isPending ?? !isPasswordConfirmed}
               type="submit"
               style={{
-                background: !isPending ? 'var(--green)' : 'var(--red)',
+                background: 'var(--green)',
                 color: 'var(--white)',
               }}
               variant="contained"
               color="primary"
             >
-              Submit
+              {isPending ? (
+                <Spinner mount={isPending} styling={{position: 'relative'}} />
+              ) : (
+                'Submit'
+              )}
             </Button>
             <Button
-              disabled={isPending ?? !isPasswordConfirmed}
+              disabled={isPending}
               type="button"
               variant="contained"
               onClick={() => setPasswordDialog(false)}

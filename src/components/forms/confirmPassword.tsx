@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {MyResponseType} from '../../../types/api'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
+import Spinner from '../spinner'
 import {$Field} from './sharedCss/field'
 
 export default function ConfirmPassword({
@@ -92,12 +93,16 @@ export default function ConfirmPassword({
             type="submit"
             variant="contained"
             style={{
-              background: !isPending ? 'var(--green)' : 'var(--red)',
+              background: 'var(--green)',
               color: 'var(--white)',
             }}
             disabled={isPending}
           >
-            Confirm
+            {isPending ? (
+              <Spinner mount={isPending} styling={{position: 'relative'}} />
+            ) : (
+              'Confirm'
+            )}
           </Button>
           <Button
             type="button"

@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-
 import styled from '@emotion/styled'
 import {Button as ButtonUI} from '@material-ui/core'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -7,6 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {$Warning, $Success, mqMax} from '../../shared/utils'
 import {auth} from '../../lib/firebase'
+import Spinner from '../spinner'
 import {$Field} from './sharedCss/field'
 
 const $TextWrapper = styled.div`
@@ -95,12 +95,16 @@ function ForgetPassword({onCancel}: {onCancel: () => void}) {
             type="submit"
             variant="contained"
             style={{
-              background: !isPending ? 'var(--green)' : 'var(--red)',
+              background: 'var(--green)',
               color: 'var(--white)',
             }}
             disabled={isPending}
           >
-            Submit
+            {isPending ? (
+              <Spinner mount={isPending} styling={{position: 'relative'}} />
+            ) : (
+              'Submit'
+            )}
           </ButtonUI>
           <ButtonUI type="button" variant="contained" onClick={onCancel}>
             Close
