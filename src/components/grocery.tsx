@@ -117,7 +117,7 @@ function Items({listName}: {listName: string}) {
   }
 
   if (listName.length === 0) {
-    return <div>Please Name your List</div>
+    return <div>Please Rename Your List.</div>
   }
   if (isLoading) {
     return <Spinner mount={isLoading} />
@@ -174,29 +174,33 @@ function Grocery({userId}: {userId: string}) {
 
   return (
     <>
-      <Spinner mount={isFetching} styling={{marginTop: '10px', left: '10px'}} />
+      <Spinner
+        mount={isFetching || isLoading}
+        styling={{marginTop: '10px', left: '10px'}}
+      />
       <NewList
+        userId={userData.userId}
         setArrayChange={setArray}
         oldList={userData.listName}
         listName="grocery"
         listArray={arrayST}
       />
 
-      {userData.listName.map((item, i) => {
-        const list = isLoading ? 'loading' : item
-        return (
-          <div
-            key={i}
-            style={{
-              margin: '30px 0',
-            }}
-          >
-            <ListName index={i} user={userData} />
-            <Items listName={list} />
-            <AddStuff listName={list} />
-          </div>
-        )
-      })}
+      {!isLoading &&
+        userData.listName.map((item, i) => {
+          return (
+            <div
+              key={i}
+              style={{
+                margin: '30px 0',
+              }}
+            >
+              <ListName index={i} user={userData} />
+              <Items listName={item} />
+              <AddStuff listName={item} />
+            </div>
+          )
+        })}
     </>
   )
 }
