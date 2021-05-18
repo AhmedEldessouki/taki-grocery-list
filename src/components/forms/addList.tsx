@@ -7,8 +7,8 @@ import {postOneLevelDeep} from '../../lib/post'
 import type {MyResponseType} from '../../../types/api'
 import {notify} from '../../lib/notify'
 import {$Warning} from '../../shared/utils'
-import {$Field} from './sharedCss/field'
 import Spinner from '../spinner'
+import {$Field} from './sharedCss/field'
 
 function ListInput({
   listName,
