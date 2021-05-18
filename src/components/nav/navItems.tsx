@@ -25,18 +25,13 @@ const $NavItemsContainer = styled.div`
 
 function NavItems({signOut}: {signOut: () => Promise<void> | null}) {
   const {user} = useAuth()
-  return (
-    <>
-      <$NavItemsContainer>
-        <NavItem href="/" title="Home" />
-        {user && (
-          <>
-            <User user={user} />
-            <NavItem onClick={signOut} title="SignOut" />
-          </>
-        )}
-      </$NavItemsContainer>
-    </>
+  return user ? (
+    <$NavItemsContainer>
+      <User user={user} />
+      <NavItem onClick={signOut} title="SignOut" />
+    </$NavItemsContainer>
+  ) : (
+    <div />
   )
 }
 
