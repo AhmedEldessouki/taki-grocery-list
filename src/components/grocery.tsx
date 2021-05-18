@@ -3,9 +3,10 @@ import styled from '@emotion/styled'
 import Button from '@material-ui/core/Button'
 import {nanoid} from 'nanoid'
 import React from 'react'
-import {useQuery} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type {UserDataType} from '../../types/user'
+import {deleteTwoLevelDeep} from '../lib/delete'
 import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
 import {spacefy} from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
@@ -91,7 +92,28 @@ function Items({listName}: {listName: string}) {
       return data
     },
   })
-  async function deleteItem() {}
+
+  const queryClient = useQueryClient()
+  const {mutateAsync} = useMutation(
+    async ({list, itemName}: {list: string; itemName: string}) => {
+      const response = await deleteTwoLevelDeep({
+        collection: 'grocery',
+        doc: 'groceryList',
+        subCollection: list,
+        subDoc: itemName,
+      })
+      // THIS IS A BLUFF ... Not Sure IF It Will [[[WORK]]]
+      setResponse({...response})
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(listName)
+      },
+    },
+  )
+  async function deleteItem(itemName: string) {
+    await mutateAsync({list: spacefy(listName, {reverse: true}), itemName})
+  }
 
   if (listName.length === 0) {
     return <div>Please Name your List</div>
@@ -108,7 +130,7 @@ function Items({listName}: {listName: string}) {
         return (
           <DeleteFromDB
             key={nanoid()}
-            deleteFn={deleteItem}
+            deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
             dialogDeleting={item.name}
             dialogLabelledBy="delete-from-grocery-list"
           >
