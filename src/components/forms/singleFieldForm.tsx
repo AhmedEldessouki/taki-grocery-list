@@ -116,7 +116,6 @@ function SingleFieldForm({
 
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
-    console.log('[[submit started]]')
     const status = await submitFunction(e)
     if (status === 'rejected') return
     onEditEnd()
