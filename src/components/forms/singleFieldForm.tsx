@@ -84,6 +84,7 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
     cursor: pointer;
     :disabled {
       cursor: no-drop;
+      background: transparent !important;
     }
   }
   ${mqMax.s} {
