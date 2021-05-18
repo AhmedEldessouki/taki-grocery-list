@@ -14,6 +14,7 @@ import {notify} from '../../lib/notify'
 import type {UserDataType} from '../../../types/user'
 import {$Field} from './sharedCss/field'
 import PasswordFields from './passwordFields'
+import Spinner from '../spinner'
 
 const $Container = styled.form`
   font-weight: 300;
@@ -171,13 +172,17 @@ function SignUpForm({
             disabled={isPending || !isPasswordConfirmed}
             type="submit"
             style={{
-              background: !isPending ? 'var(--green)' : 'var(--red)',
+              background: 'var(--green)',
               color: 'var(--white)',
             }}
             variant="contained"
             color="primary"
           >
-            Submit
+            {isPending ? (
+              <Spinner mount={isPending} styling={{position: 'relative'}} />
+            ) : (
+              'Submit'
+            )}
           </Button>
           <Button
             disabled={isPending}

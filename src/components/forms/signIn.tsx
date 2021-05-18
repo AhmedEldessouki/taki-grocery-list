@@ -10,6 +10,7 @@ import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
 import {$Field} from './sharedCss/field'
 import ForgetPassword from './forgetPassword'
+import Spinner from '../spinner'
 
 const $Form = styled.form`
   width: 300px;
@@ -115,12 +116,16 @@ const SignInForm = ({
                 type="submit"
                 variant="contained"
                 style={{
-                  background: !isPending ? 'var(--green)' : 'var(--red)',
+                  background: 'var(--green)',
                   color: 'var(--white)',
                 }}
                 disabled={isPending}
               >
-                Submit
+                {isPending ? (
+                  <Spinner mount={isPending} styling={{position: 'relative'}} />
+                ) : (
+                  'Submit'
+                )}
               </Button>
               <Button type="button" variant="contained" onClick={closeDialog}>
                 Close
