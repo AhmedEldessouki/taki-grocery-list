@@ -10,10 +10,11 @@ import {deleteTwoLevelDeep} from '../lib/delete'
 import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
 import {spacefy} from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
-import NewList from './addList'
+import NewList from './forms/addList'
 import DeleteFromDB from './deleteFromDB'
 import AddStuff from './forms/addStuff'
 import ListName from './forms/listName'
+import Spinner from './spinner'
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
@@ -116,16 +117,17 @@ function Items({listName}: {listName: string}) {
   }
 
   if (listName.length === 0) {
-    return <div>Please Name your List</div>
+    return <div>Please Rename Your List.</div>
   }
-  if (isLoading || isFetching) {
-    return <div>Loading</div>
-  }
-  if (responseST.error) {
-    return <$Warning>{responseST.error.message}</$Warning>
+  if (isLoading) {
+    return <Spinner mount={isLoading} />
   }
   return (
     <$ItemsContainer>
+      <Spinner
+        mount={isFetching}
+        styling={{marginTop: '-98px', marginLeft: '-190px'}}
+      />
       {groceries?.map(item => {
         return (
           <DeleteFromDB
@@ -138,6 +140,7 @@ function Items({listName}: {listName: string}) {
           </DeleteFromDB>
         )
       })}
+      {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>
   )
 }
@@ -171,28 +174,33 @@ function Grocery({userId}: {userId: string}) {
 
   return (
     <>
+      <Spinner
+        mount={isFetching || isLoading}
+        styling={{marginTop: '10px', left: '10px'}}
+      />
       <NewList
+        userId={userData.userId}
         setArrayChange={setArray}
         oldList={userData.listName}
         listName="grocery"
         listArray={arrayST}
       />
 
-      {userData.listName.map((item, i) => {
-        const list = isLoading || isFetching ? 'loading' : item
-        return (
-          <div
-            key={i}
-            style={{
-              margin: '30px 0',
-            }}
-          >
-            <ListName index={i} user={userData} />
-            <Items listName={list} />
-            <AddStuff listName={list} />
-          </div>
-        )
-      })}
+      {!isLoading &&
+        userData.listName.map((item, i) => {
+          return (
+            <div
+              key={i}
+              style={{
+                margin: '30px 0',
+              }}
+            >
+              <ListName index={i} user={userData} />
+              <Items listName={item} />
+              <AddStuff listName={item} />
+            </div>
+          )
+        })}
     </>
   )
 }

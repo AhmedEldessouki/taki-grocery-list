@@ -12,6 +12,7 @@ import myFirebase from '../../lib/firebase'
 import {postOneLevelDeep} from '../../lib/post'
 import {notify} from '../../lib/notify'
 import type {UserDataType} from '../../../types/user'
+import Spinner from '../spinner'
 import {$Field} from './sharedCss/field'
 import PasswordFields from './passwordFields'
 
@@ -171,13 +172,17 @@ function SignUpForm({
             disabled={isPending || !isPasswordConfirmed}
             type="submit"
             style={{
-              background: !isPending ? 'var(--green)' : 'var(--red)',
+              background: 'var(--green)',
               color: 'var(--white)',
             }}
             variant="contained"
             color="primary"
           >
-            Submit
+            {isPending ? (
+              <Spinner mount={isPending} styling={{position: 'relative'}} />
+            ) : (
+              'Submit'
+            )}
           </Button>
           <Button
             disabled={isPending}

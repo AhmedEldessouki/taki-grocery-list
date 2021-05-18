@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
+import Spinner from '../spinner'
 import {$Field} from './sharedCss/field'
 import ForgetPassword from './forgetPassword'
 
@@ -115,12 +116,16 @@ const SignInForm = ({
                 type="submit"
                 variant="contained"
                 style={{
-                  background: !isPending ? 'var(--green)' : 'var(--red)',
+                  background: 'var(--green)',
                   color: 'var(--white)',
                 }}
                 disabled={isPending}
               >
-                Submit
+                {isPending ? (
+                  <Spinner mount={isPending} styling={{position: 'relative'}} />
+                ) : (
+                  'Submit'
+                )}
               </Button>
               <Button type="button" variant="contained" onClick={closeDialog}>
                 Close

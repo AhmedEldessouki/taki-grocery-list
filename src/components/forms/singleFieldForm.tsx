@@ -4,6 +4,8 @@ import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutline
 import styled from '@emotion/styled'
 import {keyframes} from '@emotion/react'
 import {spacefy} from '../../lib/spacefy'
+import {mqMax} from '../../shared/utils'
+import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'
 
 interface SingleFieldFormType
@@ -82,6 +84,19 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
     cursor: pointer;
     :disabled {
       cursor: no-drop;
+      background: transparent !important;
+    }
+  }
+  ${mqMax.s} {
+    width: 268px;
+    input {
+      width: 258px;
+    }
+  }
+  ${mqMax.xs} {
+    width: 212px;
+    input {
+      width: 202px;
     }
   }
 `
@@ -102,7 +117,6 @@ function SingleFieldForm({
 
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
-    console.log('[[submit started]]')
     const status = await submitFunction(e)
     if (status === 'rejected') return
     onEditEnd()
@@ -121,7 +135,11 @@ function SingleFieldForm({
               type="submit"
               style={{color: 'var(--green)'}}
             >
-              <CheckCircleOutlineRoundedIcon />
+              {isPending ? (
+                <Spinner mount={isPending} styling={{position: 'relative'}} />
+              ) : (
+                <CheckCircleOutlineRoundedIcon />
+              )}
             </button>
           </$EditFormContainer>
         </form>

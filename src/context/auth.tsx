@@ -47,7 +47,6 @@ async function signIn(credentials: Credentials) {
             color: 'var(--white)',
           },
         )
-        console.log(res.user)
       },
       (err: Error) => {
         response.error = err.message
