@@ -4,7 +4,6 @@ import {QueryClient, QueryClientProvider} from 'react-query'
 import App from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {AuthProvider} from './context/auth'
-import './index.css'
 
 const queryClient = new QueryClient()
 
