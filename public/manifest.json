@@ -18,7 +18,8 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display_override": ["window-control-overlay", "minimal-ui"],
   "display": "standalone",
   "theme_color": "#000000",
