@@ -10,6 +10,7 @@ import {deleteTwoLevelDeep} from '../lib/delete'
 import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
 import {spacefy} from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
+import {postTwoLevelDeep} from '../lib/post'
 import NewList from './forms/addList'
 import DeleteFromDB from './deleteFromDB'
 import AddStuff from './forms/addStuff'
@@ -41,22 +42,74 @@ const $ItemContainer = styled.div<{isDone: boolean}>`
     `
 background: var(--blackShade);
 color: var(--white);
+border-radius: var(--roundness);
 `}
 `
-function Item({item}: {item: GroceryItemType}) {
+function Item({
+  item,
+  listName,
+  setResponse,
+}: {
+  item: GroceryItemType
+  listName: string
+  setResponse: React.Dispatch<React.SetStateAction<MyResponseType>>
+}) {
   const [isDone, setDone] = React.useState(item.isDone)
+  const [isPending, setPending] = React.useState(false)
 
+  const queryClient = useQueryClient()
+  const {mutateAsync} = useMutation(
+    async ({
+      list,
+      itemName,
+      data,
+    }: {
+      list: string
+      itemName: string
+      data: {isDone: boolean}
+    }) => {
+      const response = await postTwoLevelDeep<typeof data>({
+        collection: 'grocery',
+        doc: 'groceryList',
+        subCollection: list,
+        subDoc: spacefy(itemName, {reverse: true}),
+        data,
+        merge: true,
+      })
+      // THIS IS A BLUFF ... Not Sure IF It Will [[[WORK]]]
+      setResponse({...response})
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(listName)
+      },
+    },
+  )
   return (
     <$ItemContainer isDone={isDone}>
       <$Item style={{flex: 1}} isDone={isDone}>
         {item.quantity && item.quantity} {item.name}
       </$Item>
       <Button
-        onClick={() => setDone(!isDone)}
+        onClick={async () => {
+          setPending(!isPending)
+          await mutateAsync({
+            list: listName,
+            itemName: item.name,
+            data: {isDone: !isDone},
+          })
+          setDone(!isDone)
+          setPending(!isPending)
+        }}
         style={{width: '50px'}}
         variant="outlined"
+        disabled={isPending}
       >
-        ✔
+        {isPending ? (
+          <Spinner mount={isPending} styling={{position: 'relative'}} />
+        ) : (
+          '✔'
+        )}
       </Button>
     </$ItemContainer>
   )
@@ -101,7 +154,7 @@ function Items({listName}: {listName: string}) {
         collection: 'grocery',
         doc: 'groceryList',
         subCollection: list,
-        subDoc: itemName,
+        subDoc: spacefy(itemName, {reverse: true}),
       })
       // THIS IS A BLUFF ... Not Sure IF It Will [[[WORK]]]
       setResponse({...response})
@@ -119,27 +172,28 @@ function Items({listName}: {listName: string}) {
   if (listName.length === 0) {
     return <div>Please Rename Your List.</div>
   }
-  if (isLoading) {
-    return <Spinner mount={isLoading} />
-  }
+  // if (isLoading) {
+  //   return <Spinner mount={isLoading} />
+  // }
   return (
     <$ItemsContainer>
       <Spinner
-        mount={isFetching}
+        mount={isFetching || isLoading}
         styling={{marginTop: '-98px', marginLeft: '-190px'}}
       />
-      {groceries?.map(item => {
-        return (
-          <DeleteFromDB
-            key={nanoid()}
-            deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
-            dialogDeleting={item.name}
-            dialogLabelledBy="delete-from-grocery-list"
-          >
-            <Item item={item} />
-          </DeleteFromDB>
-        )
-      })}
+      {!isLoading &&
+        groceries?.map(item => {
+          return (
+            <DeleteFromDB
+              key={nanoid()}
+              deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
+              dialogDeleting={item.name}
+              dialogLabelledBy="delete-from-grocery-list"
+            >
+              <Item item={item} listName={listName} setResponse={setResponse} />
+            </DeleteFromDB>
+          )
+        })}
       {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>
   )
@@ -185,21 +239,21 @@ function Grocery({userId}: {userId: string}) {
         listName="grocery"
         listArray={arrayST}
       />
-      {!isLoading &&
-        userData.listName.map((item, i) => {
-          return (
-            <div
-              key={i}
-              style={{
-                margin: '30px 0',
-              }}
-            >
-              <ListName index={i} user={userData} />
-              <Items listName={item} />
-              <AddStuff listName={item} />
-            </div>
-          )
-        })}
+      {userData.listName.map((item, i) => {
+        const listName = spacefy(item, {reverse: true})
+        return (
+          <div
+            key={i}
+            style={{
+              margin: '30px 0',
+            }}
+          >
+            <ListName index={i} user={userData} />
+            <Items listName={listName} />
+            <AddStuff listName={listName} />
+          </div>
+        )
+      })}
     </>
   )
 }
