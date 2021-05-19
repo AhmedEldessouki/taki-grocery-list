@@ -72,6 +72,7 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
     }
     :read-only {
       border-color: var(--blackShade);
+      text-transform: capitalize;
     }
   }
   button {

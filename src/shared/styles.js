@@ -44,7 +44,7 @@ export const globalStyles = (
       }
       body,
       main {
-        min-height: calc(96vh - var(--navHeight));
+        min-height: calc(95vh - var(--navHeight));
       }
       h1 {
         font-size: clamp(1em, 1em + 2vw, 3em);
