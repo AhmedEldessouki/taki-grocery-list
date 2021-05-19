@@ -4,18 +4,24 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 function Spinner({
   mount,
+  size,
   styling,
 }: {
   mount: boolean
+  size?: number
   styling?: React.CSSProperties
 }) {
   return (
     <Fade
       in={mount}
-      style={{position: 'absolute', color: 'green', ...styling}}
+      style={{
+        position: 'absolute',
+        color: 'green',
+        ...styling,
+      }}
       unmountOnExit
     >
-      <CircularProgress size={20} />
+      <CircularProgress size={size ?? 20} />
     </Fade>
   )
 }
