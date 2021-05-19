@@ -1,6 +1,7 @@
 {
   "short_name": "Grocery List",
-  "name": "Create and Manage Grocery Lists",
+  "name": "Grocery List WebApp",
+  "description": "Create and Manage Grocery Lists",
   "icons": [
     {
       "src": "favicon.ico",
@@ -22,6 +23,6 @@
   "scope": "/",
   "display_override": ["window-control-overlay", "minimal-ui"],
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#10c110",
+  "background_color": "#f5f5f5"
 }
