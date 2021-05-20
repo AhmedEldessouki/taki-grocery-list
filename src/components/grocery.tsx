@@ -64,7 +64,7 @@ function ListCleanUp({
   const [wantToDelete, setWantToDelete] = React.useState<'delete' | 'clean'>()
   const queryClient = useQueryClient()
   const {mutateAsync} = useMutation(
-    async function handleCleanUp({
+    async ({
       listNameFn,
       userIdFn,
       cleanUpType,
@@ -73,7 +73,7 @@ function ListCleanUp({
       listNameFn: string
       userIdFn: string
       cleanUpType?: 'delete' | 'clean'
-    }) {
+    }) => {
       const batch = db.batch()
 
       const listRef = db
@@ -111,6 +111,9 @@ function ListCleanUp({
     },
     {
       onSuccess: () => {
+        if (wantToDelete === 'delete') {
+          queryClient.invalidateQueries('user')
+        }
         queryClient.invalidateQueries(listName)
       },
     },
@@ -126,7 +129,7 @@ function ListCleanUp({
         dialogTitle={`${wantToDelete}`}
         showDialog={wantToDelete !== undefined}
         deleting={wantToDelete === 'clean' ? 'all list items' : `this list`}
-        labelledBy="delete-user-dialog"
+        labelledBy={`${wantToDelete}-list-dialog`}
         onReject={() => {
           setWantToDelete(undefined)
         }}
