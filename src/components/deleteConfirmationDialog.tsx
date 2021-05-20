@@ -70,7 +70,15 @@ function DeleteConfirmationDialog({
           aria-label="yes"
         >
           {isPending ? (
-            <Spinner mount={isPending} styling={{position: 'relative'}} />
+            <Spinner
+              mount={isPending}
+              size={28}
+              styling={{
+                position: 'relative',
+                zIndex: 999999999999,
+                color: 'var(--white)',
+              }}
+            />
           ) : (
             'yes'
           )}

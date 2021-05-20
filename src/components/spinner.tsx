@@ -16,7 +16,7 @@ function Spinner({
       in={mount}
       style={{
         position: 'absolute',
-        color: 'green',
+        color: 'var(--green)',
         ...styling,
       }}
       unmountOnExit

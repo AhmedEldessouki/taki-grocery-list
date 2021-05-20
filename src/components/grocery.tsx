@@ -352,10 +352,9 @@ function Grocery({userId}: {userId: string}) {
             />
             {isFetching ? (
               // The Height is to prevent the layout shifting
-              <Spinner
-                mount={isFetching}
-                styling={{position: 'relative', height: '80px'}}
-              />
+              <div style={{height: '80px'}}>
+                <Spinner mount={isFetching} styling={{position: 'relative'}} />
+              </div>
             ) : (
               <ListName index={i} user={userData} />
             )}
