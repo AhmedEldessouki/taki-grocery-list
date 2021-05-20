@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {ToastContainer} from 'react-toastify'
 import styled from '@emotion/styled'
-import {Helmet} from 'react-helmet'
 import {ReactQueryDevtools} from 'react-query/devtools'
 import {globalStyles} from './shared/styles'
 import {useAuth} from './context/auth'
@@ -46,9 +45,6 @@ function App() {
 
   return (
     <Layout>
-      <Helmet>
-        <title>Grocery List</title>
-      </Helmet>
       {globalStyles}
       {user ? (
         <$AuthAppContainer>
