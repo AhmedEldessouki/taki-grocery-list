@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
@@ -50,7 +51,20 @@ const $NoteContainer = styled.div`
     line-height: 2;
   }
 `
-
+const $BtnWrapper = styled.div`
+  margin: 5px auto;
+  #close-btn {
+    position: absolute;
+    margin-left: 10px;
+    padding: 12px 13px;
+    padding-top: 7px;
+    font-size: 1rem;
+    :hover {
+      padding: 12px 13px;
+      padding-top: 7px;
+    }
+  }
+`
 function NewList({
   listName,
   userId,
@@ -138,7 +152,7 @@ function NewList({
   const isThreeItems = listArray.length + oldList.length >= 3
   return (
     <>
-      <div style={{margin: '5px auto'}}>
+      <$BtnWrapper>
         <Button
           variant="outlined"
           disabled={isThreeItems}
@@ -157,7 +171,19 @@ function NewList({
           />
           Add {listName} list
         </Button>
-      </div>
+        {isShow && (
+          <IconButton
+            id="close-btn"
+            onClick={() => {
+              setArrayChange([])
+              setShow(!isShow)
+            }}
+            aria-label="close button"
+          >
+            ✖
+          </IconButton>
+        )}
+      </$BtnWrapper>
       {isShow && (
         <$Form onSubmit={handleSubmit}>
           {listArray.map((item, i) => {
