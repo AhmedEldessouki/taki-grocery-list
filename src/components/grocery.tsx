@@ -55,9 +55,11 @@ const $CleanUpBtnsWrapper = styled.div`
 function ListCleanUp({
   listName,
   userData,
+  setError,
 }: {
   listName: string
   userData: UserDataType
+  setError: React.Dispatch<React.SetStateAction<Error | undefined>>
 }) {
   const [wantToDelete, setWantToDelete] = React.useState<'delete' | 'clean'>()
   const queryClient = useQueryClient()
@@ -86,11 +88,11 @@ function ListCleanUp({
             res.docs.map(item => listRef.doc(item.id).delete())
           },
           (err: Error) => {
-            console.log(err)
+            setError(err)
           },
         )
         .catch((err: Error) => {
-          console.log(err)
+          setError(err)
         })
       if (cleanUpType === 'delete') {
         const userRef = db.collection('users').doc(userIdFn)
@@ -310,8 +312,14 @@ function Grocery({userId}: {userId: string}) {
     },
   })
 
-  if (isError || !userData) {
-    return <div>{errorST?.message}</div>
+  if (!userData) {
+    return (
+      <$Warning>
+        {errorST
+          ? errorST.message
+          : 'Something went wrong! Please SignIn again.'}
+      </$Warning>
+    )
   }
 
   return (
@@ -327,6 +335,7 @@ function Grocery({userId}: {userId: string}) {
         listName="grocery"
         listArray={arrayST}
       />
+      {errorST && <$Warning>{errorST.message}</$Warning>}
       {userData.listName.map((item, i) => {
         const listName = spacefy(item, {reverse: true})
         return (
@@ -336,7 +345,11 @@ function Grocery({userId}: {userId: string}) {
               margin: '30px 0',
             }}
           >
-            <ListCleanUp listName={listName} userData={userData} />
+            <ListCleanUp
+              listName={listName}
+              userData={userData}
+              setError={setError}
+            />
             <ListName index={i} user={userData} />
             <Items listName={listName} />
             <AddStuff listName={listName} />
