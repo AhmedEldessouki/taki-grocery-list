@@ -100,9 +100,14 @@ function ListCleanUp({
         batch.update(userRef, {listName: userData.listName})
       }
 
-      await batch.commit().then(() => {
-        setWantToDelete(undefined)
-      })
+      await batch
+        .commit()
+        .then(() => {
+          setWantToDelete(undefined)
+        })
+        .catch((err: Error) => {
+          setError(err)
+        })
     },
     {
       onSuccess: () => {
