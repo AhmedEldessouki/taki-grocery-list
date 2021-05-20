@@ -109,9 +109,7 @@ function NewList({
 
     const newList = new Set([...oldList, ...listArray])
     await mutateAsync({
-      listName: [...(newList as unknown as string[])].map(item =>
-        whiteSpaceCleaner(item),
-      ),
+      listName: [...(newList as unknown as string[])],
     })
 
     setPending(false)
@@ -170,7 +168,9 @@ function NewList({
                 <ListInput
                   key={i}
                   handleBlur={e => {
-                    listArray[i] = e.target.value
+                    listArray[i] = whiteSpaceCleaner(
+                      e.target.value.toLowerCase(),
+                    )
                     setArrayChange([...listArray])
                   }}
                   listName={listName}
@@ -202,7 +202,15 @@ function NewList({
             }}
           >
             {isPending ? (
-              <Spinner mount={isPending} styling={{position: 'relative'}} />
+              <Spinner
+                mount={isPending}
+                size={28}
+                styling={{
+                  position: 'relative',
+                  zIndex: 999999999999,
+                  color: 'var(--white)',
+                }}
+              />
             ) : (
               'Submit'
             )}
