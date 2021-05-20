@@ -87,6 +87,7 @@ function DeleteUser() {
         <$Warning role="alert">{responseST.error.message}</$Warning>
       )}
       <DeleteConfirmationDialog
+        dialogTitle="Delete Account"
         showDialog={wantToDelete}
         deleting="your account"
         labelledBy="delete-user-dialog"
