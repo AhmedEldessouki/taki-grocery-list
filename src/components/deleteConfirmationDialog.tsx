@@ -4,9 +4,11 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import Spinner from './spinner'
 
 type DeleteConfirmationDialogPropType = {
   deleting: string
+  dialogTitle: string
   labelledBy: string
   showDialog: boolean
   onReject: () => void
@@ -14,6 +16,7 @@ type DeleteConfirmationDialogPropType = {
 }
 
 function DeleteConfirmationDialog({
+  dialogTitle,
   deleting,
   labelledBy,
   showDialog,
@@ -31,7 +34,9 @@ function DeleteConfirmationDialog({
       onClose={handleClose}
       aria-labelledby={labelledBy}
     >
-      <DialogTitle id={labelledBy}>Delete Account</DialogTitle>
+      <DialogTitle id={labelledBy} style={{textTransform: 'capitalize'}}>
+        {dialogTitle}
+      </DialogTitle>
       <DialogContent>
         <span>Do you want to delete {deleting}?</span>
       </DialogContent>
@@ -64,7 +69,11 @@ function DeleteConfirmationDialog({
           }}
           aria-label="yes"
         >
-          yes
+          {isPending ? (
+            <Spinner mount={isPending} styling={{position: 'relative'}} />
+          ) : (
+            'yes'
+          )}
         </Button>
       </DialogActions>
     </Dialog>
