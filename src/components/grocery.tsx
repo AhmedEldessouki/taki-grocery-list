@@ -96,8 +96,11 @@ function ListCleanUp({
         })
       if (cleanUpType === 'delete') {
         const userRef = db.collection('users').doc(userIdFn)
-        userData.listName.splice(userData.listName.indexOf(listNameFn), 1)
-        batch.update(userRef, {listName: userData.listName})
+        const index = userData.listName.indexOf(spacefy(listNameFn))
+        if (index >= 0) {
+          userData.listName.splice(index, 1)
+          batch.update(userRef, {listName: userData.listName})
+        }
       }
 
       await batch
@@ -319,16 +322,6 @@ function Grocery({userId}: {userId: string}) {
     },
   })
 
-  if (!userData) {
-    return (
-      <$Warning>
-        {errorST
-          ? errorST.message
-          : 'Something went wrong! Please SignIn again.'}
-      </$Warning>
-    )
-  }
-
   return (
     <>
       <Spinner
@@ -336,14 +329,14 @@ function Grocery({userId}: {userId: string}) {
         styling={{marginTop: '10px', left: '10px'}}
       />
       <NewList
-        userId={userData.userId}
+        userId={userData?.userId ?? ''}
         setArrayChange={setArray}
-        oldList={userData.listName}
+        oldList={userData?.listName ?? ['']}
         listName="grocery"
         listArray={arrayST}
       />
       {errorST && <$Warning>{errorST.message}</$Warning>}
-      {userData.listName.map((item, i) => {
+      {userData?.listName.map((item, i) => {
         const listName = spacefy(item, {reverse: true})
         return (
           <div
@@ -357,7 +350,15 @@ function Grocery({userId}: {userId: string}) {
               userData={userData}
               setError={setError}
             />
-            <ListName index={i} user={userData} />
+            {isFetching ? (
+              // The Height is to prevent the layout shifting
+              <Spinner
+                mount={isFetching}
+                styling={{position: 'relative', height: '80px'}}
+              />
+            ) : (
+              <ListName index={i} user={userData} />
+            )}
             <Items listName={listName} />
             <AddStuff listName={listName} />
           </div>
