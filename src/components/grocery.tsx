@@ -301,7 +301,6 @@ function Grocery({userId}: {userId: string}) {
   const {
     data: userData,
     isLoading,
-    isError,
     isFetching,
   } = useQuery('user', {
     queryFn: async () => {
