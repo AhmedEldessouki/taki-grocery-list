@@ -8,6 +8,7 @@ import type {MyResponseType} from '../../../types/api'
 import {notify} from '../../lib/notify'
 import {$Warning} from '../../shared/utils'
 import Spinner from '../spinner'
+import {whiteSpaceCleaner} from '../../lib/whiteSpaceCleaner'
 import {$Field} from './sharedCss/field'
 
 function ListInput({
@@ -64,6 +65,7 @@ function NewList({
   setArrayChange: React.Dispatch<React.SetStateAction<Array<string>>>
 }) {
   const [isPending, setPending] = React.useState(false)
+  const [isShow, setShow] = React.useState(false)
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
     isSuccessful: false,
@@ -87,6 +89,7 @@ function NewList({
       },
     },
   )
+
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
     setResponse({error: undefined, isSuccessful: false})
@@ -106,7 +109,9 @@ function NewList({
 
     const newList = new Set([...oldList, ...listArray])
     await mutateAsync({
-      listName: [...(newList as unknown as string[])],
+      listName: [...(newList as unknown as string[])].map(item =>
+        whiteSpaceCleaner(item),
+      ),
     })
 
     setPending(false)
@@ -123,6 +128,14 @@ function NewList({
     })
     setPending(false)
   }
+
+  React.useEffect(() => {
+    if (oldList.length >= 3) {
+      setShow(false)
+      setArrayChange([])
+    }
+  }, [oldList, setArrayChange])
+
   const hasThreeItems = listArray.length + oldList.length > 3
   const isThreeItems = listArray.length + oldList.length >= 3
   return (
@@ -132,7 +145,12 @@ function NewList({
           variant="outlined"
           disabled={isThreeItems}
           style={{background: 'transparent', color: 'var(--black)'}}
-          onClick={() => setArrayChange([...listArray.concat('')])}
+          onClick={() => {
+            setArrayChange([...listArray.concat('')])
+            if (!isShow) {
+              setShow(!isShow)
+            }
+          }}
         >
           <AddIcon
             fontSize="large"
@@ -142,7 +160,7 @@ function NewList({
           Add {listName} list
         </Button>
       </div>
-      {listArray.length > 0 && (
+      {isShow && (
         <$Form onSubmit={handleSubmit}>
           {listArray.map((item, i) => {
             if (oldList.length + i + 1 > 3) {

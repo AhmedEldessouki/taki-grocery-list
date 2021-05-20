@@ -9,6 +9,7 @@ import DeleteConfirmationDialog from './deleteConfirmationDialog'
 type DeleteFromDBPropType = {
   children: JSX.Element
   dialogLabelledBy: string
+  dialogTitle: string
   dialogDeleting: string
   deleteFn: () => void
 }
@@ -29,6 +30,7 @@ const $ButtonWrapper = styled.div`
 
 function DeleteFromDB({
   children,
+  dialogTitle,
   deleteFn,
   dialogLabelledBy,
   dialogDeleting,
@@ -58,6 +60,7 @@ function DeleteFromDB({
         {children}
       </$Container>
       <DeleteConfirmationDialog
+        dialogTitle={dialogTitle}
         showDialog={showDialog}
         labelledBy={dialogLabelledBy}
         deleting={dialogDeleting}

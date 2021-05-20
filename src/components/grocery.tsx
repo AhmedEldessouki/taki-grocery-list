@@ -11,11 +11,13 @@ import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
 import {spacefy} from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
 import {postTwoLevelDeep} from '../lib/post'
+import {db} from '../lib/firebase'
 import NewList from './forms/addList'
 import DeleteFromDB from './deleteFromDB'
 import AddStuff from './forms/addStuff'
 import ListName from './forms/listName'
 import Spinner from './spinner'
+import DeleteConfirmationDialog from './deleteConfirmationDialog'
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
@@ -45,6 +47,107 @@ color: var(--white);
 border-radius: var(--roundness);
 `}
 `
+const $CleanUpBtnsWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
+function ListCleanUp({
+  listName,
+  userData,
+  setError,
+}: {
+  listName: string
+  userData: UserDataType
+  setError: React.Dispatch<React.SetStateAction<Error | undefined>>
+}) {
+  const [wantToDelete, setWantToDelete] = React.useState<'delete' | 'clean'>()
+  const queryClient = useQueryClient()
+  const {mutateAsync} = useMutation(
+    async ({
+      listNameFn,
+      userIdFn,
+      cleanUpType,
+    }: {
+      subDoc?: string
+      listNameFn: string
+      userIdFn: string
+      cleanUpType?: 'delete' | 'clean'
+    }) => {
+      const batch = db.batch()
+
+      const listRef = db
+        .collection('grocery')
+        .doc('groceryList')
+        .collection(listNameFn)
+
+      await listRef
+        .get()
+        .then(
+          res => {
+            res.docs.map(item => listRef.doc(item.id).delete())
+          },
+          (err: Error) => {
+            setError(err)
+          },
+        )
+        .catch((err: Error) => {
+          setError(err)
+        })
+      if (cleanUpType === 'delete') {
+        const userRef = db.collection('users').doc(userIdFn)
+        const index = userData.listName.indexOf(spacefy(listNameFn))
+        if (index >= 0) {
+          userData.listName.splice(index, 1)
+          batch.update(userRef, {listName: userData.listName})
+        }
+      }
+
+      await batch
+        .commit()
+        .then(() => {
+          setWantToDelete(undefined)
+        })
+        .catch((err: Error) => {
+          setError(err)
+        })
+    },
+    {
+      onSuccess: () => {
+        if (wantToDelete === 'delete') {
+          queryClient.invalidateQueries('user')
+        }
+        queryClient.invalidateQueries(listName)
+      },
+    },
+  )
+
+  return (
+    <>
+      <$CleanUpBtnsWrapper>
+        <Button onClick={() => setWantToDelete('clean')}>Clean</Button>
+        <Button onClick={() => setWantToDelete('delete')}>Delete</Button>
+      </$CleanUpBtnsWrapper>
+      <DeleteConfirmationDialog
+        dialogTitle={`${wantToDelete}`}
+        showDialog={wantToDelete !== undefined}
+        deleting={wantToDelete === 'clean' ? 'all list items' : `this list`}
+        labelledBy={`${wantToDelete}-list-dialog`}
+        onReject={() => {
+          setWantToDelete(undefined)
+        }}
+        onAccept={async () => {
+          await mutateAsync({
+            listNameFn: listName,
+            userIdFn: userData.userId,
+            cleanUpType: wantToDelete,
+          })
+        }}
+      />
+    </>
+  )
+}
+
 function Item({
   item,
   listName,
@@ -172,9 +275,6 @@ function Items({listName}: {listName: string}) {
   if (listName.length === 0) {
     return <div>Please Rename Your List.</div>
   }
-  // if (isLoading) {
-  //   return <Spinner mount={isLoading} />
-  // }
   return (
     <$ItemsContainer>
       <Spinner
@@ -185,6 +285,7 @@ function Items({listName}: {listName: string}) {
         groceries?.map(item => {
           return (
             <DeleteFromDB
+              dialogTitle="Delete item from list"
               key={nanoid()}
               deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
               dialogDeleting={item.name}
@@ -206,7 +307,6 @@ function Grocery({userId}: {userId: string}) {
   const {
     data: userData,
     isLoading,
-    isError,
     isFetching,
   } = useQuery('user', {
     queryFn: async () => {
@@ -222,10 +322,6 @@ function Grocery({userId}: {userId: string}) {
     },
   })
 
-  if (isError || !userData) {
-    return <div>{errorST?.message}</div>
-  }
-
   return (
     <>
       <Spinner
@@ -233,13 +329,14 @@ function Grocery({userId}: {userId: string}) {
         styling={{marginTop: '10px', left: '10px'}}
       />
       <NewList
-        userId={userData.userId}
+        userId={userData?.userId ?? ''}
         setArrayChange={setArray}
-        oldList={userData.listName}
+        oldList={userData?.listName ?? ['']}
         listName="grocery"
         listArray={arrayST}
       />
-      {userData.listName.map((item, i) => {
+      {errorST && <$Warning>{errorST.message}</$Warning>}
+      {userData?.listName.map((item, i) => {
         const listName = spacefy(item, {reverse: true})
         return (
           <div
@@ -248,7 +345,20 @@ function Grocery({userId}: {userId: string}) {
               margin: '30px 0',
             }}
           >
-            <ListName index={i} user={userData} />
+            <ListCleanUp
+              listName={listName}
+              userData={userData}
+              setError={setError}
+            />
+            {isFetching ? (
+              // The Height is to prevent the layout shifting
+              <Spinner
+                mount={isFetching}
+                styling={{position: 'relative', height: '80px'}}
+              />
+            ) : (
+              <ListName index={i} user={userData} />
+            )}
             <Items listName={listName} />
             <AddStuff listName={listName} />
           </div>
