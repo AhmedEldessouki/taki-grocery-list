@@ -7,6 +7,12 @@ type MyResponseTypeWithData<T> = {
   data?: T
 } & MyResponseType
 
-type GroceryItemType = {name: string; quantity: number; isDone: boolean}
+type GroceryItemType = {
+  name: string
+  bgColor: string
+  quantity: number
+  priority: number
+  isDone: boolean
+}
 
 export {MyResponseType, MyResponseTypeWithData, GroceryItemType}

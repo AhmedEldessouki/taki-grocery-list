@@ -18,6 +18,7 @@ import AddStuff from './forms/addStuff'
 import ListName from './forms/listName'
 import Spinner from './spinner'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
+import EditItem from './forms/editItem'
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
@@ -28,23 +29,28 @@ const $Item = styled.span<{isDone: boolean}>`
 text-decoration-line: line-through;
 `}
 `
-const $ItemContainer = styled.div<{isDone: boolean}>`
+const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   display: flex;
   align-items: center;
   width: 500px;
   padding: 5px 10px;
+  border-radius: var(--roundness);
   ${mqMax.s} {
     width: 300px;
   }
   ${mqMax.xs} {
     width: 250px;
   }
-  ${({isDone}) =>
+  ${({isDone, bgColor}) =>
+    `
+  background: ${isDone ? `transparent` : `var(--${bgColor})`};
+  ${
     isDone &&
     `
-background: var(--blackShade);
-color: var(--white);
-border-radius: var(--roundness);
+    background-image: linear-gradient(to right, #000, #393939, #717171, #afafaf, #f1f1f1);
+    color: var(--white);
+`
+  };
 `}
 `
 const $CleanUpBtnsWrapper = styled.div`
@@ -189,10 +195,13 @@ function Item({
     },
   )
   return (
-    <$ItemContainer isDone={isDone}>
+    <$ItemContainer isDone={isDone} bgColor={item.bgColor}>
       <$Item style={{flex: 1}} isDone={isDone}>
         {item.quantity && item.quantity} {item.name}
       </$Item>
+      <EditItem>
+        <AddStuff idx={124} isEdit={true} listName={listName} item={item} />
+      </EditItem>
       <Button
         onClick={async () => {
           setPending(!isPending)
@@ -204,12 +213,16 @@ function Item({
           setDone(!isDone)
           setPending(!isPending)
         }}
-        style={{width: '50px'}}
+        style={{width: '50px', color: 'var(--black)'}}
         variant="outlined"
         disabled={isPending}
       >
         {isPending ? (
-          <Spinner mount={isPending} styling={{position: 'relative'}} />
+          <Spinner
+            mount={isPending}
+            size={30}
+            styling={{position: 'relative'}}
+          />
         ) : (
           '✔'
         )}
@@ -272,6 +285,21 @@ function Items({listName}: {listName: string}) {
     await mutateAsync({list: spacefy(listName, {reverse: true}), itemName})
   }
 
+  const reArrangeItems = React.useCallback(
+    (arr: Array<GroceryItemType>): Array<GroceryItemType> => {
+      return arr.sort((a, b) => {
+        if (a.priority < 1) {
+          a.priority += 9999
+        }
+        if (b.priority < 1) {
+          b.priority += 9999
+        }
+        return a.priority - b.priority
+      })
+    },
+    [],
+  )
+
   if (listName.length === 0) {
     return <div>Please Rename Your List.</div>
   }
@@ -282,7 +310,8 @@ function Items({listName}: {listName: string}) {
         styling={{marginTop: '-98px', marginLeft: '-190px'}}
       />
       {!isLoading &&
-        groceries?.map(item => {
+        groceries &&
+        reArrangeItems(groceries).map(item => {
           return (
             <DeleteFromDB
               dialogTitle="Delete item from list"
@@ -359,7 +388,7 @@ function Grocery({userId}: {userId: string}) {
               <ListName index={i} user={userData} />
             )}
             <Items listName={listName} />
-            <AddStuff listName={listName} />
+            <AddStuff listName={listName} idx={i} />
           </div>
         )
       })}

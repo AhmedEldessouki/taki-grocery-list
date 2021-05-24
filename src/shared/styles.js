@@ -24,11 +24,14 @@ export const globalStyles = (
         --rgbWhite: 245, 245, 245;
         --rgbBlack: 2, 0, 7;
 
+        --mattRed: #ff6565;
+        --mattBlue: #65b8ff;
+        --mattGray: #d6d6d6;
         --red: tomato;
         --blue: #3f51b5;
+        --gray: #a4a0a0;
         --green: #10c110;
         --yellow: #e3e355;
-        --gray: #a4a0a0;
         --white: rgba(var(--rgbWhite), 1);
         --whiteShade: rgba(var(--rgbWhite), var(--opacity));
         --black: rgba(var(--rgbBlack), 1);
