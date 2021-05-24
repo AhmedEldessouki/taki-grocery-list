@@ -2,10 +2,11 @@ import styled from '@emotion/styled'
 import React from 'react'
 import {Button} from '@material-ui/core'
 import {useMutation, useQueryClient} from 'react-query'
-import {postTwoLevelDeep} from '../../lib/post'
 import {$Warning, mqMax} from '../../shared/utils'
 import type {GroceryItemType, MyResponseType} from '../../../types/api'
 import {spacefy} from '../../lib/spacefy'
+import {db} from '../../lib/firebase'
+import {notify} from '../../lib/notify'
 import {$Field} from './sharedCss/field'
 
 const $Form = styled.form`
@@ -49,14 +50,17 @@ ${checked && `border-color: var(--green)`}`}}
 type AddStuffPropsType = {
   listName: string
   item?: Omit<GroceryItemType, 'isDone'>
+  isEdit?: boolean
+  idx: number
 }
 
-function AddStuff({listName, item}: AddStuffPropsType) {
+function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
   const [priorityST, setPriority] = React.useState(item?.priority ?? '0')
   const [qtyST, setQty] = React.useState(item?.quantity ?? '0')
   const [nameST, setName] = React.useState(item?.name ?? '')
+  const [oldNameST] = React.useState(isEdit ? item?.name : undefined)
   const [colorValue, setColorValue] = React.useState(
     item?.bgColor ?? 'transparent',
   )
@@ -68,14 +72,36 @@ function AddStuff({listName, item}: AddStuffPropsType) {
   const queryClient = useQueryClient()
   const mutation = useMutation(
     async (newData: Omit<GroceryItemType, 'isDone'>) => {
-      const response = await postTwoLevelDeep<GroceryItemType>({
-        collection: 'grocery',
-        doc: 'groceryList',
-        subCollection: spacefy(listName, {reverse: true}),
-        subDoc: spacefy(newData.name, {reverse: true}),
-        data: {...newData, isDone: false},
-      })
-      setResponse({...response})
+      const batch = db.batch()
+
+      const listRef = db
+        .collection('grocery')
+        .doc('groceryList')
+        .collection(spacefy(listName, {reverse: true}))
+
+      if (oldNameST && oldNameST !== newData.name) {
+        console.log('[Deleting]')
+        const oldItemRef = listRef.doc(spacefy(oldNameST, {reverse: true}))
+        batch.delete(oldItemRef)
+      }
+      const newItemRef = listRef.doc(spacefy(newData.name, {reverse: true}))
+      batch.set(newItemRef, {...newData, isDone: false})
+
+      await batch
+        .commit()
+        .then(() => {
+          notify('👍', 'Item Updated', {
+            color: 'var(--green)',
+          })
+          setResponse({isSuccessful: true})
+        })
+        .catch((error: Error) => {
+          notify('👻', 'Update Failed', {
+            color: 'var(--red)',
+          })
+          setResponse({isSuccessful: false, error})
+        })
+      console.log('[Update]/[Create]')
     },
     {
       onSuccess: () => {
@@ -124,24 +150,24 @@ function AddStuff({listName, item}: AddStuffPropsType) {
             <input
               type="number"
               name="quantity"
-              id="quantity"
+              id={`quantity-${idx}`}
               placeholder="enter quantity"
               value={qtyST}
               onChange={e => setQty(e.target.value)}
             />
-            <label htmlFor="quantity">Qty</label>
+            <label htmlFor={`quantity-${idx}`}>Qty</label>
           </$Field>
           <$Field>
             <input
               type="text"
               name="itemName"
-              id="itemName"
+              id={`itemName-${idx}`}
               placeholder="enter item name"
               required
               value={nameST}
               onChange={e => setName(e.target.value)}
             />
-            <label htmlFor="itemName">New Grocery Item</label>
+            <label htmlFor={`itemName-${idx}`}>New Grocery Item</label>
           </$Field>
         </$RowWrapper>
         <$RowWrapper>
@@ -175,13 +201,13 @@ function AddStuff({listName, item}: AddStuffPropsType) {
             <input
               type="number"
               name="priority"
-              id="priority"
+              id={`priority-${idx}`}
               required
               placeholder="enter priority Number"
               value={priorityST}
               onChange={e => setPriority(e.target.value)}
             />
-            <label htmlFor="priority">priority no.</label>
+            <label htmlFor={`priority-${idx}`}>priority no.</label>
           </$Field>
           <Button
             type="submit"
