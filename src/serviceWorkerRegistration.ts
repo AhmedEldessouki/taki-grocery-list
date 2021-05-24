@@ -11,6 +11,8 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://cra.link/PWA
+import React from 'react'
+import {toast} from 'react-toastify'
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -76,8 +78,17 @@ function registerValidSW(swUrl: string, config?: Config) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-              // eslint-disable-next-line no-alert
-              window.prompt('New content is available. Please restart the app.')
+              toast.info(
+                `Update available! To update, close all windows and reopen.`,
+                {
+                  toastId: 'appUpdateAvailable',
+                  // Prevent duplicate toasts
+                  onClick: () => window.close(),
+                  // Closes windows on click
+                  autoClose: false,
+                  // Prevents toast from auto closing
+                },
+              )
               console.log(
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://cra.link/PWA.',
