@@ -42,10 +42,12 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   }
   ${({isDone, bgColor}) =>
     `
-  background: ${isDone ? `var(--black)` : `${bgColor}`};
+  background: ${isDone ? `transparent` : `var(--${bgColor})`};
   ${
     isDone &&
-    `color: var(--white);
+    `
+    background-image: linear-gradient(to right, #000, #393939, #717171, #afafaf, #f1f1f1);
+    color: var(--white);
 `
   };
 `}
@@ -207,7 +209,7 @@ function Item({
           setDone(!isDone)
           setPending(!isPending)
         }}
-        style={{width: '50px'}}
+        style={{width: '50px', color: 'var(--black)'}}
         variant="outlined"
         disabled={isPending}
       >
@@ -279,6 +281,21 @@ function Items({listName}: {listName: string}) {
     await mutateAsync({list: spacefy(listName, {reverse: true}), itemName})
   }
 
+  const reArrangeItems = React.useCallback(
+    (arr: Array<GroceryItemType>): Array<GroceryItemType> => {
+      return arr.sort((a, b) => {
+        if (a.priority < 1) {
+          a.priority += 9999
+        }
+        if (b.priority < 1) {
+          b.priority += 9999
+        }
+        return a.priority - b.priority
+      })
+    },
+    [],
+  )
+
   if (listName.length === 0) {
     return <div>Please Rename Your List.</div>
   }
@@ -289,7 +306,8 @@ function Items({listName}: {listName: string}) {
         styling={{marginTop: '-98px', marginLeft: '-190px'}}
       />
       {!isLoading &&
-        groceries?.map(item => {
+        groceries &&
+        reArrangeItems(groceries).map(item => {
           return (
             <DeleteFromDB
               dialogTitle="Delete item from list"
