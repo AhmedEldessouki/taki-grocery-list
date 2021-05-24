@@ -28,23 +28,26 @@ const $Item = styled.span<{isDone: boolean}>`
 text-decoration-line: line-through;
 `}
 `
-const $ItemContainer = styled.div<{isDone: boolean}>`
+const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   display: flex;
   align-items: center;
   width: 500px;
   padding: 5px 10px;
+  border-radius: var(--roundness);
   ${mqMax.s} {
     width: 300px;
   }
   ${mqMax.xs} {
     width: 250px;
   }
-  ${({isDone}) =>
-    isDone &&
+  ${({isDone, bgColor}) =>
     `
-background: var(--blackShade);
-color: var(--white);
-border-radius: var(--roundness);
+  background: ${isDone ? `var(--black)` : `${bgColor}`};
+  ${
+    isDone &&
+    `color: var(--white);
+`
+  };
 `}
 `
 const $CleanUpBtnsWrapper = styled.div`
@@ -189,7 +192,7 @@ function Item({
     },
   )
   return (
-    <$ItemContainer isDone={isDone}>
+    <$ItemContainer isDone={isDone} bgColor={item.bgColor}>
       <$Item style={{flex: 1}} isDone={isDone}>
         {item.quantity && item.quantity} {item.name}
       </$Item>
@@ -209,7 +212,11 @@ function Item({
         disabled={isPending}
       >
         {isPending ? (
-          <Spinner mount={isPending} styling={{position: 'relative'}} />
+          <Spinner
+            mount={isPending}
+            size={30}
+            styling={{position: 'relative'}}
+          />
         ) : (
           '✔'
         )}
