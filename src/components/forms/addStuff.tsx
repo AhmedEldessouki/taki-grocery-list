@@ -42,13 +42,16 @@ width: 25px;
 height: 25px;
 margin: 5px;
 ${({checked, bgColor}) => `
-background-color: ${bgColor};
+background-color: var(--${bgColor});
 ${checked && `border-color: var(--green)`}`}}
 `
 
 function AddStuff({listName}: {listName: string}) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
+  const [priorityST, setPriority] = React.useState('0')
+  const [qtyST, setQty] = React.useState('0')
+  const [nameST, setName] = React.useState('')
   const [colorValue, setColorValue] = React.useState('transparent')
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
@@ -76,7 +79,7 @@ function AddStuff({listName}: {listName: string}) {
     },
   )
 
-  async function handleSubmit(e: React.SyntheticEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     setPending(!isPending)
@@ -84,11 +87,12 @@ function AddStuff({listName}: {listName: string}) {
       setSubmitFailed('')
     }
 
-    const {item, quantity, priority} = e.target as typeof e.target & {
-      item: {value: string}
-      quantity: {value: number}
-      priority: {value: number}
-    }
+    const {item, quantity, priority} =
+      e.currentTarget as typeof e.currentTarget & {
+        item: {value: string}
+        quantity: {value: number}
+        priority: {value: number}
+      }
 
     await mutation.mutateAsync({
       name: item.value,
@@ -97,6 +101,10 @@ function AddStuff({listName}: {listName: string}) {
       bgColor: colorValue,
     })
 
+    setColorValue('transparent')
+    setQty('0')
+    setPriority('0')
+    setName('')
     setPending(false)
   }
 
@@ -110,6 +118,8 @@ function AddStuff({listName}: {listName: string}) {
               name="quantity"
               id="quantity"
               placeholder="enter quantity"
+              value={qtyST}
+              onChange={e => setQty(e.target.value)}
             />
             <label htmlFor="quantity">Qty</label>
           </$Field>
@@ -120,6 +130,8 @@ function AddStuff({listName}: {listName: string}) {
               id="item"
               placeholder="enter item"
               required
+              value={nameST}
+              onChange={e => setName(e.target.value)}
             />
             <label htmlFor="item">New Grocery Item</label>
           </$Field>
@@ -134,21 +146,21 @@ function AddStuff({listName}: {listName: string}) {
             ></$PalletBtns>
             <$PalletBtns
               type="button"
-              bgColor="#0000ff82"
-              checked={colorValue === '#0000ff82'}
-              onClick={() => setColorValue('#0000ff82')}
+              bgColor="mattBlue"
+              checked={colorValue === 'mattBlue'}
+              onClick={() => setColorValue('mattBlue')}
             ></$PalletBtns>
             <$PalletBtns
               type="button"
-              bgColor="#f009"
-              checked={colorValue === '#f009'}
-              onClick={() => setColorValue('#f009')}
+              bgColor="mattRed"
+              checked={colorValue === 'mattRed'}
+              onClick={() => setColorValue('mattRed')}
             ></$PalletBtns>
             <$PalletBtns
               type="button"
-              bgColor="#8080808a"
-              checked={colorValue === '#8080808a'}
-              onClick={() => setColorValue('#8080808a')}
+              bgColor="mattGray"
+              checked={colorValue === 'mattGray'}
+              onClick={() => setColorValue('mattGray')}
             ></$PalletBtns>
           </$Pallet>
           <$Field>
@@ -158,6 +170,8 @@ function AddStuff({listName}: {listName: string}) {
               id="priority"
               required
               placeholder="enter priority Number"
+              value={priorityST}
+              onChange={e => setPriority(e.target.value)}
             />
             <label htmlFor="priority">priority no.</label>
           </$Field>
