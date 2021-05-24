@@ -9,11 +9,17 @@ import {spacefy} from '../../lib/spacefy'
 import {$Field} from './sharedCss/field'
 
 const $Form = styled.form`
-  display: grid;
-  grid-template-columns: 0.35fr 2fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   width: 500px;
+`
+const $RowWrapper = styled.div`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 0.5fr 2fr 1fr;
   ${mqMax.s} {
+    display: grid;
     grid-template-columns: 1fr 2fr;
     width: 300px;
   }
@@ -21,17 +27,36 @@ const $Form = styled.form`
     width: 250px;
   }
 `
+const $Pallet = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5px;
+`
+
+const $PalletBtns = styled.button<{bgColor: string; checked: boolean}>`
+border: 3px solid var(--blackShade);
+border-radius: var(--roundness);
+width: 25px;
+height: 25px;
+margin: 5px;
+${({checked, bgColor}) => `
+background-color: ${bgColor};
+${checked && `border-color: var(--green)`}`}}
+`
 
 function AddStuff({listName}: {listName: string}) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
+  const [colorValue, setColorValue] = React.useState('white')
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
     isSuccessful: false,
   })
   const queryClient = useQueryClient()
   const mutation = useMutation(
-    async (newData: {name: string; quantity: number}) => {
+    async (newData: Omit<GroceryItemType, 'isDone'>) => {
       const response = await postTwoLevelDeep<GroceryItemType>({
         collection: 'grocery',
         doc: 'groceryList',
@@ -59,12 +84,18 @@ function AddStuff({listName}: {listName: string}) {
       setSubmitFailed('')
     }
 
-    const {item, quantity} = e.target as typeof e.target & {
+    const {item, quantity, priority} = e.target as typeof e.target & {
       item: {value: string}
       quantity: {value: number}
+      priority: {value: number}
     }
 
-    await mutation.mutateAsync({name: item.value, quantity: quantity.value})
+    await mutation.mutateAsync({
+      name: item.value,
+      quantity: quantity.value,
+      priority: priority.value,
+      bgColor: colorValue,
+    })
 
     setPending(false)
   }
@@ -72,36 +103,76 @@ function AddStuff({listName}: {listName: string}) {
   return (
     <div>
       <$Form onSubmit={handleSubmit}>
-        <$Field>
-          <input
-            type="number"
-            name="quantity"
-            id="quantity"
-            placeholder="enter quantity"
-          />
-          <label htmlFor="quantity">Qty</label>
-        </$Field>
-        <$Field>
-          <input
-            type="text"
-            name="item"
-            id="item"
-            placeholder="enter item"
-            required
-          />
-          <label htmlFor="item">New Grocery Item</label>
-        </$Field>
-        <Button
-          type="submit"
-          variant="contained"
-          style={{
-            background: !isPending ? 'var(--green)' : 'var(--red)',
-            color: 'var(--white)',
-            minWidth: '88px',
-          }}
-        >
-          Add Item
-        </Button>
+        <$RowWrapper>
+          <$Field>
+            <input
+              type="number"
+              name="quantity"
+              id="quantity"
+              placeholder="enter quantity"
+            />
+            <label htmlFor="quantity">Qty</label>
+          </$Field>
+          <$Field>
+            <input
+              type="text"
+              name="item"
+              id="item"
+              placeholder="enter item"
+              required
+            />
+            <label htmlFor="item">New Grocery Item</label>
+          </$Field>
+        </$RowWrapper>
+        <$RowWrapper>
+          <$Pallet>
+            <$PalletBtns
+              type="button"
+              bgColor="transparent"
+              checked={colorValue === 'transparent'}
+              onClick={() => setColorValue('transparent')}
+            ></$PalletBtns>
+            <$PalletBtns
+              type="button"
+              bgColor="#0000ff82"
+              checked={colorValue === '#0000ff82'}
+              onClick={() => setColorValue('#0000ff82')}
+            ></$PalletBtns>
+            <$PalletBtns
+              type="button"
+              bgColor="#f009"
+              checked={colorValue === '#f009'}
+              onClick={() => setColorValue('#f009')}
+            ></$PalletBtns>
+            <$PalletBtns
+              type="button"
+              bgColor="#8080808a"
+              checked={colorValue === '#8080808a'}
+              onClick={() => setColorValue('#8080808a')}
+            ></$PalletBtns>
+          </$Pallet>
+          <$Field>
+            <input
+              type="number"
+              name="priority"
+              id="priority"
+              required
+              placeholder="enter priority Number"
+            />
+            <label htmlFor="priority">priority no.</label>
+          </$Field>
+          <Button
+            type="submit"
+            variant="contained"
+            style={{
+              background: !isPending ? 'var(--green)' : 'var(--red)',
+              color: 'var(--white)',
+              minWidth: '88px',
+            }}
+          >
+            Add Item
+          </Button>
+        </$RowWrapper>
       </$Form>
       {responseST.error && (
         <$Warning role="alert" marginBottom="10">
