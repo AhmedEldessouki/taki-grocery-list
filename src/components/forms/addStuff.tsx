@@ -46,17 +46,25 @@ background-color: var(--${bgColor});
 ${checked && `border-color: var(--green)`}`}}
 `
 
-function AddStuff({listName}: {listName: string}) {
+type AddStuffPropsType = {
+  listName: string
+  item?: Omit<GroceryItemType, 'isDone'>
+}
+
+function AddStuff({listName, item}: AddStuffPropsType) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
-  const [priorityST, setPriority] = React.useState('0')
-  const [qtyST, setQty] = React.useState('0')
-  const [nameST, setName] = React.useState('')
-  const [colorValue, setColorValue] = React.useState('transparent')
+  const [priorityST, setPriority] = React.useState(item?.priority ?? '0')
+  const [qtyST, setQty] = React.useState(item?.quantity ?? '0')
+  const [nameST, setName] = React.useState(item?.name ?? '')
+  const [colorValue, setColorValue] = React.useState(
+    item?.bgColor ?? 'transparent',
+  )
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
     isSuccessful: false,
   })
+
   const queryClient = useQueryClient()
   const mutation = useMutation(
     async (newData: Omit<GroceryItemType, 'isDone'>) => {
@@ -87,15 +95,15 @@ function AddStuff({listName}: {listName: string}) {
       setSubmitFailed('')
     }
 
-    const {item, quantity, priority} =
+    const {itemName, quantity, priority} =
       e.currentTarget as typeof e.currentTarget & {
-        item: {value: string}
+        itemName: {value: string}
         quantity: {value: number}
         priority: {value: number}
       }
 
     await mutation.mutateAsync({
-      name: item.value,
+      name: itemName.value,
       quantity: quantity.value,
       priority: priority.value,
       bgColor: colorValue,
@@ -126,14 +134,14 @@ function AddStuff({listName}: {listName: string}) {
           <$Field>
             <input
               type="text"
-              name="item"
-              id="item"
-              placeholder="enter item"
+              name="itemName"
+              id="itemName"
+              placeholder="enter item name"
               required
               value={nameST}
               onChange={e => setName(e.target.value)}
             />
-            <label htmlFor="item">New Grocery Item</label>
+            <label htmlFor="itemName">New Grocery Item</label>
           </$Field>
         </$RowWrapper>
         <$RowWrapper>
@@ -143,25 +151,25 @@ function AddStuff({listName}: {listName: string}) {
               bgColor="transparent"
               checked={colorValue === 'transparent'}
               onClick={() => setColorValue('transparent')}
-            ></$PalletBtns>
+            />
             <$PalletBtns
               type="button"
               bgColor="mattBlue"
               checked={colorValue === 'mattBlue'}
               onClick={() => setColorValue('mattBlue')}
-            ></$PalletBtns>
+            />
             <$PalletBtns
               type="button"
               bgColor="mattRed"
               checked={colorValue === 'mattRed'}
               onClick={() => setColorValue('mattRed')}
-            ></$PalletBtns>
+            />
             <$PalletBtns
               type="button"
               bgColor="mattGray"
               checked={colorValue === 'mattGray'}
               onClick={() => setColorValue('mattGray')}
-            ></$PalletBtns>
+            />
           </$Pallet>
           <$Field>
             <input
