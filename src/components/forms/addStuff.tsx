@@ -49,7 +49,7 @@ ${checked && `border-color: var(--green)`}`}}
 function AddStuff({listName}: {listName: string}) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
-  const [colorValue, setColorValue] = React.useState('white')
+  const [colorValue, setColorValue] = React.useState('transparent')
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
     isSuccessful: false,
