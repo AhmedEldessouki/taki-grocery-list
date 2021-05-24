@@ -18,6 +18,7 @@ import AddStuff from './forms/addStuff'
 import ListName from './forms/listName'
 import Spinner from './spinner'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
+import EditItem from './forms/editItem'
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
@@ -198,6 +199,9 @@ function Item({
       <$Item style={{flex: 1}} isDone={isDone}>
         {item.quantity && item.quantity} {item.name}
       </$Item>
+      <EditItem>
+        <AddStuff idx={124} isEdit={true} listName={listName} item={item} />
+      </EditItem>
       <Button
         onClick={async () => {
           setPending(!isPending)
@@ -384,7 +388,7 @@ function Grocery({userId}: {userId: string}) {
               <ListName index={i} user={userData} />
             )}
             <Items listName={listName} />
-            <AddStuff listName={listName} />
+            <AddStuff listName={listName} idx={i} />
           </div>
         )
       })}
