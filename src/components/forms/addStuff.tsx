@@ -90,13 +90,13 @@ function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
       await batch
         .commit()
         .then(() => {
-          notify('👍', 'Item Updated', {
+          notify('👍', `Item ${isEdit ? 'Updated' : 'Created'}`, {
             color: 'var(--green)',
           })
           setResponse({isSuccessful: true})
         })
         .catch((error: Error) => {
-          notify('👻', 'Update Failed', {
+          notify('👻', `${isEdit ? 'Updated' : 'Created'} Failed`, {
             color: 'var(--red)',
           })
           setResponse({isSuccessful: false, error})
