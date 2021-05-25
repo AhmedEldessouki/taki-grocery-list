@@ -67,7 +67,7 @@ function App() {
         draggable
         pauseOnHover
       />
-      <ReactQueryDevtools />
+      {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
     </Layout>
   )
 }
