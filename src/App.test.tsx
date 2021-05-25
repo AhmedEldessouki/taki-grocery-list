@@ -1,9 +1,10 @@
 import React from 'react'
-import {render, screen} from '@testing-library/react'
 import App from './App'
+import {render, screen} from './test/utils'
 
-test('renders learn react link', () => {
-  render(<App />)
-  const linkElement = screen.getByText(/learn react/i)
-  expect(linkElement).toBeInTheDocument()
+test('smoke test', async () => {
+  await render(<App />)
+  const signIn = screen.getByText(/Sign In/i)
+  expect(signIn).toBeInTheDocument()
+  screen.debug()
 })
