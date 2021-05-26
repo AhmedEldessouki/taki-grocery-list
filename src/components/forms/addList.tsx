@@ -15,9 +15,11 @@ import {$Field} from './sharedCss/field'
 function ListInput({
   componentName,
   handleBlur,
+  idx,
 }: {
   componentName: string
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void
+  idx: number
 }) {
   const [state, setState] = React.useState('')
 
@@ -25,14 +27,14 @@ function ListInput({
     <$Field>
       <input
         placeholder="this is to help control label"
-        type="list"
-        name="list"
+        type="text"
+        name={`list${idx}`}
         value={state}
         onChange={e => setState(e.target.value)}
         onBlur={handleBlur}
-        id="list"
+        id={`list${idx}`}
       />
-      <label htmlFor="list">{componentName} list</label>
+      <label htmlFor={`list${idx}`}>{componentName} list</label>
     </$Field>
   )
 }
@@ -193,6 +195,7 @@ function AddList({
               return (
                 <ListInput
                   key={i}
+                  idx={i}
                   handleBlur={e => {
                     listArray[i] = whiteSpaceCleaner(
                       e.target.value.toLowerCase(),
