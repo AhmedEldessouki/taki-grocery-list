@@ -65,7 +65,7 @@ const $BtnWrapper = styled.div`
     }
   }
 `
-function NewList({
+function AddList({
   listName,
   userId,
   listArray,
@@ -247,4 +247,4 @@ function NewList({
   )
 }
 
-export default NewList
+export default AddList
