@@ -13,10 +13,10 @@ import {whiteSpaceCleaner} from '../../lib/whiteSpaceCleaner'
 import {$Field} from './sharedCss/field'
 
 function ListInput({
-  listName,
+  componentName,
   handleBlur,
 }: {
-  listName: string
+  componentName: string
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void
 }) {
   const [state, setState] = React.useState('')
@@ -32,7 +32,7 @@ function ListInput({
         onBlur={handleBlur}
         id="list"
       />
-      <label htmlFor="list">{listName} list</label>
+      <label htmlFor="list">{componentName} list</label>
     </$Field>
   )
 }
@@ -66,13 +66,13 @@ const $BtnWrapper = styled.div`
   }
 `
 function AddList({
-  listName,
+  componentName,
   userId,
   listArray,
   oldList,
   setArrayChange,
 }: {
-  listName: string
+  componentName: string
   userId: string
   listArray: string[]
   oldList: string[]
@@ -169,7 +169,7 @@ function AddList({
             aria-label={`add icon`}
             style={{paddingRight: '15px'}}
           />
-          Add {listName} list
+          Add {componentName} list
         </Button>
         {isShow && (
           <IconButton
@@ -199,7 +199,7 @@ function AddList({
                     )
                     setArrayChange([...listArray])
                   }}
-                  listName={listName}
+                  componentName={componentName}
                 />
               )
             }

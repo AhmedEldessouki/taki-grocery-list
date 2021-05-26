@@ -361,7 +361,7 @@ function Grocery({userId}: {userId: string}) {
         userId={userData?.userId ?? ''}
         setArrayChange={setArray}
         oldList={userData?.listName ?? ['']}
-        listName="grocery"
+        componentName="grocery"
         listArray={arrayST}
       />
       {errorST && <$Warning>{errorST.message}</$Warning>}
