@@ -175,24 +175,28 @@ function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
             <$PalletBtns
               type="button"
               bgColor="transparent"
+              data-testid="transparent"
               checked={colorValue === 'transparent'}
               onClick={() => setColorValue('transparent')}
             />
             <$PalletBtns
               type="button"
               bgColor="mattBlue"
+              data-testid="mattBlue"
               checked={colorValue === 'mattBlue'}
               onClick={() => setColorValue('mattBlue')}
             />
             <$PalletBtns
               type="button"
               bgColor="mattRed"
+              data-testid="mattRed"
               checked={colorValue === 'mattRed'}
               onClick={() => setColorValue('mattRed')}
             />
             <$PalletBtns
               type="button"
               bgColor="mattGray"
+              data-testid="mattGray"
               checked={colorValue === 'mattGray'}
               onClick={() => setColorValue('mattGray')}
             />
