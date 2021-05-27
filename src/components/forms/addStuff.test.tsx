@@ -8,6 +8,7 @@ import AddStuff from './addStuff'
 
 const user: UserDataType = generateUserData()
 const item: GroceryItemType = generateGroceryItem()
+const itemTwo: GroceryItemType = generateGroceryItem()
 
 // await render( <AddStuff
 //   idx={0}
@@ -55,5 +56,29 @@ test('render with Items - [Edit]', async () => {
   )
   expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue(
     `${item.priority}`,
+  )
+})
+
+test('render with Items and edit value - [Edit]', async () => {
+  await render(
+    <AddStuff idx={0} listName={user.listName[0]} isEdit={true} item={item} />,
+  )
+
+  userEvent.clear(screen.getByLabelText(/qty/i))
+  userEvent.type(screen.getByLabelText(/qty/i), `${itemTwo.quantity}`)
+  expect(screen.getByLabelText(/qty/i)).toHaveDisplayValue(
+    `${itemTwo.quantity}`,
+  )
+
+  userEvent.clear(screen.getByLabelText(/new grocery item/i))
+  userEvent.type(screen.getByLabelText(/new grocery item/i), itemTwo.name)
+  expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
+    itemTwo.name,
+  )
+
+  userEvent.clear(screen.getByLabelText(/priority no/i))
+  userEvent.type(screen.getByLabelText(/priority no/i), `${itemTwo.priority}`)
+  expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue(
+    `${itemTwo.priority}`,
   )
 })
