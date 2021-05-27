@@ -13,7 +13,6 @@ const $Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 500px;
   justify-content: center;
   align-items: center;
   ${mqMax.s} {
@@ -24,6 +23,7 @@ const $RowWrapper = styled.div`
   display: grid;
   gap: 10px;
   grid-template-columns: 0.5fr 2fr 1fr;
+  width: 450px;
   ${mqMax.s} {
     display: grid;
     grid-template-columns: 1fr 2fr;
