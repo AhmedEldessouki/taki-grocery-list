@@ -13,7 +13,8 @@
     "kentcdodds/possible-errors",
     "kentcdodds/best-practices",
     "kentcdodds/es6/possible-errors",
-    "kentcdodds/import"
+    "kentcdodds/import",
+    "plugin:cypress/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -21,7 +22,7 @@
     "sourceType": "module",
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint", "prettier", "@emotion"],
+  "plugins": ["@typescript-eslint", "prettier", "@emotion", "cypress"],
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
