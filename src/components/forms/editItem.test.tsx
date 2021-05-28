@@ -3,14 +3,7 @@ import {GroceryItemType} from '../../../types/api'
 import {UserDataType} from '../../../types/user'
 import {generateGroceryItem} from '../../test/groceryDB'
 import {generateUserData} from '../../test/userDB'
-import {
-  act,
-  render,
-  screen,
-  userEvent,
-  waitForElementToBeRemoved,
-  within,
-} from '../../test/utils'
+import {render, screen, userEvent} from '../../test/utils'
 import AddStuff from './addStuff'
 import EditItem from './editItem'
 
