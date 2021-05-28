@@ -12,7 +12,7 @@ import {spacefy} from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
 import {postTwoLevelDeep} from '../lib/post'
 import {db} from '../lib/firebase'
-import NewList from './forms/addList'
+import AddList from './forms/addList'
 import DeleteFromDB from './deleteFromDB'
 import AddStuff from './forms/addStuff'
 import ListName from './forms/listName'
@@ -357,11 +357,11 @@ function Grocery({userId}: {userId: string}) {
         mount={isFetching || isLoading}
         styling={{marginTop: '10px', left: '10px'}}
       />
-      <NewList
+      <AddList
         userId={userData?.userId ?? ''}
         setArrayChange={setArray}
         oldList={userData?.listName ?? ['']}
-        listName="grocery"
+        componentName="grocery"
         listArray={arrayST}
       />
       {errorST && <$Warning>{errorST.message}</$Warning>}

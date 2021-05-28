@@ -13,11 +13,13 @@ import {whiteSpaceCleaner} from '../../lib/whiteSpaceCleaner'
 import {$Field} from './sharedCss/field'
 
 function ListInput({
-  listName,
+  componentName,
   handleBlur,
+  idx,
 }: {
-  listName: string
+  componentName: string
   handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void
+  idx: number
 }) {
   const [state, setState] = React.useState('')
 
@@ -25,14 +27,14 @@ function ListInput({
     <$Field>
       <input
         placeholder="this is to help control label"
-        type="list"
-        name="list"
+        type="text"
+        name={`list${idx}`}
         value={state}
         onChange={e => setState(e.target.value)}
         onBlur={handleBlur}
-        id="list"
+        id={`list${idx}`}
       />
-      <label htmlFor="list">{listName} list</label>
+      <label htmlFor={`list${idx}`}>{componentName} list</label>
     </$Field>
   )
 }
@@ -65,14 +67,14 @@ const $BtnWrapper = styled.div`
     }
   }
 `
-function NewList({
-  listName,
+function AddList({
+  componentName,
   userId,
   listArray,
   oldList,
   setArrayChange,
 }: {
-  listName: string
+  componentName: string
   userId: string
   listArray: string[]
   oldList: string[]
@@ -169,7 +171,7 @@ function NewList({
             aria-label={`add icon`}
             style={{paddingRight: '15px'}}
           />
-          Add {listName} list
+          Add {componentName} list
         </Button>
         {isShow && (
           <IconButton
@@ -193,13 +195,14 @@ function NewList({
               return (
                 <ListInput
                   key={i}
+                  idx={i}
                   handleBlur={e => {
                     listArray[i] = whiteSpaceCleaner(
                       e.target.value.toLowerCase(),
                     )
                     setArrayChange([...listArray])
                   }}
-                  listName={listName}
+                  componentName={componentName}
                 />
               )
             }
@@ -247,4 +250,4 @@ function NewList({
   )
 }
 
-export default NewList
+export default AddList

@@ -13,19 +13,24 @@ const $Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 500px;
+  justify-content: center;
+  align-items: center;
+  ${mqMax.s} {
+    width: 100%;
+  }
 `
 const $RowWrapper = styled.div`
   display: grid;
   gap: 10px;
   grid-template-columns: 0.5fr 2fr 1fr;
+  width: 450px;
   ${mqMax.s} {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    width: 300px;
+    width: 257px;
   }
   ${mqMax.xs} {
-    width: 250px;
+    width: 217px;
   }
 `
 const $Pallet = styled.div`
@@ -175,24 +180,28 @@ function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
             <$PalletBtns
               type="button"
               bgColor="transparent"
+              data-testid="transparent"
               checked={colorValue === 'transparent'}
               onClick={() => setColorValue('transparent')}
             />
             <$PalletBtns
               type="button"
               bgColor="mattBlue"
+              data-testid="mattBlue"
               checked={colorValue === 'mattBlue'}
               onClick={() => setColorValue('mattBlue')}
             />
             <$PalletBtns
               type="button"
               bgColor="mattRed"
+              data-testid="mattRed"
               checked={colorValue === 'mattRed'}
               onClick={() => setColorValue('mattRed')}
             />
             <$PalletBtns
               type="button"
               bgColor="mattGray"
+              data-testid="mattGray"
               checked={colorValue === 'mattGray'}
               onClick={() => setColorValue('mattGray')}
             />
