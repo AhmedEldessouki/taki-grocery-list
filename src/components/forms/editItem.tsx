@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent'
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import CloseIcon from '@material-ui/icons/Close'
-import IconButton from '@material-ui/core/IconButton'
 import styled from '@emotion/styled'
 
 const $CloseBtnWrapper = styled.div`
