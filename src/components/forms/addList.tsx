@@ -4,6 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
+import {nanoid} from 'nanoid'
 import {postOneLevelDeep} from '../../lib/post'
 import type {MyResponseType} from '../../../types/api'
 import {notify} from '../../lib/notify'
@@ -168,7 +169,7 @@ function AddList({
         >
           <AddIcon
             fontSize="large"
-            aria-label={`add icon`}
+            aria-label="add icon"
             style={{paddingRight: '15px'}}
           />
           Add {componentName} list
@@ -194,7 +195,7 @@ function AddList({
             } else {
               return (
                 <ListInput
-                  key={i}
+                  key={nanoid()}
                   idx={i}
                   handleBlur={e => {
                     listArray[i] = whiteSpaceCleaner(

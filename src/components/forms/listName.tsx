@@ -77,7 +77,7 @@ function ListName({user, index}: {user: UserDataType; index: number}) {
         isPending={isPending}
         submitFunction={handleListNameUpdate}
         placeholder="Enter Grocery List Name"
-        passwordConfirmation={true}
+        passwordConfirmation
         name="groceryListName"
         type="text"
         value={listNameST}

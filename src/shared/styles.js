@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-filename-extension */
+import React from 'react'
 import {css, Global} from '@emotion/react'
 import normalize from 'normalize.css'
 

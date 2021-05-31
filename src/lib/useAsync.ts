@@ -26,7 +26,7 @@ interface IAction<T, S> {
 }
 
 function asyncReducer(
-  state: useAsyncReducerState,
+  state: UseAsyncReducerState,
   action: IAction<Status, unknown>,
 ) {
   switch (action.type) {
@@ -51,11 +51,11 @@ function asyncReducer(
     }
   }
 }
-interface useAsyncReducerState {
+type UseAsyncReducerState = {
   status: Status
 }
 
-interface useAsyncProps {
+type UseAsyncProps = {
   isIdle: boolean
   isLoading: boolean
   isSuccess: boolean
@@ -66,8 +66,8 @@ interface useAsyncProps {
 }
 
 function useAsync(
-  initialState: useAsyncReducerState = {status: 'idle'},
-): useAsyncProps {
+  initialState: UseAsyncReducerState = {status: 'idle'},
+): UseAsyncProps {
   const initialStateRef = useRef({
     ...initialState,
   })

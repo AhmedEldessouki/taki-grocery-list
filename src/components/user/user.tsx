@@ -33,6 +33,7 @@ function User({user}: {user: myFirebase.User}) {
     <>
       <$UserContainer>
         <button
+          type="button"
           onClick={() => {
             openDialog()
           }}

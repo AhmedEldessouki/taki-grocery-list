@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Nav from './nav/nav'
 
 export default function Layout({children}: {children: React.ReactNode}) {
@@ -14,6 +14,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
         {process.env.NODE_ENV !== 'production' && (
           <div>
             <button
+              type="button"
               style={{
                 background:
                   isEmulatorActive === 'true' ? `green` : 'var(--white)',
@@ -29,6 +30,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
               Activate Emulator
             </button>
             <button
+              type="button"
               style={{
                 background:
                   isEmulatorActive === 'false' ? `red` : 'var(--white)',

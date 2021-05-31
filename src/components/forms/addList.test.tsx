@@ -99,10 +99,7 @@ test('Input extra white space cleaning', async () => {
   ).toBeInTheDocument()
 
   const someCleanListName = generateListName()
-  const someListName =
-    '                      ' +
-    someCleanListName +
-    '          + daad +                                    '
+  const someListName = `                      ${someCleanListName}          + daad +                                    `
 
   userEvent.type(
     screen.getByRole('textbox', {

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import faker from 'faker'
 import type {GroceryItemType} from '../../types/api'
 

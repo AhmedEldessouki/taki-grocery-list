@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import Button from '@material-ui/core/Button'
 import {useAuth} from '../context/auth'
 import {$Warning} from '../shared/utils'
@@ -38,7 +38,7 @@ function DeleteUser() {
       notify('🤷🏻‍♀️', `something went Wrong`, {
         color: 'var(--red)',
       })
-      setResponse({isSuccessful: false, error: error})
+      setResponse({isSuccessful: false, error})
       return
     }
 

@@ -31,14 +31,15 @@ function ChangePassword() {
     isSuccessful: false,
   })
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       setResponse({
         error: undefined,
         isSuccessful: false,
       })
-    }
-  }, [])
+    },
+    [],
+  )
 
   async function handlePasswordUpdate(e: React.SyntheticEvent) {
     e.preventDefault()

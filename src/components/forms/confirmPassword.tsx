@@ -52,7 +52,7 @@ export default function ConfirmPassword({
 
     setPending(false)
   }
-  if (!showDialog) return <div></div>
+  if (!showDialog) return <div />
   return (
     <Dialog open={showDialog} aria-labelledby="confirm-password-dialog">
       <DialogTitle style={{paddingBottom: '0'}} id="confirm-password-dialog">

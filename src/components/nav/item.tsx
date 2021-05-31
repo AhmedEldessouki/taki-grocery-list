@@ -38,7 +38,9 @@ function Item({
   return (
     <$ItemContainer>
       {!!onClick ? (
-        <button onClick={onClick}>{title}</button>
+        <button type="button" onClick={onClick}>
+          {title}
+        </button>
       ) : (
         <a href={href}>{title}</a>
       )}

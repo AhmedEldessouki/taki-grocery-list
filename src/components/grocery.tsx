@@ -200,7 +200,7 @@ function Item({
         {item.quantity && item.quantity} {item.name}
       </$Item>
       <EditItem>
-        <AddStuff idx={124} isEdit={true} listName={listName} item={item} />
+        <AddStuff idx={124} isEdit listName={listName} item={item} />
       </EditItem>
       <Button
         onClick={async () => {
@@ -286,8 +286,8 @@ function Items({listName}: {listName: string}) {
   }
 
   const reArrangeItems = React.useCallback(
-    (arr: Array<GroceryItemType>): Array<GroceryItemType> => {
-      return arr.sort((a, b) => {
+    (arr: Array<GroceryItemType>): Array<GroceryItemType> =>
+      arr.sort((a, b) => {
         if (a.priority < 1) {
           a.priority += 9999
         }
@@ -295,8 +295,7 @@ function Items({listName}: {listName: string}) {
           b.priority += 9999
         }
         return a.priority - b.priority
-      })
-    },
+      }),
     [],
   )
 
@@ -311,19 +310,17 @@ function Items({listName}: {listName: string}) {
       />
       {!isLoading &&
         groceries &&
-        reArrangeItems(groceries).map(item => {
-          return (
-            <DeleteFromDB
-              dialogTitle="Delete item from list"
-              key={nanoid()}
-              deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
-              dialogDeleting={item.name}
-              dialogLabelledBy="delete-from-grocery-list"
-            >
-              <Item item={item} listName={listName} setResponse={setResponse} />
-            </DeleteFromDB>
-          )
-        })}
+        reArrangeItems(groceries).map(item => (
+          <DeleteFromDB
+            dialogTitle="Delete item from list"
+            key={nanoid()}
+            deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
+            dialogDeleting={item.name}
+            dialogLabelledBy="delete-from-grocery-list"
+          >
+            <Item item={item} listName={listName} setResponse={setResponse} />
+          </DeleteFromDB>
+        ))}
       {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>
   )
@@ -369,7 +366,7 @@ function Grocery({userId}: {userId: string}) {
         const listName = spacefy(item, {reverse: true})
         return (
           <div
-            key={i}
+            key={nanoid()}
             style={{
               margin: '30px 0',
             }}

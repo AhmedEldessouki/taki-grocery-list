@@ -231,7 +231,7 @@ function Settings({
               isSuccess={!!responseST.isSuccessful}
               isPending={isPending}
               submitFunction={handleEmailUpdate}
-              passwordConfirmation={true}
+              passwordConfirmation
               placeholder="Enter email address"
               name="email"
               type="email"
@@ -243,10 +243,8 @@ function Settings({
               onEditStart={onEditStart}
               onEditEnd={onEditEnd}
               isSuccess={false}
-              isPending={true}
-              submitFunction={async () => {
-                return 'unchanged'
-              }}
+              isPending
+              submitFunction={async () => 'unchanged'}
               placeholder="enter a grocery list name"
               name="listName"
               type="text"
