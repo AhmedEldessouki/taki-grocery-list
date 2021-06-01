@@ -4,16 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": [
-    "airbnb-typescript",
-    "react-app",
-    "react-app/jest",
-    "prettier",
-    "kentcdodds/possible-errors",
-    "kentcdodds/best-practices",
-    "kentcdodds/es6/possible-errors",
-    "kentcdodds/import"
-  ],
+  "extends": ["airbnb-typescript", "react-app", "react-app/jest", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 12,
@@ -26,7 +17,6 @@
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "jsx-a11y/label-has-associated-control": "warn",
     "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-unsafe-assignment": "warn",
@@ -38,7 +28,23 @@
     "@emotion/jsx-import": "error",
     "@emotion/no-vanilla": "error",
     "@emotion/import-from-emotion": "error",
-    "@emotion/styled-import": "error"
+    "@emotion/styled-import": "error",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "required": {
+          "some": ["nesting", "id"]
+        }
+      }
+    ],
+    "jsx-a11y/label-has-for": [
+      "error",
+      {
+        "required": {
+          "some": ["nesting", "id"]
+        }
+      }
+    ]
   },
   "settings": {
     "react": {
