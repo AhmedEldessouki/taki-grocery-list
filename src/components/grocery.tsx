@@ -13,13 +13,14 @@ import spacefy from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
 import {postTwoLevelDeep} from '../lib/post'
 import {db} from '../lib/firebase'
-import AddList from './forms/addList'
 import DeleteFromDB from './deleteFromDB'
-import AddStuff from './forms/addStuff'
-import ListName from './forms/listName'
 import Spinner from './spinner'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
-import EditItem from './forms/editItem'
+
+const AddList = React.lazy(() => import('./forms/addList'))
+const AddStuff = React.lazy(() => import('./forms/addStuff'))
+const ListName = React.lazy(() => import('./forms/listName'))
+const EditItem = React.lazy(() => import('./forms/editItem'))
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
@@ -200,9 +201,13 @@ function Item({
       <$Item style={{flex: 1}} isDone={isDone}>
         {item.quantity && item.quantity} {item.name}
       </$Item>
-      <EditItem>
-        <AddStuff idx={124} isEdit listName={listName} item={item} />
-      </EditItem>
+      <React.Suspense fallback={<Spinner size={40} mount />}>
+        <EditItem>
+          <React.Suspense fallback={<Spinner size={40} mount />}>
+            <AddStuff idx={124} isEdit listName={listName} item={item} />
+          </React.Suspense>
+        </EditItem>
+      </React.Suspense>
       <Button
         onClick={async () => {
           setPending(!isPending)
@@ -355,13 +360,15 @@ function Grocery({userId}: {userId: string}) {
         mount={isFetching || isLoading}
         styling={{marginTop: '10px', left: '10px'}}
       />
-      <AddList
-        userId={userData?.userId ?? ''}
-        setArrayChange={setArray}
-        oldList={userData?.listName ?? ['']}
-        componentName="grocery"
-        listArray={arrayST}
-      />
+      <React.Suspense fallback={<Spinner size={40} mount />}>
+        <AddList
+          userId={userData?.userId ?? ''}
+          setArrayChange={setArray}
+          oldList={userData?.listName ?? ['']}
+          componentName="grocery"
+          listArray={arrayST}
+        />
+      </React.Suspense>
       {errorST && <$Warning>{errorST.message}</$Warning>}
       {userData?.listName.map((item, i) => {
         const listName = spacefy(item, {reverse: true})
@@ -383,10 +390,14 @@ function Grocery({userId}: {userId: string}) {
                 <Spinner mount={isFetching} styling={{position: 'relative'}} />
               </div>
             ) : (
-              <ListName index={i} user={userData} />
+              <React.Suspense fallback={<Spinner size={40} mount />}>
+                <ListName index={i} user={userData} />
+              </React.Suspense>
             )}
             <Items listName={listName} />
-            <AddStuff listName={listName} idx={i} />
+            <React.Suspense fallback={<Spinner size={40} mount />}>
+              <AddStuff listName={listName} idx={i} />
+            </React.Suspense>
           </div>
         )
       })}
