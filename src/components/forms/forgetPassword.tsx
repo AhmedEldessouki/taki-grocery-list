@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {$Warning, $Success, mqMax} from '../../shared/utils'
 import {auth} from '../../lib/firebase'
 import Spinner from '../spinner'
-import {$Field} from './sharedCss/field'
+import $Field from './sharedCss/field'
 
 const $TextWrapper = styled.div`
   display: flex;

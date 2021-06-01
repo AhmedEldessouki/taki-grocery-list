@@ -6,4 +6,4 @@ type UserDataType = {
   timeStamp?: unknown
 }
 
-export {UserDataType}
+export default UserDataType

@@ -12,7 +12,9 @@ async function deleteOneLevelDeep({collection, doc}: OneLevelDeep) {
       () => {
         response.isSuccessful = true
       },
-      (err: Error) => (response.error = err),
+      (err: Error) => {
+        response.error = err
+      },
     )
     .catch((err: Error) => {
       response.error = err
@@ -37,7 +39,9 @@ async function deleteTwoLevelDeep({
       () => {
         response.isSuccessful = true
       },
-      (err: Error) => (response.error = err),
+      (err: Error) => {
+        response.error = err
+      },
     )
     .catch((err: Error) => {
       response.error = err

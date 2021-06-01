@@ -1,8 +1,8 @@
 import React from 'react'
 import {GroceryItemType} from '../../../types/api'
-import {UserDataType} from '../../../types/user'
+import UserDataType from '../../../types/user'
 import {generateGroceryItem} from '../../test/groceryDB'
-import {generateUserData} from '../../test/userDB'
+import generateUserData from '../../test/userDB'
 import {render, screen, userEvent} from '../../test/utils'
 import AddStuff from './addStuff'
 
@@ -48,7 +48,7 @@ test('render without Items - [Create]', async () => {
 
 test('render with Items - [Edit]', async () => {
   await render(
-    <AddStuff idx={0} listName={user.listName[0]} isEdit={true} item={item} />,
+    <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
   )
   expect(screen.getByLabelText(/qty/i)).toHaveDisplayValue(`${item.quantity}`)
   expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
@@ -61,7 +61,7 @@ test('render with Items - [Edit]', async () => {
 
 test('render with Items and edit value - [Edit]', async () => {
   await render(
-    <AddStuff idx={0} listName={user.listName[0]} isEdit={true} item={item} />,
+    <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
   )
 
   userEvent.clear(screen.getByLabelText(/qty/i))

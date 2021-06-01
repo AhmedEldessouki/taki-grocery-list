@@ -8,7 +8,7 @@ const notify = (
 ) =>
   toast.dark(`${emoji} ${text}`, {
     style: {
-      color: color,
+      color,
       fontWeight: 500,
       fontFamily: 'inherit',
       fontSize: '1.5rem',
@@ -17,4 +17,4 @@ const notify = (
     ...toastOptions,
   })
 
-export {notify}
+export default notify

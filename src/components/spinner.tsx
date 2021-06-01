@@ -4,7 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 function Spinner({
   mount,
-  size,
+  size = 20,
   styling,
 }: {
   mount: boolean

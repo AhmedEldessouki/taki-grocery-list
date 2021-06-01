@@ -34,4 +34,4 @@ function useLocalStorageState<TState>(
 
   return {state, setState}
 }
-export {useLocalStorageState}
+export default useLocalStorageState

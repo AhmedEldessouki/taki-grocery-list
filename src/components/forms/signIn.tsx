@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
 import Spinner from '../spinner'
-import {$Field} from './sharedCss/field'
+import $Field from './sharedCss/field'
 import ForgetPassword from './forgetPassword'
 
 const $Form = styled.form`

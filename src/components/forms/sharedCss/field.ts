@@ -76,4 +76,4 @@ const $Field = styled.div`
   }
 `
 
-export {$Field}
+export default $Field

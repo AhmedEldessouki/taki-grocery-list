@@ -1,7 +1,7 @@
 import React from 'react'
-import {UserDataType} from '../../../types/user'
+import UserDataType from '../../../types/user'
 import {generateListName} from '../../test/groceryDB'
-import {generateUserData} from '../../test/userDB'
+import generateUserData from '../../test/userDB'
 import {render, screen, userEvent} from '../../test/utils'
 import AddList from './addList'
 
@@ -99,10 +99,7 @@ test('Input extra white space cleaning', async () => {
   ).toBeInTheDocument()
 
   const someCleanListName = generateListName()
-  const someListName =
-    '                      ' +
-    someCleanListName +
-    '          + daad +                                    '
+  const someListName = `                      ${someCleanListName}          + daad +                                    `
 
   userEvent.type(
     screen.getByRole('textbox', {

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
 
 import {$Warning, mqMax} from '../../shared/utils'
-import {$Field} from './sharedCss/field'
+import $Field from './sharedCss/field'
 
 const $Bars = styled.div`
   display: flex;
@@ -106,14 +106,15 @@ function PasswordFields({
     ]
   }
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       setPassword('')
       setConfirmPassword('')
       setPasswordStrength(Array(4).fill(false))
       setPasswordValidation(Array(4).fill(false))
-    }
-  }, [])
+    },
+    [],
+  )
 
   return (
     <>
@@ -131,16 +132,8 @@ function PasswordFields({
             const validation: boolean[] = validatePasswordStrength(
               e.target.value,
             )
-            setPasswordValidation([
-              ...validation.map((item: boolean) => {
-                return item
-              }),
-            ])
-            setPasswordStrength([
-              ...validation.filter(item => {
-                return item && item
-              }),
-            ])
+            setPasswordValidation([...validation.map((item: boolean) => item)])
+            setPasswordStrength([...validation.filter(item => item && item)])
             setIsPasswordConfirmed(e.target.value === confirmPassword)
           }}
         />

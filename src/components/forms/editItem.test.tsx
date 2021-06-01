@@ -1,8 +1,8 @@
 import React from 'react'
 import {GroceryItemType} from '../../../types/api'
-import {UserDataType} from '../../../types/user'
+import UserDataType from '../../../types/user'
 import {generateGroceryItem} from '../../test/groceryDB'
-import {generateUserData} from '../../test/userDB'
+import generateUserData from '../../test/userDB'
 import {render, screen, userEvent} from '../../test/utils'
 import AddStuff from './addStuff'
 import EditItem from './editItem'
@@ -14,8 +14,7 @@ const itemTwo: GroceryItemType = generateGroceryItem()
 test('render EditItem: check that the Edit Form is not visible', async () => {
   await render(
     <EditItem>
-      <AddStuff idx={0} listName={user.listName[0]} isEdit={true} item={item} />
-      ,
+      <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
     </EditItem>,
   )
   expect(screen.queryByLabelText(/qty/i)).not.toBeInTheDocument()
@@ -28,8 +27,7 @@ test('render EditItem: check that the Edit Form is not visible', async () => {
 test("render EditItem: Edit Form's values", async () => {
   await render(
     <EditItem>
-      <AddStuff idx={0} listName={user.listName[0]} isEdit={true} item={item} />
-      ,
+      <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
     </EditItem>,
   )
 

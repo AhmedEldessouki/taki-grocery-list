@@ -1,8 +1,8 @@
 import React from 'react'
 import myFirebase, {auth} from '../lib/firebase'
-import {notify} from '../lib/notify'
+import notify from '../lib/notify'
 import type {MyResponseTypeWithData} from '../../types/api'
-import {useLocalStorageState} from '../lib/useLocalStorage'
+import useLocalStorageState from '../lib/useLocalStorage'
 
 type Credentials = {
   email: string

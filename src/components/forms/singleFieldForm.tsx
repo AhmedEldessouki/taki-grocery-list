@@ -1,9 +1,11 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import React, {useState} from 'react'
 import EditIcon from '@material-ui/icons/Edit'
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import styled from '@emotion/styled'
 import {keyframes} from '@emotion/react'
-import {spacefy} from '../../lib/spacefy'
+import spacefy from '../../lib/spacefy'
 import {mqMax} from '../../shared/utils'
 import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'

@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
 import type {MyResponseType} from '../../../types/api'
-import {notify} from '../../lib/notify'
+import notify from '../../lib/notify'
 import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'
 import PasswordFields from './passwordFields'
@@ -31,14 +31,15 @@ function ChangePassword() {
     isSuccessful: false,
   })
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       setResponse({
         error: undefined,
         isSuccessful: false,
       })
-    }
-  }, [])
+    },
+    [],
+  )
 
   async function handlePasswordUpdate(e: React.SyntheticEvent) {
     e.preventDefault()

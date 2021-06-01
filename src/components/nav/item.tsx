@@ -37,8 +37,10 @@ function Item({
   // Checks If It's a Button
   return (
     <$ItemContainer>
-      {!!onClick ? (
-        <button onClick={onClick}>{title}</button>
+      {onClick ? (
+        <button type="button" onClick={onClick}>
+          {title}
+        </button>
       ) : (
         <a href={href}>{title}</a>
       )}

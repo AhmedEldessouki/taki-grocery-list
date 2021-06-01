@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // --------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------- This Is Just A Reference For When The Time Comes  ---------------------------------------
 // --------------------------------------------------------------------------------------------------------------------------------
@@ -15,9 +16,9 @@ async function firestoreTransaction() {
   // sfDocRef.set({ population: 0 });
 
   try {
-    await db.runTransaction(transaction => {
+    await db.runTransaction(transaction =>
       // This code may get re-run multiple times if there are conflicts.
-      return transaction.get(sfDocRef).then(sfDoc => {
+      transaction.get(sfDocRef).then(sfDoc => {
         if (!sfDoc.exists) {
           throw Error('Document does not exist!')
         }
@@ -27,8 +28,8 @@ async function firestoreTransaction() {
         //       by updating the population using FieldValue.increment()
         const newPopulation = (sfDoc.data()?.population as number) + 1
         transaction.update(sfDocRef, {population: newPopulation})
-      })
-    })
+      }),
+    )
     console.log('Transaction successfully committed!')
   } catch (error: unknown) {
     console.log('Transaction failed: ', error)
@@ -42,8 +43,8 @@ function firestoreTransactionWithOutput() {
   // Create a reference to the SF doc.
   const sfDocRef = db.collection('cities').doc('SF')
 
-  db.runTransaction(transaction => {
-    return transaction.get(sfDocRef).then(sfDoc => {
+  db.runTransaction(transaction =>
+    transaction.get(sfDocRef).then(sfDoc => {
       if (!sfDoc.exists) {
         throw Error('Document does not exist!')
       }
@@ -52,12 +53,11 @@ function firestoreTransactionWithOutput() {
       if (newPopulation <= 1000000) {
         transaction.update(sfDocRef, {population: newPopulation})
         return newPopulation
-      } else {
-        // eslint-disable-next-line prefer-promise-reject-errors
-        return Promise.reject('Sorry! Population is too big.')
       }
-    })
-  })
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return Promise.reject('Sorry! Population is too big.')
+    }),
+  )
     .then(newPopulation => {
       console.log('Population increased to ', newPopulation)
     })

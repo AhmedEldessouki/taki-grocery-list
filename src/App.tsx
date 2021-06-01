@@ -1,8 +1,9 @@
 import * as React from 'react'
 import {ToastContainer} from 'react-toastify'
 import styled from '@emotion/styled'
+import {Global} from '@emotion/react'
 import {ReactQueryDevtools} from 'react-query/devtools'
-import {globalStyles} from './shared/styles'
+import globalStyles from './shared/styles'
 import {useAuth} from './context/auth'
 import SignIn from './components/forms/signIn'
 import SignUp from './components/forms/signUp'
@@ -45,7 +46,7 @@ function App() {
 
   return (
     <Layout>
-      {globalStyles}
+      <Global styles={globalStyles} />
       {user ? (
         <$AuthAppContainer>
           <Grocery userId={user.uid} />
