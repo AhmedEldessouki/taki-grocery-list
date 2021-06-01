@@ -4,10 +4,10 @@ import {Button} from '@material-ui/core'
 import {useMutation, useQueryClient} from 'react-query'
 import {$Warning, mqMax} from '../../shared/utils'
 import type {GroceryItemType, MyResponseType} from '../../../types/api'
-import {spacefy} from '../../lib/spacefy'
+import spacefy from '../../lib/spacefy'
 import {db} from '../../lib/firebase'
-import {notify} from '../../lib/notify'
-import {$Field} from './sharedCss/field'
+import notify from '../../lib/notify'
+import $Field from './sharedCss/field'
 
 const $Form = styled.form`
   display: flex;
@@ -85,7 +85,6 @@ function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
         .collection(spacefy(listName, {reverse: true}))
 
       if (oldNameST && oldNameST !== newData.name) {
-        console.log('[Deleting]')
         const oldItemRef = listRef.doc(spacefy(oldNameST, {reverse: true}))
         batch.delete(oldItemRef)
       }
@@ -106,7 +105,6 @@ function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
           })
           setResponse({isSuccessful: false, error})
         })
-      console.log('[Update]/[Create]')
     },
     {
       onSuccess: () => {

@@ -37,7 +37,7 @@ function Item({
   // Checks If It's a Button
   return (
     <$ItemContainer>
-      {!!onClick ? (
+      {onClick ? (
         <button type="button" onClick={onClick}>
           {title}
         </button>

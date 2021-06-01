@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // --------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------- This Is Just A Reference For When The Time Comes  ---------------------------------------
 // --------------------------------------------------------------------------------------------------------------------------------
@@ -52,10 +53,9 @@ function firestoreTransactionWithOutput() {
       if (newPopulation <= 1000000) {
         transaction.update(sfDocRef, {population: newPopulation})
         return newPopulation
-      } else {
-        // eslint-disable-next-line prefer-promise-reject-errors
-        return Promise.reject('Sorry! Population is too big.')
       }
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return Promise.reject('Sorry! Population is too big.')
     }),
   )
     .then(newPopulation => {

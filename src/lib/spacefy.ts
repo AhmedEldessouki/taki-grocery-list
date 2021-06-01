@@ -14,4 +14,4 @@ function spacefy(str: string, {reverse}: {reverse?: boolean} = {}): string {
   return str.replace(/[A-Z]/g, _ => ` ${_.toLowerCase()}`)
 }
 
-export {spacefy}
+export default spacefy

@@ -1,8 +1,8 @@
 import React from 'react'
 import {useMutation, useQueryClient} from 'react-query'
 import type {MyResponseType} from '../../../types/api'
-import type {UserDataType} from '../../../types/user'
-import {notify} from '../../lib/notify'
+import type UserDataType from '../../../types/user'
+import notify from '../../lib/notify'
 import {postOneLevelDeep} from '../../lib/post'
 import SingleFieldForm from './singleFieldForm'
 
@@ -56,10 +56,10 @@ function ListName({user, index}: {user: UserDataType; index: number}) {
       notify('❌', `Update Failed!`, {
         color: 'var(--red)',
       })
-      return status
+      return 'rejected'
     }
 
-    return status
+    return 'resolved'
   }
   return (
     <div

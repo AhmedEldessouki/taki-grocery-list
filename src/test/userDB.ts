@@ -1,5 +1,5 @@
 import faker from 'faker'
-import type {UserDataType} from '../../types/user'
+import type UserDataType from '../../types/user'
 
 function generateUserData(): UserDataType {
   return {
@@ -10,4 +10,4 @@ function generateUserData(): UserDataType {
   }
 }
 
-export {generateUserData}
+export default generateUserData

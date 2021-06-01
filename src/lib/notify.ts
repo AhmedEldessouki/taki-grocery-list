@@ -17,4 +17,4 @@ const notify = (
     ...toastOptions,
   })
 
-export {notify}
+export default notify

@@ -1,7 +1,7 @@
 import React from 'react'
-import {UserDataType} from '../../../types/user'
+import UserDataType from '../../../types/user'
 import {generateListName} from '../../test/groceryDB'
-import {generateUserData} from '../../test/userDB'
+import generateUserData from '../../test/userDB'
 import {render, screen, userEvent} from '../../test/utils'
 import AddList from './addList'
 

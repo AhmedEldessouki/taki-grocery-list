@@ -1,8 +1,8 @@
 import React from 'react'
 import {GroceryItemType} from '../../../types/api'
-import {UserDataType} from '../../../types/user'
+import UserDataType from '../../../types/user'
 import {generateGroceryItem} from '../../test/groceryDB'
-import {generateUserData} from '../../test/userDB'
+import generateUserData from '../../test/userDB'
 import {render, screen, userEvent} from '../../test/utils'
 import AddStuff from './addStuff'
 

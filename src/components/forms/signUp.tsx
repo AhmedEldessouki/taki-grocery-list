@@ -10,10 +10,10 @@ import {$Warning, mqMax} from '../../shared/utils'
 import {namePattern} from '../../lib/patterns'
 import myFirebase from '../../lib/firebase'
 import {postOneLevelDeep} from '../../lib/post'
-import {notify} from '../../lib/notify'
-import type {UserDataType} from '../../../types/user'
+import notify from '../../lib/notify'
+import type UserDataType from '../../../types/user'
 import Spinner from '../spinner'
-import {$Field} from './sharedCss/field'
+import $Field from './sharedCss/field'
 import PasswordFields from './passwordFields'
 
 const $Container = styled.form`
@@ -76,7 +76,8 @@ function SignUpForm({
       setDidSignUpFailed(error)
       setPending(false)
       return
-    } else if (user) {
+    }
+    if (user) {
       notify('🙂', `Hello, ${name.value}!`, {
         color: 'var(--white)',
       })

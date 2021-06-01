@@ -1,5 +1,6 @@
 import {css, keyframes} from '@emotion/react'
 import styled from '@emotion/styled'
+
 const breakpoints: Array<number> = [320, 480, 900, 1220]
 const names: Array<string> = [`xs`, `s`, `phoneLarge`, `desktop`]
 

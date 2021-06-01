@@ -8,7 +8,7 @@ import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {postOneLevelDeep} from '../../lib/post'
 import myFirebase, {auth} from '../../lib/firebase'
 import {getOneLevelDeepDoc} from '../../lib/get'
-import {notify} from '../../lib/notify'
+import notify from '../../lib/notify'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
 import DeleteUser from '../deleteUser'
@@ -16,7 +16,7 @@ import SingleFieldForm from '../forms/singleFieldForm'
 import ChangePassword from '../forms/changePassword'
 
 import type {MyResponseType} from '../../../types/api'
-import type {UserDataType} from '../../../types/user'
+import type UserDataType from '../../../types/user'
 import Spinner from '../spinner'
 
 // TODO: Find a good way to only do the success animation once after it succeeds not after it succeeds and when the next field is open

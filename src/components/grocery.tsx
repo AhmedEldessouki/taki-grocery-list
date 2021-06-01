@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 import styled from '@emotion/styled'
 import Button from '@material-ui/core/Button'
@@ -5,10 +6,10 @@ import {nanoid} from 'nanoid'
 import React from 'react'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
-import type {UserDataType} from '../../types/user'
+import type UserDataType from '../../types/user'
 import {deleteTwoLevelDeep} from '../lib/delete'
 import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
-import {spacefy} from '../lib/spacefy'
+import spacefy from '../lib/spacefy'
 import {$Warning, mqMax} from '../shared/utils'
 import {postTwoLevelDeep} from '../lib/post'
 import {db} from '../lib/firebase'
@@ -289,10 +290,10 @@ function Items({listName}: {listName: string}) {
     (arr: Array<GroceryItemType>): Array<GroceryItemType> =>
       arr.sort((a, b) => {
         if (a.priority < 1) {
-          a.priority += 9999
+          a.priority = 9999
         }
         if (b.priority < 1) {
-          b.priority += 9999
+          b.priority = 9999
         }
         return a.priority - b.priority
       }),

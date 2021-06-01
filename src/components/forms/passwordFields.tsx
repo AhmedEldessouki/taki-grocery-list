@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
 
 import {$Warning, mqMax} from '../../shared/utils'
-import {$Field} from './sharedCss/field'
+import $Field from './sharedCss/field'
 
 const $Bars = styled.div`
   display: flex;

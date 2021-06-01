@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
@@ -7,11 +8,11 @@ import styled from '@emotion/styled'
 import {nanoid} from 'nanoid'
 import {postOneLevelDeep} from '../../lib/post'
 import type {MyResponseType} from '../../../types/api'
-import {notify} from '../../lib/notify'
+import notify from '../../lib/notify'
 import {$Warning} from '../../shared/utils'
 import Spinner from '../spinner'
-import {whiteSpaceCleaner} from '../../lib/whiteSpaceCleaner'
-import {$Field} from './sharedCss/field'
+import whiteSpaceCleaner from '../../lib/whiteSpaceCleaner'
+import $Field from './sharedCss/field'
 
 function ListInput({
   componentName,
@@ -115,7 +116,8 @@ function AddList({
       // This Is for bypassing on enter submit because
       // the value of Inputs is being set onBlur
       return
-    } else if (
+    }
+    if (
       oldList.find(oldItem => listArray.find(newItem => newItem === oldItem))
     ) {
       setResponse({error: {message: 'List Already Exists.'} as Error})
@@ -191,22 +193,19 @@ function AddList({
         <$Form onSubmit={handleSubmit}>
           {listArray.map((item, i) => {
             if (oldList.length + i + 1 > 3) {
-              return void 0
-            } else {
-              return (
-                <ListInput
-                  key={nanoid()}
-                  idx={i}
-                  handleBlur={e => {
-                    listArray[i] = whiteSpaceCleaner(
-                      e.target.value.toLowerCase(),
-                    )
-                    setArrayChange([...listArray])
-                  }}
-                  componentName={componentName}
-                />
-              )
+              return undefined
             }
+            return (
+              <ListInput
+                key={nanoid()}
+                idx={i}
+                handleBlur={e => {
+                  listArray[i] = whiteSpaceCleaner(e.target.value.toLowerCase())
+                  setArrayChange([...listArray])
+                }}
+                componentName={componentName}
+              />
+            )
           })}
           <$NoteContainer>
             <span>✖ Name should be unique.</span>
