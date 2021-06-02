@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@material-ui/core/Button'
 import {nanoid} from 'nanoid'
 import React from 'react'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
@@ -159,10 +160,12 @@ function ListCleanUp({
 
 function Item({
   item,
+  children,
   listName,
   setResponse,
 }: {
   item: GroceryItemType
+  children: JSX.Element
   listName: string
   setResponse: React.Dispatch<React.SetStateAction<MyResponseType>>
 }) {
@@ -202,34 +205,46 @@ function Item({
       <$Item style={{flex: 1}} isDone={isDone}>
         {item.quantity && item.quantity} {item.name}
       </$Item>
-      <EditItem>
-        <AddStuff idx={124} isEdit listName={listName} item={item} />
-      </EditItem>
-      <Button
-        onClick={async () => {
-          setPending(!isPending)
-          await mutateAsync({
-            list: listName,
-            itemName: item.name,
-            data: {isDone: !isDone},
-          })
-          setDone(!isDone)
-          setPending(!isPending)
-        }}
-        style={{width: '50px', color: 'var(--black)'}}
-        variant="outlined"
-        disabled={isPending}
-      >
-        {isPending ? (
-          <Spinner
-            mount={isPending}
-            size={30}
-            styling={{position: 'relative'}}
+      <ButtonGroup size="small" aria-label="small outlined button group">
+        <EditItem>
+          <AddStuff
+            idx={124}
+            isEdit
+            listName={listName}
+            itemNameE={item.name}
+            itemBgColorE={item.bgColor}
+            itemQuantityE={item.quantity}
+            itemPriorityE={item.priority}
+            itemIsDoneE={item.isDone}
           />
-        ) : (
-          '✔'
-        )}
-      </Button>
+        </EditItem>
+        <Button
+          onClick={async () => {
+            setPending(!isPending)
+            await mutateAsync({
+              list: listName,
+              itemName: item.name,
+              data: {isDone: !isDone},
+            })
+            setDone(!isDone)
+            setPending(!isPending)
+          }}
+          style={{width: '50px', color: 'var(--black)'}}
+          variant="outlined"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <Spinner
+              mount={isPending}
+              size={30}
+              styling={{position: 'relative'}}
+            />
+          ) : (
+            '✔'
+          )}
+        </Button>
+        {children}
+      </ButtonGroup>
     </$ItemContainer>
   )
 }
@@ -314,15 +329,19 @@ function Items({listName}: {listName: string}) {
       {!isLoading &&
         groceries &&
         reArrangeItems(groceries).map(item => (
-          <div key={nanoid()}>
+          <Item
+            item={item}
+            listName={listName}
+            setResponse={setResponse}
+            key={nanoid()}
+          >
             <DeleteFromDB
               dialogTitle="Delete item from list"
               deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
               dialogDeleting={item.name}
               dialogLabelledBy="delete-from-grocery-list"
             />
-            <Item item={item} listName={listName} setResponse={setResponse} />
-          </div>
+          </Item>
         ))}
       {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>

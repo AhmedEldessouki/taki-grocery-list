@@ -54,20 +54,33 @@ ${checked && `border-color: var(--green)`}`}}
 
 type AddStuffPropsType = {
   listName: string
-  item?: Omit<GroceryItemType, 'isDone'>
+  itemNameE?: string
+  itemBgColorE?: string
+  itemQuantityE?: number
+  itemPriorityE?: number
+  itemIsDoneE?: boolean
   isEdit?: boolean
   idx: number
 }
 
-function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
+function AddStuff({
+  listName,
+  itemPriorityE,
+  itemQuantityE,
+  itemNameE,
+  itemBgColorE,
+  itemIsDoneE,
+  isEdit,
+  idx,
+}: AddStuffPropsType) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
-  const [priorityST, setPriority] = React.useState(item?.priority ?? '0')
-  const [qtyST, setQty] = React.useState(item?.quantity ?? '0')
-  const [nameST, setName] = React.useState(item?.name ?? '')
-  const [oldNameST] = React.useState(isEdit ? item?.name : undefined)
+  const [priorityST, setPriority] = React.useState(itemPriorityE ?? '0')
+  const [qtyST, setQty] = React.useState(itemQuantityE ?? '0')
+  const [nameST, setName] = React.useState(itemNameE ?? '')
+  const [oldNameST] = React.useState(isEdit ? itemNameE : undefined)
   const [colorValue, setColorValue] = React.useState(
-    item?.bgColor ?? 'transparent',
+    itemBgColorE ?? 'transparent',
   )
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
@@ -89,7 +102,7 @@ function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
         batch.delete(oldItemRef)
       }
       const newItemRef = listRef.doc(spacefy(newData.name, {reverse: true}))
-      batch.set(newItemRef, {...newData, isDone: false})
+      batch.set(newItemRef, {...newData, isDone: itemIsDoneE})
 
       await batch
         .commit()
