@@ -78,7 +78,7 @@ function ListName({user, index}: {user: UserDataType; index: number}) {
         submitFunction={handleListNameUpdate}
         placeholder="Enter Grocery List Name"
         passwordConfirmation
-        name="groceryListName"
+        name={`groceryListName${index}`}
         type="text"
         value={listNameST}
         handleUserConfirmed={(arg: boolean) => setUserConfirmed(arg)}
