@@ -6,8 +6,16 @@ import notify from '../../lib/notify'
 import {postOneLevelDeep} from '../../lib/post'
 import SingleFieldForm from './singleFieldForm'
 
-function ListName({user, index}: {user: UserDataType; index: number}) {
-  const [listNameST, setListName] = React.useState<string>(user.listName[index])
+function ListName({
+  userID,
+  index,
+  userLists,
+}: {
+  userID: string
+  userLists: string[]
+  index: number
+}) {
+  const [listNameST, setListName] = React.useState<string>(userLists[index])
   const [userConfirmed, setUserConfirmed] = React.useState(false)
   const [isPending, setPending] = React.useState(false)
   const [responseST, setResponse] = React.useState<MyResponseType>({
@@ -20,7 +28,7 @@ function ListName({user, index}: {user: UserDataType; index: number}) {
     async (newData: string[]) => {
       const response = await postOneLevelDeep<Pick<UserDataType, 'listName'>>({
         collection: 'users',
-        doc: user.userId,
+        doc: userID,
         data: {listName: [...newData]},
         merge: true,
       })
@@ -40,16 +48,17 @@ function ListName({user, index}: {user: UserDataType; index: number}) {
 
   async function handleListNameUpdate(e: React.SyntheticEvent) {
     setResponse({error: undefined, isSuccessful: false})
-    if (!userConfirmed) return 'unChanged'
-    setPending(true)
 
+    if (userLists[index] === listNameST) return 'unChanged'
+    if (!userConfirmed) return 'unChanged'
+
+    setPending(true)
     const {groceryListName} = e.currentTarget as typeof e.currentTarget & {
       groceryListName: {value: string}
     }
-    if (user.listName[index] === groceryListName.value) return 'unChanged'
 
-    user.listName.splice(index, 1, groceryListName.value)
-    const newListName: string[] = user.listName
+    userLists.splice(index, 1, groceryListName.value)
+    const newListName: string[] = userLists
     setPending(false)
     await mutateAsync(newListName)
     if (responseST.error) {
@@ -78,7 +87,8 @@ function ListName({user, index}: {user: UserDataType; index: number}) {
         submitFunction={handleListNameUpdate}
         placeholder="Enter Grocery List Name"
         passwordConfirmation
-        name={`groceryListName${index}`}
+        name="groceryListName"
+        id={`groceryListName${index + 1}`}
         type="text"
         value={listNameST}
         handleUserConfirmed={(arg: boolean) => setUserConfirmed(arg)}

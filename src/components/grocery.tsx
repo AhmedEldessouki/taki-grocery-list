@@ -22,6 +22,8 @@ const AddStuff = React.lazy(() => import('./forms/addStuff'))
 const ListName = React.lazy(() => import('./forms/listName'))
 const EditItem = React.lazy(() => import('./forms/editItem'))
 
+// Will move the buttons into items and extract them to another file. then lazy load... also will do suspense List
+
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
   text-transform: capitalize;
@@ -314,6 +316,7 @@ function Items({listName}: {listName: string}) {
         mount={isFetching || isLoading}
         styling={{marginTop: '-98px', marginLeft: '-190px'}}
       />
+
       {!isLoading &&
         groceries &&
         reArrangeItems(groceries).map(item => (
@@ -391,7 +394,11 @@ function Grocery({userId}: {userId: string}) {
               </div>
             ) : (
               <React.Suspense fallback={<Spinner size={40} mount />}>
-                <ListName index={i} user={userData} />
+                <ListName
+                  index={i}
+                  userID={userData.userId}
+                  userLists={userData.listName}
+                />
               </React.Suspense>
             )}
             <Items listName={listName} />

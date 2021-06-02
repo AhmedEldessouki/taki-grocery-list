@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, {useState} from 'react'
@@ -17,6 +18,7 @@ interface SingleFieldFormType
   onEditEnd: () => void
   passwordConfirmation?: boolean
   name: string
+  id?: string
   isPending: boolean
   isSuccess: boolean
   handleUserConfirmed?: (arg: boolean) => void
@@ -119,6 +121,7 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
 function SingleFieldForm({
   submitFunction,
   name,
+  id,
   isPending,
   isSuccess,
   passwordConfirmation,
@@ -142,13 +145,17 @@ function SingleFieldForm({
     <>
       {isEditActive ? (
         <form onSubmit={handleSubmit}>
-          <$Label htmlFor={name}>{label}</$Label>
+          <$Label htmlFor={id ?? name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
-            <input name={name} id={name} {...inputOverrides} />
+            <input name={name} id={id ?? name} {...inputOverrides} />
             <button
               disabled={isPending}
               type="submit"
-              style={{color: 'var(--green)'}}
+              style={{
+                color: 'var(--green)',
+                position: 'relative',
+                zIndex: 1000,
+              }}
             >
               {isPending ? (
                 <Spinner
@@ -168,9 +175,9 @@ function SingleFieldForm({
         </form>
       ) : (
         <>
-          <$Label htmlFor={name}>{label}</$Label>
+          <$Label htmlFor={id ?? name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
-            <input name={name} id={name} readOnly {...inputOverrides} />
+            <input name={name} id={id ?? name} readOnly {...inputOverrides} />
             <button
               disabled={isPending}
               aria-label="Edit"
