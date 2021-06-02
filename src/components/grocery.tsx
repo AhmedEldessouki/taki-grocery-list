@@ -61,11 +61,13 @@ const $CleanUpBtnsWrapper = styled.div`
 
 function ListCleanUp({
   listName,
-  userData,
+  userID,
+  userLists,
   setError,
 }: {
   listName: string
-  userData: UserDataType
+  userID: string
+  userLists: string[]
   setError: React.Dispatch<React.SetStateAction<Error | undefined>>
 }) {
   const [wantToDelete, setWantToDelete] = React.useState<'delete' | 'clean'>()
@@ -103,10 +105,10 @@ function ListCleanUp({
         })
       if (cleanUpType === 'delete') {
         const userRef = db.collection('users').doc(userIdFn)
-        const index = userData.listName.indexOf(spacefy(listNameFn))
+        const index = userLists.indexOf(spacefy(listNameFn))
         if (index >= 0) {
-          userData.listName.splice(index, 1)
-          batch.update(userRef, {listName: userData.listName})
+          userLists.splice(index, 1)
+          batch.update(userRef, {listName: userLists})
         }
       }
 
@@ -146,7 +148,7 @@ function ListCleanUp({
         onAccept={async () => {
           await mutateAsync({
             listNameFn: listName,
-            userIdFn: userData.userId,
+            userIdFn: userID,
             cleanUpType: wantToDelete,
           })
         }}
@@ -312,15 +314,15 @@ function Items({listName}: {listName: string}) {
       {!isLoading &&
         groceries &&
         reArrangeItems(groceries).map(item => (
-          <DeleteFromDB
-            dialogTitle="Delete item from list"
-            key={nanoid()}
-            deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
-            dialogDeleting={item.name}
-            dialogLabelledBy="delete-from-grocery-list"
-          >
+          <div key={nanoid()}>
+            <DeleteFromDB
+              dialogTitle="Delete item from list"
+              deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
+              dialogDeleting={item.name}
+              dialogLabelledBy="delete-from-grocery-list"
+            />
             <Item item={item} listName={listName} setResponse={setResponse} />
-          </DeleteFromDB>
+          </div>
         ))}
       {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>
@@ -348,7 +350,9 @@ function Grocery({userId}: {userId: string}) {
       return data
     },
   })
-
+  if (!userData) {
+    return <Spinner mount />
+  }
   return (
     <>
       <Spinner
@@ -356,14 +360,14 @@ function Grocery({userId}: {userId: string}) {
         styling={{marginTop: '10px', left: '10px'}}
       />
       <AddList
-        userId={userData?.userId ?? ''}
+        userId={userData.userId}
         setArrayChange={setArray}
-        oldList={userData?.listName ?? ['']}
+        oldList={userData.listName}
         componentName="grocery"
         listArray={arrayST}
       />
       {errorST && <$Warning>{errorST.message}</$Warning>}
-      {userData?.listName.map((item, i) => {
+      {userData.listName.map((item, i) => {
         const listName = spacefy(item, {reverse: true})
         return (
           <div
@@ -374,7 +378,8 @@ function Grocery({userId}: {userId: string}) {
           >
             <ListCleanUp
               listName={listName}
-              userData={userData}
+              userID={userData.userId}
+              userLists={userData.listName}
               setError={setError}
             />
             {isFetching ? (
@@ -383,7 +388,11 @@ function Grocery({userId}: {userId: string}) {
                 <Spinner mount={isFetching} styling={{position: 'relative'}} />
               </div>
             ) : (
-              <ListName index={i} user={userData} />
+              <ListName
+                index={i}
+                userID={userData.userId}
+                userLists={userData.listName}
+              />
             )}
             <Items listName={listName} />
             <AddStuff listName={listName} idx={i} />
