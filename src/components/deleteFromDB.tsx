@@ -1,35 +1,18 @@
 import React, {useState} from 'react'
-import styled from '@emotion/styled'
-import {IconButton} from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 
 import {useAuth} from '../context/auth'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
 
 type DeleteFromDBPropType = {
-  children: JSX.Element
   dialogLabelledBy: string
   dialogTitle: string
   dialogDeleting: string
   deleteFn: () => void
 }
 
-const $Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row-reverse;
-`
-const $ButtonWrapper = styled.div`
-  position: relative;
-  z-index: 100;
-  bottom: 15px;
-  left: -30px;
-  width: 0;
-  overflow: visible;
-`
-
 function DeleteFromDB({
-  children,
   dialogTitle,
   deleteFn,
   dialogLabelledBy,
@@ -37,28 +20,20 @@ function DeleteFromDB({
 }: DeleteFromDBPropType) {
   const {user} = useAuth()
   const [showDialog, setShowDialog] = useState(false)
-  const [show, setShow] = useState(false)
 
-  if (!user) return children
+  if (!user) return <div />
 
   return (
-    <div style={{marginTop: '15px'}}>
-      <$Container
-        onFocus={() => setShow(true)}
-        onBlur={() => setShow(false)}
-        onDoubleClick={() => setShow(!show)}
+    <>
+      <Button
+        aria-label="delete"
+        size="small"
+        onClick={() => setShowDialog(true)}
+        variant="text"
+        style={{padding: 0}}
       >
-        <$ButtonWrapper>
-          <IconButton
-            aria-label="delete"
-            size="small"
-            onClick={() => setShowDialog(true)}
-          >
-            <DeleteForeverIcon style={{fill: 'red'}} />
-          </IconButton>
-        </$ButtonWrapper>
-        {children}
-      </$Container>
+        <DeleteForeverIcon style={{fill: 'red', height: '33px'}} />
+      </Button>
       <DeleteConfirmationDialog
         dialogTitle={dialogTitle}
         showDialog={showDialog}
@@ -70,7 +45,7 @@ function DeleteFromDB({
           setShowDialog(false)
         }}
       />
-    </div>
+    </>
   )
 }
 
