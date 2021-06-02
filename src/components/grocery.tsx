@@ -64,11 +64,13 @@ const $CleanUpBtnsWrapper = styled.div`
 
 function ListCleanUp({
   listName,
-  userData,
+  userID,
+  userLists,
   setError,
 }: {
   listName: string
-  userData: UserDataType
+  userID: string
+  userLists: string[]
   setError: React.Dispatch<React.SetStateAction<Error | undefined>>
 }) {
   const [wantToDelete, setWantToDelete] = React.useState<'delete' | 'clean'>()
@@ -106,10 +108,10 @@ function ListCleanUp({
         })
       if (cleanUpType === 'delete') {
         const userRef = db.collection('users').doc(userIdFn)
-        const index = userData.listName.indexOf(spacefy(listNameFn))
+        const index = userLists.indexOf(spacefy(listNameFn))
         if (index >= 0) {
-          userData.listName.splice(index, 1)
-          batch.update(userRef, {listName: userData.listName})
+          userLists.splice(index, 1)
+          batch.update(userRef, {listName: userLists})
         }
       }
 
@@ -149,7 +151,7 @@ function ListCleanUp({
         onAccept={async () => {
           await mutateAsync({
             listNameFn: listName,
-            userIdFn: userData.userId,
+            userIdFn: userID,
             cleanUpType: wantToDelete,
           })
         }}
@@ -382,7 +384,8 @@ function Grocery({userId}: {userId: string}) {
           >
             <ListCleanUp
               listName={listName}
-              userData={userData}
+              userID={userData.userId}
+              userLists={userData.listName}
               setError={setError}
             />
             {isFetching ? (
