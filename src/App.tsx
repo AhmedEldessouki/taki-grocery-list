@@ -7,12 +7,10 @@ import globalStyles from './shared/styles'
 import {useAuth} from './context/auth'
 import {auth} from './lib/firebase'
 import Layout from './components/layout'
+import SignIn from './components/forms/signIn'
+import SignUp from './components/forms/signUp'
+import Grocery from './components/grocery'
 import 'react-toastify/dist/ReactToastify.css'
-import Spinner from './components/spinner'
-
-const SignIn = React.lazy(() => import('./components/forms/signIn'))
-const SignUp = React.lazy(() => import('./components/forms/signUp'))
-const Grocery = React.lazy(() => import('./components/grocery'))
 
 const $AppContainer = styled.div`
   background: var(--white);
@@ -51,16 +49,12 @@ function App() {
       <Global styles={globalStyles} />
       {user ? (
         <$AuthAppContainer>
-          <React.Suspense fallback={<Spinner size={40} mount />}>
-            <Grocery userId={user.uid} />
-          </React.Suspense>
+          <Grocery userId={user.uid} />
         </$AuthAppContainer>
       ) : (
         <$AppContainer>
-          <React.Suspense fallback={<Spinner size={40} mount />}>
-            <SignIn />
-            <SignUp />
-          </React.Suspense>
+          <SignIn />
+          <SignUp />
         </$AppContainer>
       )}
       <ToastContainer
