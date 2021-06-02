@@ -8,8 +8,8 @@ import SingleFieldForm from './singleFieldForm'
 
 function ListName({
   userID,
-  index,
   userLists,
+  index,
 }: {
   userID: string
   userLists: string[]
