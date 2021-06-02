@@ -177,6 +177,8 @@ function SingleFieldForm({
               type="button"
               style={{
                 gridArea: 'edit',
+                position: 'relative',
+                zIndex: 1000,
               }}
               onClick={() => {
                 setIsEditActive(true)
