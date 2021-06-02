@@ -173,24 +173,37 @@ function Item({
   const queryClient = useQueryClient()
   const {mutateAsync} = useMutation(
     async ({
+      deleteX,
       list,
       itemName,
       data,
-    }: {
-      list: string
-      itemName: string
-      data: {isDone: boolean}
-    }) => {
-      const response = await postTwoLevelDeep<typeof data>({
-        collection: 'grocery',
-        doc: 'groceryList',
-        subCollection: list,
-        subDoc: spacefy(itemName, {reverse: true}),
-        data,
-        merge: true,
-      })
-      // THIS IS A BLUFF ... Not Sure IF It Will [[[WORK]]]
-      setResponse({...response})
+    }:
+      | {
+          deleteX: false
+          list: string
+          itemName: string
+          data: {isDone: boolean}
+        }
+      | {deleteX: true; list: string; itemName: string; data?: unknown}) => {
+      if (deleteX) {
+        const response = await deleteTwoLevelDeep({
+          collection: 'grocery',
+          doc: 'groceryList',
+          subCollection: list,
+          subDoc: spacefy(itemName, {reverse: true}),
+        })
+        setResponse({...response})
+      } else {
+        const response = await postTwoLevelDeep<typeof data>({
+          collection: 'grocery',
+          doc: 'groceryList',
+          subCollection: list,
+          subDoc: spacefy(itemName, {reverse: true}),
+          data,
+          merge: true,
+        })
+        setResponse({...response})
+      }
     },
     {
       onSuccess: () => {
@@ -198,6 +211,13 @@ function Item({
       },
     },
   )
+  async function deleteItem(itemName: string) {
+    await mutateAsync({
+      deleteX: true,
+      list: spacefy(listName, {reverse: true}),
+      itemName,
+    })
+  }
   return (
     <$ItemContainer isDone={isDone} bgColor={item.bgColor}>
       <$Item style={{flex: 1}} isDone={isDone}>
@@ -214,6 +234,7 @@ function Item({
         onClick={async () => {
           setPending(!isPending)
           await mutateAsync({
+            deleteX: false,
             list: listName,
             itemName: item.name,
             data: {isDone: !isDone},
@@ -221,8 +242,8 @@ function Item({
           setDone(!isDone)
           setPending(!isPending)
         }}
-        style={{width: '50px', color: 'var(--black)'}}
-        variant="outlined"
+        style={{color: 'var(--black)', padding: 0}}
+        variant="text"
         disabled={isPending}
       >
         {isPending ? (
@@ -235,6 +256,13 @@ function Item({
           '✔'
         )}
       </Button>
+      <DeleteFromDB
+        dialogTitle="Delete item from list"
+        key={nanoid()}
+        deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
+        dialogDeleting={item.name}
+        dialogLabelledBy="delete-from-grocery-list"
+      />
     </$ItemContainer>
   )
 }
@@ -271,28 +299,6 @@ function Items({listName}: {listName: string}) {
     },
   })
 
-  const queryClient = useQueryClient()
-  const {mutateAsync} = useMutation(
-    async ({list, itemName}: {list: string; itemName: string}) => {
-      const response = await deleteTwoLevelDeep({
-        collection: 'grocery',
-        doc: 'groceryList',
-        subCollection: list,
-        subDoc: spacefy(itemName, {reverse: true}),
-      })
-      // THIS IS A BLUFF ... Not Sure IF It Will [[[WORK]]]
-      setResponse({...response})
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(listName)
-      },
-    },
-  )
-  async function deleteItem(itemName: string) {
-    await mutateAsync({list: spacefy(listName, {reverse: true}), itemName})
-  }
-
   const reArrangeItems = React.useCallback(
     (arr: Array<GroceryItemType>): Array<GroceryItemType> =>
       arr.sort((a, b) => {
@@ -320,15 +326,7 @@ function Items({listName}: {listName: string}) {
       {!isLoading &&
         groceries &&
         reArrangeItems(groceries).map(item => (
-          <DeleteFromDB
-            dialogTitle="Delete item from list"
-            key={nanoid()}
-            deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
-            dialogDeleting={item.name}
-            dialogLabelledBy="delete-from-grocery-list"
-          >
-            <Item item={item} listName={listName} setResponse={setResponse} />
-          </DeleteFromDB>
+          <Item item={item} listName={listName} setResponse={setResponse} />
         ))}
       {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>

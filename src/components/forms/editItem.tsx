@@ -21,9 +21,9 @@ function EditItem({children}: {children: React.ReactNode}) {
   return (
     <>
       <Button
-        style={{width: '50px', marginRight: '10px'}}
+        style={{padding: 0}}
         onClick={() => setShowDialog(!showDialog)}
-        variant="outlined"
+        variant="text"
         aria-label="click to Edit Item"
         disabled={showDialog}
       >
