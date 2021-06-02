@@ -21,6 +21,7 @@
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-unsafe-assignment": "warn",
     "react/require-default-props": "off",
+    "import/order": "warn",
     "@typescript-eslint/no-unnecessary-condition": "off",
     "no-use-before-define": "off",
     "react/jsx-pascal-case": "off",
