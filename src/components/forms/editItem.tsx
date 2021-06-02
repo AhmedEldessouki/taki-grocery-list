@@ -21,7 +21,6 @@ function EditItem({children}: {children: React.ReactNode}) {
   return (
     <>
       <Button
-        style={{width: '50px', marginRight: '10px'}}
         onClick={() => setShowDialog(!showDialog)}
         variant="outlined"
         aria-label="click to Edit Item"

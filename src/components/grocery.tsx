@@ -159,17 +159,25 @@ function ListCleanUp({
 }
 
 function Item({
-  item,
+  itemNameP,
+  itemBgColorP,
+  itemQuantityP,
+  itemPriorityP,
+  itemIsDoneP,
   children,
   listName,
   setResponse,
 }: {
-  item: GroceryItemType
+  itemNameP: string
+  itemBgColorP: string
+  itemQuantityP: number
+  itemPriorityP: number
+  itemIsDoneP: boolean
   children: JSX.Element
   listName: string
   setResponse: React.Dispatch<React.SetStateAction<MyResponseType>>
 }) {
-  const [isDone, setDone] = React.useState(item.isDone)
+  const [isDone, setDone] = React.useState(itemIsDoneP)
   const [isPending, setPending] = React.useState(false)
 
   const queryClient = useQueryClient()
@@ -201,9 +209,9 @@ function Item({
     },
   )
   return (
-    <$ItemContainer isDone={isDone} bgColor={item.bgColor}>
+    <$ItemContainer isDone={isDone} bgColor={itemBgColorP}>
       <$Item style={{flex: 1}} isDone={isDone}>
-        {item.quantity && item.quantity} {item.name}
+        {itemPriorityP && itemPriorityP} {itemNameP}
       </$Item>
       <ButtonGroup size="small" aria-label="small outlined button group">
         <EditItem>
@@ -211,11 +219,11 @@ function Item({
             idx={124}
             isEdit
             listName={listName}
-            itemNameE={item.name}
-            itemBgColorE={item.bgColor}
-            itemQuantityE={item.quantity}
-            itemPriorityE={item.priority}
-            itemIsDoneE={item.isDone}
+            itemNameE={itemNameP}
+            itemBgColorE={itemBgColorP}
+            itemQuantityE={itemQuantityP}
+            itemPriorityE={itemPriorityP}
+            itemIsDoneE={itemIsDoneP}
           />
         </EditItem>
         <Button
@@ -223,7 +231,7 @@ function Item({
             setPending(!isPending)
             await mutateAsync({
               list: listName,
-              itemName: item.name,
+              itemName: itemNameP,
               data: {isDone: !isDone},
             })
             setDone(!isDone)
@@ -330,7 +338,11 @@ function Items({listName}: {listName: string}) {
         groceries &&
         reArrangeItems(groceries).map(item => (
           <Item
-            item={item}
+            itemNameP={item.name}
+            itemBgColorP={item.bgColor}
+            itemQuantityP={item.quantity}
+            itemPriorityP={item.priority}
+            itemIsDoneP={item.isDone}
             listName={listName}
             setResponse={setResponse}
             key={nanoid()}
