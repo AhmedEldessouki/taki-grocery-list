@@ -12,6 +12,7 @@ import ConfirmPassword from './confirmPassword'
 
 interface SingleFieldFormType
   extends React.InputHTMLAttributes<HTMLInputElement> {
+  id?: string
   submitFunction: (e: React.SyntheticEvent) => Promise<string>
   onEditStart: () => void
   onEditEnd: () => void
@@ -119,6 +120,7 @@ const $EditFormContainer = styled.div<{successful: boolean}>`
 function SingleFieldForm({
   submitFunction,
   name,
+  id,
   isPending,
   isSuccess,
   passwordConfirmation,
@@ -142,13 +144,17 @@ function SingleFieldForm({
     <>
       {isEditActive ? (
         <form onSubmit={handleSubmit}>
-          <$Label htmlFor={name}>{label}</$Label>
+          <$Label htmlFor={id ?? name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
-            <input name={name} id={name} {...inputOverrides} />
+            <input name={name} id={id ?? name} {...inputOverrides} />
             <button
               disabled={isPending}
               type="submit"
-              style={{color: 'var(--green)'}}
+              style={{
+                color: 'var(--green)',
+                position: 'relative',
+                zIndex: 1000,
+              }}
             >
               {isPending ? (
                 <Spinner
@@ -156,7 +162,7 @@ function SingleFieldForm({
                   size={28}
                   styling={{
                     position: 'relative',
-                    zIndex: 999999999999,
+                    zIndex: 1000,
                     color: 'var(--white)',
                   }}
                 />
@@ -168,15 +174,17 @@ function SingleFieldForm({
         </form>
       ) : (
         <>
-          <$Label htmlFor={name}>{label}</$Label>
+          <$Label htmlFor={id ?? name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
-            <input name={name} id={name} readOnly {...inputOverrides} />
+            <input name={name} id={id ?? name} readOnly {...inputOverrides} />
             <button
               disabled={isPending}
               aria-label="Edit"
               type="button"
               style={{
                 gridArea: 'edit',
+                position: 'relative',
+                zIndex: 1000,
               }}
               onClick={() => {
                 setIsEditActive(true)
