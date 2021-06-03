@@ -1,6 +1,6 @@
 function spacefy(str: string, {reverse}: {reverse?: boolean} = {}): string {
   if (reverse) {
-    const camelCase = str
+    return str
       .split(' ')
       .map((item, i) => {
         if (i > 0) {
@@ -9,7 +9,6 @@ function spacefy(str: string, {reverse}: {reverse?: boolean} = {}): string {
         return item
       })
       .join('')
-    return camelCase
   }
   return str.replace(/[A-Z]/g, _ => ` ${_.toLowerCase()}`)
 }
