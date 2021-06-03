@@ -147,10 +147,9 @@ function AddList({
   }
 
   React.useEffect(() => {
-    if (oldList.length >= 3) {
-      setShow(false)
-      setArrayChange([])
-    }
+    if (oldList.length < 3) return
+    setShow(false)
+    setArrayChange([])
   }, [oldList, setArrayChange])
 
   const hasThreeItems = listArray.length + oldList.length > 3
