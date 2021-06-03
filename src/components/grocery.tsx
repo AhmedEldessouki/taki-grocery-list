@@ -211,7 +211,7 @@ function Item({
   return (
     <$ItemContainer isDone={isDone} bgColor={itemBgColorP}>
       <$Item style={{flex: 1}} isDone={isDone}>
-        {itemPriorityP && itemPriorityP} {itemNameP}
+        {itemQuantityP && itemQuantityP} {itemNameP}
       </$Item>
       <ButtonGroup size="small" aria-label="small outlined button group">
         <EditItem>
