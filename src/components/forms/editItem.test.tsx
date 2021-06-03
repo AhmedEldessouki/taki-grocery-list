@@ -14,7 +14,17 @@ const itemTwo: GroceryItemType = generateGroceryItem()
 test('render EditItem: check that the Edit Form is not visible', async () => {
   await render(
     <EditItem>
-      <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
+      <AddStuff
+        idx={0}
+        listName={user.listName[0]}
+        isEdit
+        itemNameE={item.name}
+        itemBgColorE={item.bgColor}
+        itemQuantityE={item.quantity}
+        itemPriorityE={item.priority}
+        itemIsDoneE={item.isDone}
+      />
+      ,
     </EditItem>,
   )
   expect(screen.queryByLabelText(/qty/i)).not.toBeInTheDocument()
@@ -27,7 +37,17 @@ test('render EditItem: check that the Edit Form is not visible', async () => {
 test("render EditItem: Edit Form's values", async () => {
   await render(
     <EditItem>
-      <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
+      <AddStuff
+        idx={0}
+        listName={user.listName[0]}
+        isEdit
+        itemNameE={item.name}
+        itemBgColorE={item.bgColor}
+        itemQuantityE={item.quantity}
+        itemPriorityE={item.priority}
+        itemIsDoneE={item.isDone}
+      />
+      ,
     </EditItem>,
   )
 
