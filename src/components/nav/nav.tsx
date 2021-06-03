@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import {mqMax} from '../../shared/utils'
-import NavBar from './navBar'
+
+const NavBar = React.lazy(() => import('./navBar'))
 
 const $Logo = styled.h1`
   margin: 0;
@@ -43,7 +44,9 @@ function Nav() {
   return (
     <$Nav>
       <$Logo>Grocery List</$Logo>
-      <NavBar />
+      <React.Suspense fallback={<div>...</div>}>
+        <NavBar />
+      </React.Suspense>
     </$Nav>
   )
 }
