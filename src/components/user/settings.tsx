@@ -209,7 +209,12 @@ function Settings({
             Settings
             <Spinner
               mount={isFetching || isLoading}
-              styling={{marginTop: '7px', marginLeft: '10px', zIndex: 9999999}}
+              styling={{
+                position: 'absolute',
+                marginTop: '-27px',
+                marginLeft: '80px',
+                zIndex: 9999999,
+              }}
             />
           </DialogTitle>
           <DialogContent style={{paddingTop: '0'}}>
