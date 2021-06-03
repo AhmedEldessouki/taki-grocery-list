@@ -75,17 +75,27 @@ function AddStuff({
 }: AddStuffPropsType) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
-  const [priorityST, setPriority] = React.useState(itemPriorityE ?? '0')
-  const [qtyST, setQty] = React.useState(itemQuantityE ?? '0')
-  const [nameST, setName] = React.useState(itemNameE ?? '')
-  const [oldNameST] = React.useState(isEdit ? itemNameE : undefined)
-  const [colorValue, setColorValue] = React.useState(
-    itemBgColorE ?? 'transparent',
-  )
+  const [priorityST, setPriority] = React.useState('0')
+  const [qtyST, setQty] = React.useState('0')
+  const [nameST, setName] = React.useState('')
+  const [oldNameST, setOldNameST] =
+    React.useState<string | undefined>(undefined)
+  const [colorValue, setColorValue] = React.useState('transparent')
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
     isSuccessful: false,
   })
+
+  React.useEffect(() => {
+    if (!isEdit) return
+    setPriority(
+      itemPriorityE === 9999 || !itemPriorityE ? '0' : `${itemPriorityE}`,
+    )
+    setQty(`${itemQuantityE ?? 0}`)
+    setName(itemNameE ?? '')
+    setOldNameST(itemNameE)
+    setColorValue(itemBgColorE ?? '')
+  }, [isEdit, itemBgColorE, itemNameE, itemPriorityE, itemQuantityE])
 
   const queryClient = useQueryClient()
   const mutation = useMutation(
