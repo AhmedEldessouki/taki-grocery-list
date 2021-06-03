@@ -10,13 +10,6 @@ const user: UserDataType = generateUserData()
 const item: GroceryItemType = generateGroceryItem()
 const itemTwo: GroceryItemType = generateGroceryItem()
 
-// await render( <AddStuff
-//   idx={0}
-//   listName={user.listName[0]}
-//   isEdit={false}
-//   item={generateGroceryItem()}
-// />)
-
 test('render without Items - [Create]', async () => {
   await render(<AddStuff idx={0} listName={user.listName[0]} />)
   expect(screen.getByLabelText(/qty/i)).toHaveDisplayValue('0')
@@ -48,7 +41,16 @@ test('render without Items - [Create]', async () => {
 
 test('render with Items - [Edit]', async () => {
   await render(
-    <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
+    <AddStuff
+      idx={0}
+      listName={user.listName[0]}
+      isEdit
+      itemNameE={item.name}
+      itemBgColorE={item.bgColor}
+      itemQuantityE={item.quantity}
+      itemPriorityE={item.priority}
+      itemIsDoneE={item.isDone}
+    />,
   )
   expect(screen.getByLabelText(/qty/i)).toHaveDisplayValue(`${item.quantity}`)
   expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
@@ -61,7 +63,16 @@ test('render with Items - [Edit]', async () => {
 
 test('render with Items and edit value - [Edit]', async () => {
   await render(
-    <AddStuff idx={0} listName={user.listName[0]} isEdit item={item} />,
+    <AddStuff
+      idx={0}
+      listName={user.listName[0]}
+      isEdit
+      itemNameE={item.name}
+      itemBgColorE={item.bgColor}
+      itemQuantityE={item.quantity}
+      itemPriorityE={item.priority}
+      itemIsDoneE={item.isDone}
+    />,
   )
 
   userEvent.clear(screen.getByLabelText(/qty/i))

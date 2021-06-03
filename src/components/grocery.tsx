@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@material-ui/core/Button'
 import {nanoid} from 'nanoid'
 import React from 'react'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
@@ -61,11 +62,13 @@ const $CleanUpBtnsWrapper = styled.div`
 
 function ListCleanUp({
   listName,
-  userData,
+  userID,
+  userLists,
   setError,
 }: {
   listName: string
-  userData: UserDataType
+  userID: string
+  userLists: string[]
   setError: React.Dispatch<React.SetStateAction<Error | undefined>>
 }) {
   const [wantToDelete, setWantToDelete] = React.useState<'delete' | 'clean'>()
@@ -103,10 +106,10 @@ function ListCleanUp({
         })
       if (cleanUpType === 'delete') {
         const userRef = db.collection('users').doc(userIdFn)
-        const index = userData.listName.indexOf(spacefy(listNameFn))
+        const index = userLists.indexOf(spacefy(listNameFn))
         if (index >= 0) {
-          userData.listName.splice(index, 1)
-          batch.update(userRef, {listName: userData.listName})
+          userLists.splice(index, 1)
+          batch.update(userRef, {listName: userLists})
         }
       }
 
@@ -146,7 +149,7 @@ function ListCleanUp({
         onAccept={async () => {
           await mutateAsync({
             listNameFn: listName,
-            userIdFn: userData.userId,
+            userIdFn: userID,
             cleanUpType: wantToDelete,
           })
         }}
@@ -156,15 +159,25 @@ function ListCleanUp({
 }
 
 function Item({
-  item,
+  itemNameP,
+  itemBgColorP,
+  itemQuantityP,
+  itemPriorityP,
+  itemIsDoneP,
+  children,
   listName,
   setResponse,
 }: {
-  item: GroceryItemType
+  itemNameP: string
+  itemBgColorP: string
+  itemQuantityP: number
+  itemPriorityP: number
+  itemIsDoneP: boolean
+  children: JSX.Element
   listName: string
   setResponse: React.Dispatch<React.SetStateAction<MyResponseType>>
 }) {
-  const [isDone, setDone] = React.useState(item.isDone)
+  const [isDone, setDone] = React.useState(itemIsDoneP)
   const [isPending, setPending] = React.useState(false)
 
   const queryClient = useQueryClient()
@@ -196,38 +209,50 @@ function Item({
     },
   )
   return (
-    <$ItemContainer isDone={isDone} bgColor={item.bgColor}>
+    <$ItemContainer isDone={isDone} bgColor={itemBgColorP}>
       <$Item style={{flex: 1}} isDone={isDone}>
-        {item.quantity && item.quantity} {item.name}
+        {itemQuantityP && itemQuantityP} {itemNameP}
       </$Item>
-      <EditItem>
-        <AddStuff idx={124} isEdit listName={listName} item={item} />
-      </EditItem>
-      <Button
-        onClick={async () => {
-          setPending(!isPending)
-          await mutateAsync({
-            list: listName,
-            itemName: item.name,
-            data: {isDone: !isDone},
-          })
-          setDone(!isDone)
-          setPending(!isPending)
-        }}
-        style={{width: '50px', color: 'var(--black)'}}
-        variant="outlined"
-        disabled={isPending}
-      >
-        {isPending ? (
-          <Spinner
-            mount={isPending}
-            size={30}
-            styling={{position: 'relative'}}
+      <ButtonGroup size="small" aria-label="small outlined button group">
+        <EditItem>
+          <AddStuff
+            idx={124}
+            isEdit
+            listName={listName}
+            itemNameE={itemNameP}
+            itemBgColorE={itemBgColorP}
+            itemQuantityE={itemQuantityP}
+            itemPriorityE={itemPriorityP}
+            itemIsDoneE={itemIsDoneP}
           />
-        ) : (
-          '✔'
-        )}
-      </Button>
+        </EditItem>
+        <Button
+          onClick={async () => {
+            setPending(!isPending)
+            await mutateAsync({
+              list: listName,
+              itemName: itemNameP,
+              data: {isDone: !isDone},
+            })
+            setDone(!isDone)
+            setPending(!isPending)
+          }}
+          style={{width: '50px', color: 'var(--black)'}}
+          variant="outlined"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <Spinner
+              mount={isPending}
+              size={30}
+              styling={{position: 'relative'}}
+            />
+          ) : (
+            '✔'
+          )}
+        </Button>
+        {children}
+      </ButtonGroup>
     </$ItemContainer>
   )
 }
@@ -312,15 +337,23 @@ function Items({listName}: {listName: string}) {
       {!isLoading &&
         groceries &&
         reArrangeItems(groceries).map(item => (
-          <DeleteFromDB
-            dialogTitle="Delete item from list"
+          <Item
+            itemNameP={item.name}
+            itemBgColorP={item.bgColor}
+            itemQuantityP={item.quantity}
+            itemPriorityP={item.priority}
+            itemIsDoneP={item.isDone}
+            listName={listName}
+            setResponse={setResponse}
             key={nanoid()}
-            deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
-            dialogDeleting={item.name}
-            dialogLabelledBy="delete-from-grocery-list"
           >
-            <Item item={item} listName={listName} setResponse={setResponse} />
-          </DeleteFromDB>
+            <DeleteFromDB
+              dialogTitle="Delete item from list"
+              deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
+              dialogDeleting={item.name}
+              dialogLabelledBy="delete-from-grocery-list"
+            />
+          </Item>
         ))}
       {responseST.error && <$Warning>{responseST.error.message}</$Warning>}
     </$ItemsContainer>
@@ -348,7 +381,9 @@ function Grocery({userId}: {userId: string}) {
       return data
     },
   })
-
+  if (!userData) {
+    return <Spinner mount />
+  }
   return (
     <>
       <Spinner
@@ -356,14 +391,14 @@ function Grocery({userId}: {userId: string}) {
         styling={{marginTop: '10px', left: '10px'}}
       />
       <AddList
-        userId={userData?.userId ?? ''}
+        userId={userData.userId}
         setArrayChange={setArray}
-        oldList={userData?.listName ?? ['']}
+        oldList={userData.listName}
         componentName="grocery"
         listArray={arrayST}
       />
       {errorST && <$Warning>{errorST.message}</$Warning>}
-      {userData?.listName.map((item, i) => {
+      {userData.listName.map((item, i) => {
         const listName = spacefy(item, {reverse: true})
         return (
           <div
@@ -374,7 +409,8 @@ function Grocery({userId}: {userId: string}) {
           >
             <ListCleanUp
               listName={listName}
-              userData={userData}
+              userID={userData.userId}
+              userLists={userData.listName}
               setError={setError}
             />
             {isFetching ? (
@@ -383,7 +419,11 @@ function Grocery({userId}: {userId: string}) {
                 <Spinner mount={isFetching} styling={{position: 'relative'}} />
               </div>
             ) : (
-              <ListName index={i} user={userData} />
+              <ListName
+                index={i}
+                userID={userData.userId}
+                userLists={userData.listName}
+              />
             )}
             <Items listName={listName} />
             <AddStuff listName={listName} idx={i} />

@@ -147,20 +147,17 @@ function AddList({
   }
 
   React.useEffect(() => {
-    if (oldList.length >= 3) {
-      setShow(false)
-      setArrayChange([])
-    }
+    if (oldList.length < 3) return
+    setShow(false)
+    setArrayChange([])
   }, [oldList, setArrayChange])
 
-  const hasThreeItems = listArray.length + oldList.length > 3
-  const isThreeItems = listArray.length + oldList.length >= 3
   return (
     <>
       <$BtnWrapper>
         <Button
           variant="outlined"
-          disabled={isThreeItems}
+          disabled={listArray.length + oldList.length >= 3}
           style={{background: 'transparent', color: 'var(--black)'}}
           onClick={() => {
             setArrayChange([...listArray.concat('')])
@@ -189,7 +186,7 @@ function AddList({
           </IconButton>
         )}
       </$BtnWrapper>
-      {isShow && (
+      {isShow ? (
         <$Form onSubmit={handleSubmit}>
           {listArray.map((item, i) => {
             if (oldList.length + i + 1 > 3) {
@@ -209,13 +206,7 @@ function AddList({
           })}
           <$NoteContainer>
             <span>✖ Name should be unique.</span>
-            <span
-              style={{
-                color: hasThreeItems ? 'var(--red)' : 'inherit',
-              }}
-            >
-              ✖ Max of 3 lists per user.
-            </span>
+            <span>✖ Max of 3 lists per user.</span>
           </$NoteContainer>
           {responseST.error && (
             <$Warning marginBottom="10">{responseST.error.message}</$Warning>
@@ -223,7 +214,7 @@ function AddList({
           <Button
             type="submit"
             variant="outlined"
-            disabled={isPending || hasThreeItems}
+            disabled={isPending}
             style={{
               background: 'var(--green)',
               color: 'var(--white)',
@@ -245,6 +236,8 @@ function AddList({
             )}
           </Button>
         </$Form>
+      ) : (
+        <div />
       )}
     </>
   )

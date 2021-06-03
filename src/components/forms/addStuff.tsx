@@ -54,25 +54,48 @@ ${checked && `border-color: var(--green)`}`}}
 
 type AddStuffPropsType = {
   listName: string
-  item?: Omit<GroceryItemType, 'isDone'>
+  itemNameE?: string
+  itemBgColorE?: string
+  itemQuantityE?: number
+  itemPriorityE?: number
+  itemIsDoneE?: boolean
   isEdit?: boolean
   idx: number
 }
 
-function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
+function AddStuff({
+  listName,
+  itemPriorityE,
+  itemQuantityE,
+  itemNameE,
+  itemBgColorE,
+  itemIsDoneE,
+  isEdit,
+  idx,
+}: AddStuffPropsType) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
-  const [priorityST, setPriority] = React.useState(item?.priority ?? '0')
-  const [qtyST, setQty] = React.useState(item?.quantity ?? '0')
-  const [nameST, setName] = React.useState(item?.name ?? '')
-  const [oldNameST] = React.useState(isEdit ? item?.name : undefined)
-  const [colorValue, setColorValue] = React.useState(
-    item?.bgColor ?? 'transparent',
-  )
+  const [priorityST, setPriority] = React.useState('0')
+  const [qtyST, setQty] = React.useState('0')
+  const [nameST, setName] = React.useState('')
+  const [oldNameST, setOldNameST] =
+    React.useState<string | undefined>(undefined)
+  const [colorValue, setColorValue] = React.useState('transparent')
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
     isSuccessful: false,
   })
+
+  React.useEffect(() => {
+    if (!isEdit) return
+    setPriority(
+      itemPriorityE === 9999 || !itemPriorityE ? '0' : `${itemPriorityE}`,
+    )
+    setQty(`${itemQuantityE ?? 0}`)
+    setName(itemNameE ?? '')
+    setOldNameST(itemNameE)
+    setColorValue(itemBgColorE ?? '')
+  }, [isEdit, itemBgColorE, itemNameE, itemPriorityE, itemQuantityE])
 
   const queryClient = useQueryClient()
   const mutation = useMutation(
@@ -89,7 +112,7 @@ function AddStuff({listName, item, isEdit, idx}: AddStuffPropsType) {
         batch.delete(oldItemRef)
       }
       const newItemRef = listRef.doc(spacefy(newData.name, {reverse: true}))
-      batch.set(newItemRef, {...newData, isDone: false})
+      batch.set(newItemRef, {...newData, isDone: itemIsDoneE})
 
       await batch
         .commit()
