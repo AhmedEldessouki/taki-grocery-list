@@ -189,7 +189,7 @@ function AddList({
           </IconButton>
         )}
       </$BtnWrapper>
-      {isShow && (
+      {isShow ? (
         <$Form onSubmit={handleSubmit}>
           {listArray.map((item, i) => {
             if (oldList.length + i + 1 > 3) {
@@ -245,6 +245,8 @@ function AddList({
             )}
           </Button>
         </$Form>
+      ) : (
+        <div />
       )}
     </>
   )
