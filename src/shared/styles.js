@@ -17,7 +17,7 @@ const globalStyles = css`
 
     --navHeight: 50px;
 
-    --roundness: 3px;
+    --roundness: 5px;
     --opacity: 0.3;
 
     --rgbWhite: 245, 245, 245;
