@@ -11,6 +11,7 @@ import {$Warning} from '../../shared/utils'
 import Spinner from '../spinner'
 import whiteSpaceCleaner from '../../lib/whiteSpaceCleaner'
 import $Field from './sharedCss/field'
+import Button from '../button'
 
 function ListInput({
   componentName,
@@ -153,7 +154,7 @@ function AddList({
   return (
     <>
       <$BtnWrapper>
-        <button
+        <Button
           disabled={listArray.length + oldList.length >= 3}
           style={{background: 'transparent', color: 'var(--black)'}}
           onClick={() => {
@@ -164,15 +165,17 @@ function AddList({
           }}
           type="button"
         >
-          <AddIcon
-            fontSize="large"
-            aria-label="add icon"
-            style={{paddingRight: '15px'}}
-          />
-          Add {componentName} list
-        </button>
+          <>
+            <AddIcon
+              fontSize="large"
+              aria-label="add icon"
+              style={{paddingRight: '15px'}}
+            />
+            Add {componentName} list
+          </>
+        </Button>
         {isShow && (
-          <button
+          <Button
             type="button"
             id="close-btn"
             onClick={() => {
@@ -182,7 +185,7 @@ function AddList({
             aria-label="close button"
           >
             ✖
-          </button>
+          </Button>
         )}
       </$BtnWrapper>
       {isShow ? (
@@ -210,7 +213,7 @@ function AddList({
           {responseST.error && (
             <$Warning marginBottom="10">{responseST.error.message}</$Warning>
           )}
-          <button
+          <Button
             type="submit"
             disabled={isPending}
             style={{
@@ -232,7 +235,7 @@ function AddList({
             ) : (
               'Submit'
             )}
-          </button>
+          </Button>
         </$Form>
       ) : (
         <div />

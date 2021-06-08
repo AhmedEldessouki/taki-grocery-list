@@ -1,7 +1,5 @@
 import React, {useState} from 'react'
-
 import styled from '@emotion/styled'
-
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -11,6 +9,7 @@ import {$Warning, mqMax} from '../../shared/utils'
 import Spinner from '../spinner'
 import $Field from './sharedCss/field'
 import ForgetPassword from './forgetPassword'
+import Button from '../button'
 
 const $Form = styled.form`
   width: 300px;
@@ -97,13 +96,13 @@ const SignInForm = ({
                 <label htmlFor="signInPassword">Password</label>
               </$Field>
             </DialogContent>
-            <button
+            <Button
               onClick={() => setForgetPassword(!forgetPassword)}
               type="button"
               style={{marginLeft: '15px'}}
             >
               Forget Password
-            </button>
+            </Button>
             {signInFailed && <$Warning role="alert">{signInFailed}</$Warning>}
             <DialogActions
               style={{
@@ -112,7 +111,7 @@ const SignInForm = ({
                 minWidth: '50%',
               }}
             >
-              <button
+              <Button
                 type="submit"
                 style={{
                   background: 'var(--green)',
@@ -133,10 +132,10 @@ const SignInForm = ({
                 ) : (
                   'Submit'
                 )}
-              </button>
-              <button type="button" onClick={closeDialog}>
+              </Button>
+              <Button type="button" onClick={closeDialog}>
                 Close
-              </button>
+              </Button>
             </DialogActions>
           </$Form>
         </div>
@@ -152,9 +151,9 @@ const SignIn = () => {
 
   return (
     <>
-      <button onClick={openDialog} type="button">
+      <Button onClick={openDialog} type="button">
         Sign In
-      </button>
+      </Button>
       {showDialog && (
         <SignInForm showDialog={showDialog} setShowDialog={setShowDialog} />
       )}

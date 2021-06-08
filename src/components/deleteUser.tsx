@@ -6,6 +6,7 @@ import notify from '../lib/notify'
 import {deleteOneLevelDeep} from '../lib/delete'
 import ConfirmPassword from './forms/confirmPassword'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
+import Button from './button'
 
 function DeleteUser() {
   const {user, setUser} = useAuth()
@@ -74,13 +75,13 @@ function DeleteUser() {
 
   return (
     <div style={{margin: '10px 22px'}}>
-      <button
+      <Button
         type="button"
         color="secondary"
         onClick={() => setWantToDelete(true)}
       >
         Delete Account
-      </button>
+      </Button>
       {responseST.error && (
         <$Warning role="alert">{responseST.error.message}</$Warning>
       )}

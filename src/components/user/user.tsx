@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import myFirebase from '../../lib/firebase'
 import Settings from './settings'
+import Button from '../button'
 
 const $UserContainer = styled.div`
   button {
@@ -32,14 +33,14 @@ function User({user}: {user: myFirebase.User}) {
   return (
     <>
       <$UserContainer>
-        <button
+        <Button
           type="button"
           onClick={() => {
             openDialog()
           }}
         >
           Settings
-        </button>
+        </Button>
       </$UserContainer>
       {showDialog && (
         <Settings

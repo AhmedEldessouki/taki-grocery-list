@@ -7,6 +7,7 @@ import spacefy from '../../lib/spacefy'
 import {db} from '../../lib/firebase'
 import notify from '../../lib/notify'
 import $Field from './sharedCss/field'
+import Button from '../button'
 
 const $Form = styled.form`
   display: flex;
@@ -237,7 +238,7 @@ function AddStuff({
             />
             <label htmlFor={`priority-${idx}`}>priority no.</label>
           </$Field>
-          <button
+          <Button
             type="submit"
             style={{
               background: !isPending ? 'var(--green)' : 'var(--red)',
@@ -246,7 +247,7 @@ function AddStuff({
             }}
           >
             Add Item
-          </button>
+          </Button>
         </$RowWrapper>
       </$Form>
       {responseST.error && (

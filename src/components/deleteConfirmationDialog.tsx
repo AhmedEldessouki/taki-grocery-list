@@ -1,10 +1,10 @@
 import React from 'react'
-
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Spinner from './spinner'
+import Button from './button'
 
 type DeleteConfirmationDialogPropType = {
   deleting: string
@@ -47,7 +47,7 @@ function DeleteConfirmationDialog({
           minWidth: '50%',
         }}
       >
-        <button
+        <Button
           type="button"
           disabled={isPending}
           color="primary"
@@ -55,8 +55,8 @@ function DeleteConfirmationDialog({
           aria-label="no"
         >
           No
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           disabled={isPending}
           color="secondary"
@@ -80,7 +80,7 @@ function DeleteConfirmationDialog({
           ) : (
             'yes'
           )}
-        </button>
+        </Button>
       </DialogActions>
     </Dialog>
   )

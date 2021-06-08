@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -9,6 +8,7 @@ import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
 import Spinner from '../spinner'
 import $Field from './sharedCss/field'
+import Button from '../button'
 
 export default function ConfirmPassword({
   showDialog,
@@ -89,7 +89,7 @@ export default function ConfirmPassword({
             minWidth: '50%',
           }}
         >
-          <button
+          <Button
             type="submit"
             style={{
               background: 'var(--green)',
@@ -110,8 +110,8 @@ export default function ConfirmPassword({
             ) : (
               'Confirm'
             )}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={() => {
               setResponse({error: undefined, isSuccessful: false})
@@ -119,7 +119,7 @@ export default function ConfirmPassword({
             }}
           >
             Close
-          </button>
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

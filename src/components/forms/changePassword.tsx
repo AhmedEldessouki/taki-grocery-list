@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -12,6 +11,7 @@ import notify from '../../lib/notify'
 import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'
 import PasswordFields from './passwordFields'
+import Button from '../button'
 
 const $Form = styled.form`
   width: 320px;
@@ -90,13 +90,13 @@ function ChangePassword() {
 
   return (
     <div style={{margin: '5px 22px 10px'}}>
-      <button
+      <Button
         type="button"
         onClick={() => setShowDialog(true)}
         aria-label="change password"
       >
         Change Password
-      </button>
+      </Button>
       <Dialog open={passwordDialog} aria-labelledby="change-password-dialog">
         <DialogTitle id="change-password-dialog">Delete Account</DialogTitle>
         <$Form id="change-password" onSubmit={handlePasswordUpdate}>
@@ -115,7 +115,7 @@ function ChangePassword() {
               minWidth: '50%',
             }}
           >
-            <button
+            <Button
               disabled={isPending ?? !isPasswordConfirmed}
               type="submit"
               style={{
@@ -137,14 +137,14 @@ function ChangePassword() {
               ) : (
                 'Submit'
               )}
-            </button>
-            <button
+            </Button>
+            <Button
               disabled={isPending}
               type="button"
               onClick={() => setPasswordDialog(false)}
             >
               Close
-            </button>
+            </Button>
           </DialogActions>
         </$Form>
       </Dialog>

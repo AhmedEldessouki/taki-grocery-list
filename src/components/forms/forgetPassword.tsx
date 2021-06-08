@@ -7,6 +7,7 @@ import {$Warning, $Success, mqMax} from '../../shared/utils'
 import {auth} from '../../lib/firebase'
 import Spinner from '../spinner'
 import $Field from './sharedCss/field'
+import Button from '../button'
 
 const $TextWrapper = styled.div`
   display: flex;
@@ -90,7 +91,7 @@ function ForgetPassword({onCancel}: {onCancel: () => void}) {
             minWidth: '50%',
           }}
         >
-          <button
+          <Button
             type="submit"
             style={{
               background: 'var(--green)',
@@ -111,10 +112,10 @@ function ForgetPassword({onCancel}: {onCancel: () => void}) {
             ) : (
               'Submit'
             )}
-          </button>
-          <button type="button" onClick={onCancel}>
+          </Button>
+          <Button type="button" onClick={onCancel}>
             Close
-          </button>
+          </Button>
         </DialogActions>
       </$Form>
     </div>

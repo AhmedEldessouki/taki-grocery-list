@@ -1,8 +1,6 @@
 import styled from '@emotion/styled'
-//
 import {nanoid} from 'nanoid'
 import React from 'react'
-// import buttonGroup from '@material-ui/core/buttonGroup'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
@@ -19,6 +17,7 @@ import ListName from './forms/listName'
 import Spinner from './spinner'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
 import EditItem from './forms/editItem'
+import Button from './button'
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
@@ -34,7 +33,6 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   align-items: center;
   width: 500px;
   padding: 5px 10px;
-  border-radius: var(--roundness);
   ${mqMax.s} {
     width: 300px;
   }
@@ -133,12 +131,12 @@ function ListCleanUp({
   return (
     <>
       <$CleanUpBtnsWrapper>
-        <button type="button" onClick={() => setWantToDelete('clean')}>
+        <Button type="button" onClick={() => setWantToDelete('clean')}>
           Clean
-        </button>
-        <button type="button" onClick={() => setWantToDelete('delete')}>
+        </Button>
+        <Button type="button" onClick={() => setWantToDelete('delete')}>
           Delete
-        </button>
+        </Button>
       </$CleanUpBtnsWrapper>
       <DeleteConfirmationDialog
         dialogTitle={`${wantToDelete}`}
@@ -168,6 +166,8 @@ function Item({
   itemIsDoneP,
   children,
   listName,
+  current,
+  last,
   setResponse,
 }: {
   itemNameP: string
@@ -177,6 +177,8 @@ function Item({
   itemIsDoneP: boolean
   children: JSX.Element
   listName: string
+  current: number
+  last: number
   setResponse: React.Dispatch<React.SetStateAction<MyResponseType>>
 }) {
   const [isDone, setDone] = React.useState(itemIsDoneP)
@@ -211,7 +213,16 @@ function Item({
     },
   )
   return (
-    <$ItemContainer isDone={isDone} bgColor={itemBgColorP}>
+    <$ItemContainer
+      isDone={isDone}
+      bgColor={itemBgColorP}
+      style={{
+        borderTopLeftRadius: current === 0 ? `var(--roundness)` : 0,
+        borderTopRightRadius: current === 0 ? `var(--roundness)` : 0,
+        borderBottomLeftRadius: current === last ? `var(--roundness)` : 0,
+        borderBottomRightRadius: current === last ? `var(--roundness)` : 0,
+      }}
+    >
       <$Item style={{flex: 1}} isDone={isDone}>
         {itemQuantityP > 0 && itemQuantityP} {itemNameP}
       </$Item>
@@ -227,7 +238,7 @@ function Item({
           itemIsDoneE={itemIsDoneP}
         />
       </EditItem>
-      <button
+      <Button
         type="button"
         onClick={() => {
           setPending(!isPending)
@@ -251,7 +262,7 @@ function Item({
         ) : (
           '✔'
         )}
-      </button>
+      </Button>
       {children}
     </$ItemContainer>
   )
@@ -328,7 +339,7 @@ function Items({listName}: {listName: string}) {
       />
       {!isLoading &&
         groceries &&
-        reArrangeItems(groceries).map(item => (
+        reArrangeItems(groceries).map((item, i, arr) => (
           <Item
             itemNameP={item.name}
             itemBgColorP={item.bgColor}
@@ -338,6 +349,8 @@ function Items({listName}: {listName: string}) {
             listName={listName}
             setResponse={setResponse}
             key={nanoid()}
+            current={i}
+            last={arr.length - 1}
           >
             <DeleteFromDB
               dialogTitle="Delete item from list"

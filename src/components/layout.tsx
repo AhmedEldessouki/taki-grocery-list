@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Button from './button'
 import Nav from './nav/nav'
 
 export default function Layout({children}: {children: React.ReactNode}) {
@@ -13,7 +14,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
       <main style={{background: 'var(--white)'}}>
         {process.env.NODE_ENV !== 'production' && (
           <div>
-            <button
+            <Button
               type="button"
               style={{
                 background:
@@ -28,8 +29,8 @@ export default function Layout({children}: {children: React.ReactNode}) {
               disabled={isEmulatorActive === 'true'}
             >
               Activate Emulator
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               style={{
                 background:
@@ -44,7 +45,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
               disabled={isEmulatorActive === 'false'}
             >
               deactivate Emulator
-            </button>
+            </Button>
           </div>
         )}
         {children}

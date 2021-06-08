@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
 import React, {useState} from 'react'
 import EditIcon from '@material-ui/icons/Edit'
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded'
@@ -9,6 +8,7 @@ import spacefy from '../../lib/spacefy'
 import {mqMax} from '../../shared/utils'
 import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'
+import Button from '../button'
 
 interface SingleFieldFormType
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -147,13 +147,16 @@ function SingleFieldForm({
           <$Label htmlFor={id ?? name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
             <input name={name} id={id ?? name} {...inputOverrides} />
-            <button
+            <Button
               disabled={isPending}
               type="submit"
               style={{
                 color: 'var(--green)',
                 position: 'relative',
                 zIndex: 1000,
+                display: 'block',
+                minHeight: 0,
+                minWidth: 0,
               }}
             >
               {isPending ? (
@@ -169,7 +172,7 @@ function SingleFieldForm({
               ) : (
                 <CheckCircleOutlineRoundedIcon />
               )}
-            </button>
+            </Button>
           </$EditFormContainer>
         </form>
       ) : (
@@ -177,7 +180,7 @@ function SingleFieldForm({
           <$Label htmlFor={id ?? name}>{label}</$Label>
           <$EditFormContainer successful={isSuccess}>
             <input name={name} id={id ?? name} readOnly {...inputOverrides} />
-            <button
+            <Button
               disabled={isPending}
               aria-label="Edit"
               type="button"
@@ -185,6 +188,9 @@ function SingleFieldForm({
                 gridArea: 'edit',
                 position: 'relative',
                 zIndex: 1000,
+                display: 'block',
+                minHeight: 0,
+                minWidth: 0,
               }}
               onClick={() => {
                 setIsEditActive(true)
@@ -195,7 +201,7 @@ function SingleFieldForm({
               }}
             >
               <EditIcon style={{color: 'var(--blue)'}} />
-            </button>
+            </Button>
           </$EditFormContainer>
         </>
       )}
