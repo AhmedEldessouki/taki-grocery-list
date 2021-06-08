@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
+
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -47,20 +47,18 @@ function DeleteConfirmationDialog({
           minWidth: '50%',
         }}
       >
-        <Button
+        <button
           type="button"
           disabled={isPending}
-          variant="contained"
           color="primary"
           onClick={onReject}
           aria-label="no"
         >
           No
-        </Button>
-        <Button
+        </button>
+        <button
           type="button"
           disabled={isPending}
-          variant="contained"
           color="secondary"
           onClick={() => {
             setPending(true)
@@ -82,7 +80,7 @@ function DeleteConfirmationDialog({
           ) : (
             'yes'
           )}
-        </Button>
+        </button>
       </DialogActions>
     </Dialog>
   )

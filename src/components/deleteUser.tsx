@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from 'react'
-import Button from '@material-ui/core/Button'
 import {useAuth} from '../context/auth'
 import {$Warning} from '../shared/utils'
 import type {MyResponseType} from '../../types/api'
@@ -75,14 +74,13 @@ function DeleteUser() {
 
   return (
     <div style={{margin: '10px 22px'}}>
-      <Button
+      <button
         type="button"
-        variant="contained"
         color="secondary"
         onClick={() => setWantToDelete(true)}
       >
         Delete Account
-      </Button>
+      </button>
       {responseST.error && (
         <$Warning role="alert">{responseST.error.message}</$Warning>
       )}

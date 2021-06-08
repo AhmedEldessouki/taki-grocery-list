@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import Button from '@material-ui/core/Button'
+
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -276,9 +276,8 @@ function Settings({
               minWidth: '50%',
             }}
           >
-            <Button
+            <button
               type="button"
-              variant="contained"
               color="primary"
               onClick={() => {
                 if (isPending || isEditActive) return
@@ -287,7 +286,7 @@ function Settings({
               aria-label="close model"
             >
               Done
-            </Button>
+            </button>
           </DialogActions>
         </div>
       )}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import Button from '@material-ui/core/Button'
+
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -90,14 +90,13 @@ function ChangePassword() {
 
   return (
     <div style={{margin: '5px 22px 10px'}}>
-      <Button
+      <button
         type="button"
-        variant="contained"
         onClick={() => setShowDialog(true)}
         aria-label="change password"
       >
         Change Password
-      </Button>
+      </button>
       <Dialog open={passwordDialog} aria-labelledby="change-password-dialog">
         <DialogTitle id="change-password-dialog">Delete Account</DialogTitle>
         <$Form id="change-password" onSubmit={handlePasswordUpdate}>
@@ -116,14 +115,13 @@ function ChangePassword() {
               minWidth: '50%',
             }}
           >
-            <Button
+            <button
               disabled={isPending ?? !isPasswordConfirmed}
               type="submit"
               style={{
                 background: 'var(--green)',
                 color: 'var(--white)',
               }}
-              variant="contained"
               color="primary"
             >
               {isPending ? (
@@ -139,15 +137,14 @@ function ChangePassword() {
               ) : (
                 'Submit'
               )}
-            </Button>
-            <Button
+            </button>
+            <button
               disabled={isPending}
               type="button"
-              variant="contained"
               onClick={() => setPasswordDialog(false)}
             >
               Close
-            </Button>
+            </button>
           </DialogActions>
         </$Form>
       </Dialog>

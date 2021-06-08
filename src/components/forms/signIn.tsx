@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 import styled from '@emotion/styled'
-import Button from '@material-ui/core/Button'
+
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -97,13 +97,13 @@ const SignInForm = ({
                 <label htmlFor="signInPassword">Password</label>
               </$Field>
             </DialogContent>
-            <Button
+            <button
               onClick={() => setForgetPassword(!forgetPassword)}
-              variant="outlined"
+              type="button"
               style={{marginLeft: '15px'}}
             >
               Forget Password
-            </Button>
+            </button>
             {signInFailed && <$Warning role="alert">{signInFailed}</$Warning>}
             <DialogActions
               style={{
@@ -112,9 +112,8 @@ const SignInForm = ({
                 minWidth: '50%',
               }}
             >
-              <Button
+              <button
                 type="submit"
-                variant="contained"
                 style={{
                   background: 'var(--green)',
                   color: 'var(--white)',
@@ -134,10 +133,10 @@ const SignInForm = ({
                 ) : (
                   'Submit'
                 )}
-              </Button>
-              <Button type="button" variant="contained" onClick={closeDialog}>
+              </button>
+              <button type="button" onClick={closeDialog}>
                 Close
-              </Button>
+              </button>
             </DialogActions>
           </$Form>
         </div>
@@ -153,9 +152,9 @@ const SignIn = () => {
 
   return (
     <>
-      <Button onClick={openDialog} variant="contained" color="primary">
+      <button onClick={openDialog} type="button">
         Sign In
-      </Button>
+      </button>
       {showDialog && (
         <SignInForm showDialog={showDialog} setShowDialog={setShowDialog} />
       )}

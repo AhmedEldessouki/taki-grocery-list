@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import styled from '@emotion/styled'
-import {Button as ButtonUI} from '@material-ui/core'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -91,9 +90,8 @@ function ForgetPassword({onCancel}: {onCancel: () => void}) {
             minWidth: '50%',
           }}
         >
-          <ButtonUI
+          <button
             type="submit"
-            variant="contained"
             style={{
               background: 'var(--green)',
               color: 'var(--white)',
@@ -113,10 +111,10 @@ function ForgetPassword({onCancel}: {onCancel: () => void}) {
             ) : (
               'Submit'
             )}
-          </ButtonUI>
-          <ButtonUI type="button" variant="contained" onClick={onCancel}>
+          </button>
+          <button type="button" onClick={onCancel}>
             Close
-          </ButtonUI>
+          </button>
         </DialogActions>
       </$Form>
     </div>

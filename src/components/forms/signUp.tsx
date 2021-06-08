@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
-import Button from '@material-ui/core/Button'
+
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -169,14 +169,13 @@ function SignUpForm({
             minWidth: '50%',
           }}
         >
-          <Button
+          <button
             disabled={isPending || !isPasswordConfirmed}
             type="submit"
             style={{
               background: 'var(--green)',
               color: 'var(--white)',
             }}
-            variant="contained"
             color="primary"
           >
             {isPending ? (
@@ -192,15 +191,10 @@ function SignUpForm({
             ) : (
               'Submit'
             )}
-          </Button>
-          <Button
-            disabled={isPending}
-            type="button"
-            variant="contained"
-            onClick={onClose}
-          >
+          </button>
+          <button disabled={isPending} type="button" onClick={onClose}>
             Close
-          </Button>
+          </button>
         </DialogActions>
       </$Container>
     </Dialog>
@@ -214,9 +208,9 @@ function SignUp() {
 
   return (
     <>
-      <Button variant="contained" onClick={openDialog}>
+      <button type="button" onClick={openDialog}>
         Sign Up
-      </Button>
+      </button>
       {showDialog && (
         <SignUpForm
           showDialog={showDialog}

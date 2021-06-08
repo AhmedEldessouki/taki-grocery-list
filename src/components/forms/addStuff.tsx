@@ -238,9 +238,8 @@ function AddStuff({
             />
             <label htmlFor={`priority-${idx}`}>priority no.</label>
           </$Field>
-          <Button
+          <button
             type="submit"
-            variant="contained"
             style={{
               background: !isPending ? 'var(--green)' : 'var(--red)',
               color: 'var(--white)',
@@ -248,7 +247,7 @@ function AddStuff({
             }}
           >
             Add Item
-          </Button>
+          </button>
         </$RowWrapper>
       </$Form>
       {responseST.error && (

@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
 import React from 'react'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
@@ -155,8 +153,7 @@ function AddList({
   return (
     <>
       <$BtnWrapper>
-        <Button
-          variant="outlined"
+        <button
           disabled={listArray.length + oldList.length >= 3}
           style={{background: 'transparent', color: 'var(--black)'}}
           onClick={() => {
@@ -165,6 +162,7 @@ function AddList({
               setShow(!isShow)
             }
           }}
+          type="button"
         >
           <AddIcon
             fontSize="large"
@@ -172,9 +170,10 @@ function AddList({
             style={{paddingRight: '15px'}}
           />
           Add {componentName} list
-        </Button>
+        </button>
         {isShow && (
-          <IconButton
+          <button
+            type="button"
             id="close-btn"
             onClick={() => {
               setArrayChange([])
@@ -183,7 +182,7 @@ function AddList({
             aria-label="close button"
           >
             ✖
-          </IconButton>
+          </button>
         )}
       </$BtnWrapper>
       {isShow ? (
@@ -211,9 +210,8 @@ function AddList({
           {responseST.error && (
             <$Warning marginBottom="10">{responseST.error.message}</$Warning>
           )}
-          <Button
+          <button
             type="submit"
-            variant="outlined"
             disabled={isPending}
             style={{
               background: 'var(--green)',
@@ -234,7 +232,7 @@ function AddList({
             ) : (
               'Submit'
             )}
-          </Button>
+          </button>
         </$Form>
       ) : (
         <div />

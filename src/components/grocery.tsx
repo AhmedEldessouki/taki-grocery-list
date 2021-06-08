@@ -1,10 +1,8 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
 import styled from '@emotion/styled'
-import Button from '@material-ui/core/Button'
+//
 import {nanoid} from 'nanoid'
 import React from 'react'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
+// import buttonGroup from '@material-ui/core/buttonGroup'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
@@ -135,8 +133,12 @@ function ListCleanUp({
   return (
     <>
       <$CleanUpBtnsWrapper>
-        <Button onClick={() => setWantToDelete('clean')}>Clean</Button>
-        <Button onClick={() => setWantToDelete('delete')}>Delete</Button>
+        <button type="button" onClick={() => setWantToDelete('clean')}>
+          Clean
+        </button>
+        <button type="button" onClick={() => setWantToDelete('delete')}>
+          Delete
+        </button>
       </$CleanUpBtnsWrapper>
       <DeleteConfirmationDialog
         dialogTitle={`${wantToDelete}`}
@@ -211,48 +213,46 @@ function Item({
   return (
     <$ItemContainer isDone={isDone} bgColor={itemBgColorP}>
       <$Item style={{flex: 1}} isDone={isDone}>
-        {itemQuantityP && itemQuantityP} {itemNameP}
+        {itemQuantityP > 0 && itemQuantityP} {itemNameP}
       </$Item>
-      <ButtonGroup size="small" aria-label="small outlined button group">
-        <EditItem>
-          <AddStuff
-            idx={124}
-            isEdit
-            listName={listName}
-            itemNameE={itemNameP}
-            itemBgColorE={itemBgColorP}
-            itemQuantityE={itemQuantityP}
-            itemPriorityE={itemPriorityP}
-            itemIsDoneE={itemIsDoneP}
+      <EditItem>
+        <AddStuff
+          idx={124}
+          isEdit
+          listName={listName}
+          itemNameE={itemNameP}
+          itemBgColorE={itemBgColorP}
+          itemQuantityE={itemQuantityP}
+          itemPriorityE={itemPriorityP}
+          itemIsDoneE={itemIsDoneP}
+        />
+      </EditItem>
+      <button
+        type="button"
+        onClick={() => {
+          setPending(!isPending)
+          mutateAsync({
+            list: listName,
+            itemName: itemNameP,
+            data: {isDone: !isDone},
+          })
+          setDone(!isDone)
+          setPending(!isPending)
+        }}
+        style={{width: '50px', color: 'var(--black)'}}
+        disabled={isPending}
+      >
+        {isPending ? (
+          <Spinner
+            mount={isPending}
+            size={30}
+            styling={{position: 'relative'}}
           />
-        </EditItem>
-        <Button
-          onClick={async () => {
-            setPending(!isPending)
-            await mutateAsync({
-              list: listName,
-              itemName: itemNameP,
-              data: {isDone: !isDone},
-            })
-            setDone(!isDone)
-            setPending(!isPending)
-          }}
-          style={{width: '50px', color: 'var(--black)'}}
-          variant="outlined"
-          disabled={isPending}
-        >
-          {isPending ? (
-            <Spinner
-              mount={isPending}
-              size={30}
-              styling={{position: 'relative'}}
-            />
-          ) : (
-            '✔'
-          )}
-        </Button>
-        {children}
-      </ButtonGroup>
+        ) : (
+          '✔'
+        )}
+      </button>
+      {children}
     </$ItemContainer>
   )
 }
@@ -313,15 +313,7 @@ function Items({listName}: {listName: string}) {
 
   const reArrangeItems = React.useCallback(
     (arr: Array<GroceryItemType>): Array<GroceryItemType> =>
-      arr.sort((a, b) => {
-        if (a.priority < 1) {
-          a.priority = 9999
-        }
-        if (b.priority < 1) {
-          b.priority = 9999
-        }
-        return a.priority - b.priority
-      }),
+      arr.sort((a, b) => a.priority - b.priority),
     [],
   )
 
@@ -413,18 +405,11 @@ function Grocery({userId}: {userId: string}) {
               userLists={userData.listName}
               setError={setError}
             />
-            {isFetching ? (
-              // The Height is to prevent the layout shifting
-              <div style={{height: '80px'}}>
-                <Spinner mount={isFetching} styling={{position: 'relative'}} />
-              </div>
-            ) : (
-              <ListName
-                index={i}
-                userID={userData.userId}
-                userLists={userData.listName}
-              />
-            )}
+            <ListName
+              index={i}
+              userID={userData.userId}
+              userLists={userData.listName}
+            />
             <Items listName={listName} />
             <AddStuff listName={listName} idx={i} />
           </div>
