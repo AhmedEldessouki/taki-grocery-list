@@ -250,7 +250,12 @@ function Item({
           setDone(!isDone)
           setPending(!isPending)
         }}
-        style={{width: '50px', color: 'var(--black)'}}
+        style={{
+          color: 'var(--black)',
+          borderLeft: 'none',
+          borderRight: 'none',
+          borderRadius: 0,
+        }}
         disabled={isPending}
       >
         {isPending ? (

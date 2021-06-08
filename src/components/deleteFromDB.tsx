@@ -28,7 +28,11 @@ function DeleteFromDB({
         type="button"
         aria-label="delete"
         onClick={() => setShowDialog(true)}
-        style={{padding: 0}}
+        style={{
+          padding: 0,
+          borderTopLeftRadius: 0,
+          borderBottomLeftRadius: 0,
+        }}
       >
         <DeleteForeverIcon style={{fill: 'red', height: '33px'}} />
       </Button>

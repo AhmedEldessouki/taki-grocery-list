@@ -25,6 +25,10 @@ function EditItem({children}: {children: React.ReactNode}) {
         type="button"
         aria-label="click to Edit Item"
         disabled={showDialog}
+        style={{
+          borderTopRightRadius: 0,
+          borderBottomRightRadius: 0,
+        }}
       >
         <EditIcon
           aria-label="edit item"
