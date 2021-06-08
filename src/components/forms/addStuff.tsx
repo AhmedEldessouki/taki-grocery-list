@@ -112,8 +112,7 @@ function AddStuff({
         batch.delete(oldItemRef)
       }
       const newItemRef = listRef.doc(spacefy(newData.name, {reverse: true}))
-      batch.set(newItemRef, {...newData, isDone: itemIsDoneE})
-
+      batch.set(newItemRef, {...newData, isDone: itemIsDoneE ?? false})
       await batch
         .commit()
         .then(() => {
