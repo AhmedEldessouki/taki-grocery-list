@@ -2,27 +2,36 @@
 import styled from '@emotion/styled'
 import React from 'react'
 
-const $Button = styled.button`
+const $Button = styled.button<{bgColor?: string}>`
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: var(--roundness);
   min-height: 40px;
   min-width: 40px;
-  background: var(--white);
-  border: 0.1em solid #d9d9d9;
+  background: ${({bgColor}) => bgColor ?? `var(--white)`};
+  border: 0.125rem solid #b0b0b075;
   padding: 0 15px;
   cursor: pointer;
-  letter-space: 0.4px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  line-height: 1.3;
+  text-align: center;
 `
 function Button({
   children,
+  bgColor,
   ...overRide
 }: {
+  bgColor?: string
   children: string | JSX.Element
   overRide?: React.ButtonHTMLAttributes<HTMLButtonElement>
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return <$Button {...overRide}>{children}</$Button>
+  return (
+    <$Button bgColor={bgColor} {...overRide}>
+      {children}
+    </$Button>
+  )
 }
 
 export default Button
