@@ -77,7 +77,8 @@ function DeleteUser() {
     <div style={{margin: '10px 22px'}}>
       <Button
         type="button"
-        color="secondary"
+        bgColor="var(--redTwo)"
+        style={{color: 'var(--white)'}}
         onClick={() => setWantToDelete(true)}
       >
         Delete Account

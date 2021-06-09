@@ -50,7 +50,11 @@ function DeleteConfirmationDialog({
         <Button
           type="button"
           disabled={isPending}
-          color="primary"
+          bgColor="var(--blue)"
+          style={{
+            color: 'var(--white)',
+            width: '60px',
+          }}
           onClick={onReject}
           aria-label="no"
         >
@@ -59,7 +63,8 @@ function DeleteConfirmationDialog({
         <Button
           type="button"
           disabled={isPending}
-          color="secondary"
+          bgColor="var(--redTwo)"
+          style={{color: 'var(--white)', width: '60px'}}
           onClick={() => {
             setPending(true)
             onAccept()

@@ -173,10 +173,9 @@ function SignUpForm({
             disabled={isPending || !isPasswordConfirmed}
             type="submit"
             style={{
-              background: 'var(--green)',
               color: 'var(--white)',
             }}
-            color="primary"
+            bgColor="var(--green)"
           >
             {isPending ? (
               <Spinner

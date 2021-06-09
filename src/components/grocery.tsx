@@ -131,10 +131,19 @@ function ListCleanUp({
   return (
     <>
       <$CleanUpBtnsWrapper>
-        <Button type="button" onClick={() => setWantToDelete('clean')}>
+        <Button
+          bgColor="var(--yellow)"
+          type="button"
+          onClick={() => setWantToDelete('clean')}
+        >
           Clean
         </Button>
-        <Button type="button" onClick={() => setWantToDelete('delete')}>
+        <Button
+          bgColor="var(--redTwo)"
+          style={{color: 'var(--white)', marginLeft: '5px'}}
+          type="button"
+          onClick={() => setWantToDelete('delete')}
+        >
           Delete
         </Button>
       </$CleanUpBtnsWrapper>

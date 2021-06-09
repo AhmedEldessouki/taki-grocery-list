@@ -114,9 +114,9 @@ const SignInForm = ({
               <Button
                 type="submit"
                 style={{
-                  background: 'var(--green)',
                   color: 'var(--white)',
                 }}
+                bgColor="var(--green)"
                 disabled={isPending}
               >
                 {isPending ? (
@@ -151,7 +151,12 @@ const SignIn = () => {
 
   return (
     <>
-      <Button onClick={openDialog} type="button">
+      <Button
+        onClick={openDialog}
+        type="button"
+        bgColor="var(--blue)"
+        style={{color: 'var(--white)'}}
+      >
         Sign In
       </Button>
       {showDialog && (

@@ -56,16 +56,11 @@ const $NoteContainer = styled.div`
 `
 const $BtnWrapper = styled.div`
   margin: 5px auto;
+  padding-right: 3rem;
   #close-btn {
     position: absolute;
-    margin-left: 10px;
-    padding: 12px 13px;
-    padding-top: 7px;
-    font-size: 1rem;
-    :hover {
-      padding: 12px 13px;
-      padding-top: 7px;
-    }
+    margin-left: 210px;
+    margin-top: -40px;
   }
 `
 function AddList({
