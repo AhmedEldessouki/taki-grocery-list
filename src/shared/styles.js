@@ -27,6 +27,7 @@ const globalStyles = css`
     --mattBlue: #65b8ff;
     --mattGray: #d6d6d6;
     --red: tomato;
+    --redTwo: #df2525;
     --blue: #3f51b5;
     --gray: #a4a0a0;
     --green: #10c110;
