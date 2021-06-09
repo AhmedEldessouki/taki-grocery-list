@@ -278,7 +278,10 @@ function Settings({
           >
             <Button
               type="button"
-              color="primary"
+              bgColor="var(--blue)"
+              style={{
+                color: 'var(--white)',
+              }}
               onClick={() => {
                 if (isPending || isEditActive) return
                 closeDialog()
