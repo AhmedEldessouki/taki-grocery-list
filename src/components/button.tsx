@@ -17,6 +17,12 @@ const $Button = styled.button<{bgColor?: string}>`
   letter-spacing: 1px;
   line-height: 1.3;
   text-align: center;
+  :hover {
+    scale: 1.035;
+  }
+  :active {
+    scale: 0.97;
+  }
 `
 function Button({
   children,
