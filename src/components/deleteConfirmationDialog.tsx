@@ -1,10 +1,10 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Spinner from './spinner'
+import Button from './button'
 
 type DeleteConfirmationDialogPropType = {
   deleting: string
@@ -50,8 +50,11 @@ function DeleteConfirmationDialog({
         <Button
           type="button"
           disabled={isPending}
-          variant="contained"
-          color="primary"
+          bgColor="var(--blue)"
+          style={{
+            color: 'var(--white)',
+            width: '60px',
+          }}
           onClick={onReject}
           aria-label="no"
         >
@@ -60,8 +63,8 @@ function DeleteConfirmationDialog({
         <Button
           type="button"
           disabled={isPending}
-          variant="contained"
-          color="secondary"
+          bgColor="var(--redTwo)"
+          style={{color: 'var(--white)', width: '60px'}}
           onClick={() => {
             setPending(true)
             onAccept()

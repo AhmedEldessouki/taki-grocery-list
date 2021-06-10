@@ -1,9 +1,8 @@
 import React, {useState} from 'react'
-import Button from '@material-ui/core/Button'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-
 import {useAuth} from '../context/auth'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
+import Button from './button'
 
 type DeleteFromDBPropType = {
   dialogLabelledBy: string
@@ -26,11 +25,14 @@ function DeleteFromDB({
   return (
     <>
       <Button
+        type="button"
         aria-label="delete"
-        size="small"
         onClick={() => setShowDialog(true)}
-        variant="outlined"
-        style={{padding: 0}}
+        style={{
+          padding: 0,
+          borderTopLeftRadius: 0,
+          borderBottomLeftRadius: 0,
+        }}
       >
         <DeleteForeverIcon style={{fill: 'red', height: '33px'}} />
       </Button>

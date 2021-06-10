@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -12,6 +11,7 @@ import notify from '../../lib/notify'
 import Spinner from '../spinner'
 import ConfirmPassword from './confirmPassword'
 import PasswordFields from './passwordFields'
+import Button from '../button'
 
 const $Form = styled.form`
   width: 320px;
@@ -92,7 +92,6 @@ function ChangePassword() {
     <div style={{margin: '5px 22px 10px'}}>
       <Button
         type="button"
-        variant="contained"
         onClick={() => setShowDialog(true)}
         aria-label="change password"
       >
@@ -120,11 +119,9 @@ function ChangePassword() {
               disabled={isPending ?? !isPasswordConfirmed}
               type="submit"
               style={{
-                background: 'var(--green)',
                 color: 'var(--white)',
               }}
-              variant="contained"
-              color="primary"
+              bgColor="var(--green)"
             >
               {isPending ? (
                 <Spinner
@@ -143,7 +140,6 @@ function ChangePassword() {
             <Button
               disabled={isPending}
               type="button"
-              variant="contained"
               onClick={() => setPasswordDialog(false)}
             >
               Close

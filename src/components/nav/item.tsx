@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import Button from '../button'
 
 const $ItemContainer = styled.div`
   a {
@@ -38,9 +39,9 @@ function Item({
   return (
     <$ItemContainer>
       {onClick ? (
-        <button type="button" onClick={onClick}>
-          {title}
-        </button>
+        <Button type="button" onClick={onClick}>
+          {title ?? ''}
+        </Button>
       ) : (
         <a href={href}>{title}</a>
       )}

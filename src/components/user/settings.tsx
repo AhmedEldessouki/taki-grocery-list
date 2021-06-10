@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -18,6 +17,7 @@ import ChangePassword from '../forms/changePassword'
 import type {MyResponseType} from '../../../types/api'
 import type UserDataType from '../../../types/user'
 import Spinner from '../spinner'
+import Button from '../button'
 
 // TODO: Find a good way to only do the success animation once after it succeeds not after it succeeds and when the next field is open
 function Settings({
@@ -278,8 +278,10 @@ function Settings({
           >
             <Button
               type="button"
-              variant="contained"
-              color="primary"
+              bgColor="var(--blue)"
+              style={{
+                color: 'var(--white)',
+              }}
               onClick={() => {
                 if (isPending || isEditActive) return
                 closeDialog()

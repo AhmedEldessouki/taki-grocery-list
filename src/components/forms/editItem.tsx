@@ -2,10 +2,10 @@ import React from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
 import CloseIcon from '@material-ui/icons/Close'
 import styled from '@emotion/styled'
+import Button from '../button'
 
 const $CloseBtnWrapper = styled.div`
   display: flex;
@@ -22,9 +22,13 @@ function EditItem({children}: {children: React.ReactNode}) {
     <>
       <Button
         onClick={() => setShowDialog(!showDialog)}
-        variant="outlined"
+        type="button"
         aria-label="click to Edit Item"
         disabled={showDialog}
+        style={{
+          borderTopRightRadius: 0,
+          borderBottomRightRadius: 0,
+        }}
       >
         <EditIcon
           aria-label="edit item"
@@ -39,6 +43,7 @@ function EditItem({children}: {children: React.ReactNode}) {
         <DialogTitle>Edit Item</DialogTitle>
         <$CloseBtnWrapper>
           <Button
+            type="button"
             data-testid="closeBtn"
             onClick={() => setShowDialog(!showDialog)}
           >

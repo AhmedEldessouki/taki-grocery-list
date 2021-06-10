@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from 'react'
-import Button from '@material-ui/core/Button'
 import {useAuth} from '../context/auth'
 import {$Warning} from '../shared/utils'
 import type {MyResponseType} from '../../types/api'
@@ -7,6 +6,7 @@ import notify from '../lib/notify'
 import {deleteOneLevelDeep} from '../lib/delete'
 import ConfirmPassword from './forms/confirmPassword'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
+import Button from './button'
 
 function DeleteUser() {
   const {user, setUser} = useAuth()
@@ -77,8 +77,8 @@ function DeleteUser() {
     <div style={{margin: '10px 22px'}}>
       <Button
         type="button"
-        variant="contained"
-        color="secondary"
+        bgColor="var(--redTwo)"
+        style={{color: 'var(--white)'}}
         onClick={() => setWantToDelete(true)}
       >
         Delete Account

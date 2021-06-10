@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import React from 'react'
-import {Button} from '@material-ui/core'
 import {useMutation, useQueryClient} from 'react-query'
 import {$Warning, mqMax} from '../../shared/utils'
 import type {GroceryItemType, MyResponseType} from '../../../types/api'
@@ -8,6 +7,7 @@ import spacefy from '../../lib/spacefy'
 import {db} from '../../lib/firebase'
 import notify from '../../lib/notify'
 import $Field from './sharedCss/field'
+import Button from '../button'
 
 const $Form = styled.form`
   display: flex;
@@ -47,6 +47,7 @@ border-radius: var(--roundness);
 width: 25px;
 height: 25px;
 margin: 5px;
+cursor: pointer;
 ${({checked, bgColor}) => `
 background-color: var(--${bgColor});
 ${checked && `border-color: var(--green)`}`}}
@@ -80,7 +81,7 @@ function AddStuff({
   const [nameST, setName] = React.useState('')
   const [oldNameST, setOldNameST] =
     React.useState<string | undefined>(undefined)
-  const [colorValue, setColorValue] = React.useState('transparent')
+  const [colorValue, setColorValue] = React.useState('white')
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
     isSuccessful: false,
@@ -160,7 +161,7 @@ function AddStuff({
       bgColor: colorValue,
     })
 
-    setColorValue('transparent')
+    setColorValue('white')
     setQty('0')
     setPriority('0')
     setName('')
@@ -199,10 +200,10 @@ function AddStuff({
           <$Pallet>
             <$PalletBtns
               type="button"
-              bgColor="transparent"
-              data-testid="transparent"
-              checked={colorValue === 'transparent'}
-              onClick={() => setColorValue('transparent')}
+              bgColor="white"
+              data-testid="white"
+              checked={colorValue === 'white'}
+              onClick={() => setColorValue('white')}
             />
             <$PalletBtns
               type="button"
@@ -240,7 +241,6 @@ function AddStuff({
           </$Field>
           <Button
             type="submit"
-            variant="contained"
             style={{
               background: !isPending ? 'var(--green)' : 'var(--red)',
               color: 'var(--white)',

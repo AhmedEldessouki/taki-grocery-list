@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
 import React from 'react'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
@@ -13,6 +11,7 @@ import {$Warning} from '../../shared/utils'
 import Spinner from '../spinner'
 import whiteSpaceCleaner from '../../lib/whiteSpaceCleaner'
 import $Field from './sharedCss/field'
+import Button from '../button'
 
 function ListInput({
   componentName,
@@ -57,16 +56,11 @@ const $NoteContainer = styled.div`
 `
 const $BtnWrapper = styled.div`
   margin: 5px auto;
+  padding-right: 3rem;
   #close-btn {
     position: absolute;
-    margin-left: 10px;
-    padding: 12px 13px;
-    padding-top: 7px;
-    font-size: 1rem;
-    :hover {
-      padding: 12px 13px;
-      padding-top: 7px;
-    }
+    margin-left: 210px;
+    margin-top: -40px;
   }
 `
 function AddList({
@@ -156,7 +150,6 @@ function AddList({
     <>
       <$BtnWrapper>
         <Button
-          variant="outlined"
           disabled={listArray.length + oldList.length >= 3}
           style={{background: 'transparent', color: 'var(--black)'}}
           onClick={() => {
@@ -165,16 +158,20 @@ function AddList({
               setShow(!isShow)
             }
           }}
+          type="button"
         >
-          <AddIcon
-            fontSize="large"
-            aria-label="add icon"
-            style={{paddingRight: '15px'}}
-          />
-          Add {componentName} list
+          <>
+            <AddIcon
+              fontSize="large"
+              aria-label="add icon"
+              style={{paddingRight: '15px'}}
+            />
+            Add {componentName} list
+          </>
         </Button>
         {isShow && (
-          <IconButton
+          <Button
+            type="button"
             id="close-btn"
             onClick={() => {
               setArrayChange([])
@@ -183,7 +180,7 @@ function AddList({
             aria-label="close button"
           >
             ✖
-          </IconButton>
+          </Button>
         )}
       </$BtnWrapper>
       {isShow ? (
@@ -213,7 +210,6 @@ function AddList({
           )}
           <Button
             type="submit"
-            variant="outlined"
             disabled={isPending}
             style={{
               background: 'var(--green)',

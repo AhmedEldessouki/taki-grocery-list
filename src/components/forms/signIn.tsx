@@ -1,7 +1,5 @@
 import React, {useState} from 'react'
-
 import styled from '@emotion/styled'
-import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -11,6 +9,7 @@ import {$Warning, mqMax} from '../../shared/utils'
 import Spinner from '../spinner'
 import $Field from './sharedCss/field'
 import ForgetPassword from './forgetPassword'
+import Button from '../button'
 
 const $Form = styled.form`
   width: 300px;
@@ -99,7 +98,7 @@ const SignInForm = ({
             </DialogContent>
             <Button
               onClick={() => setForgetPassword(!forgetPassword)}
-              variant="outlined"
+              type="button"
               style={{marginLeft: '15px'}}
             >
               Forget Password
@@ -114,11 +113,10 @@ const SignInForm = ({
             >
               <Button
                 type="submit"
-                variant="contained"
                 style={{
-                  background: 'var(--green)',
                   color: 'var(--white)',
                 }}
+                bgColor="var(--green)"
                 disabled={isPending}
               >
                 {isPending ? (
@@ -135,7 +133,7 @@ const SignInForm = ({
                   'Submit'
                 )}
               </Button>
-              <Button type="button" variant="contained" onClick={closeDialog}>
+              <Button type="button" onClick={closeDialog}>
                 Close
               </Button>
             </DialogActions>
@@ -153,7 +151,12 @@ const SignIn = () => {
 
   return (
     <>
-      <Button onClick={openDialog} variant="contained" color="primary">
+      <Button
+        onClick={openDialog}
+        type="button"
+        bgColor="var(--blue)"
+        style={{color: 'var(--white)'}}
+      >
         Sign In
       </Button>
       {showDialog && (

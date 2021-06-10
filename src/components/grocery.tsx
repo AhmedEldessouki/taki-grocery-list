@@ -1,10 +1,6 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
 import styled from '@emotion/styled'
-import Button from '@material-ui/core/Button'
 import {nanoid} from 'nanoid'
 import React from 'react'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
@@ -21,22 +17,17 @@ import ListName from './forms/listName'
 import Spinner from './spinner'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
 import EditItem from './forms/editItem'
+import Button from './button'
 
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
   text-transform: capitalize;
-  ${({isDone}) =>
-    isDone &&
-    `
-text-decoration-line: line-through;
-`}
 `
 const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   display: flex;
   align-items: center;
   width: 500px;
   padding: 5px 10px;
-  border-radius: var(--roundness);
   ${mqMax.s} {
     width: 300px;
   }
@@ -49,8 +40,11 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   ${
     isDone &&
     `
-    background-image: linear-gradient(to right, #000, #393939, #717171, #afafaf, #f1f1f1);
-    color: var(--white);
+    background-image: linear-gradient(to top, var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), 
+    var(--${bgColor}), var(--${bgColor}), var(--blackShade), var(--blackShade), 
+    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
+    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
+    var(--${bgColor}));
 `
   };
 `}
@@ -135,8 +129,21 @@ function ListCleanUp({
   return (
     <>
       <$CleanUpBtnsWrapper>
-        <Button onClick={() => setWantToDelete('clean')}>Clean</Button>
-        <Button onClick={() => setWantToDelete('delete')}>Delete</Button>
+        <Button
+          bgColor="var(--yellow)"
+          type="button"
+          onClick={() => setWantToDelete('clean')}
+        >
+          Clean
+        </Button>
+        <Button
+          bgColor="var(--redTwo)"
+          style={{color: 'var(--white)', marginLeft: '5px'}}
+          type="button"
+          onClick={() => setWantToDelete('delete')}
+        >
+          Delete
+        </Button>
       </$CleanUpBtnsWrapper>
       <DeleteConfirmationDialog
         dialogTitle={`${wantToDelete}`}
@@ -166,6 +173,8 @@ function Item({
   itemIsDoneP,
   children,
   listName,
+  current,
+  last,
   setResponse,
 }: {
   itemNameP: string
@@ -175,6 +184,8 @@ function Item({
   itemIsDoneP: boolean
   children: JSX.Element
   listName: string
+  current: number
+  last: number
   setResponse: React.Dispatch<React.SetStateAction<MyResponseType>>
 }) {
   const [isDone, setDone] = React.useState(itemIsDoneP)
@@ -209,50 +220,62 @@ function Item({
     },
   )
   return (
-    <$ItemContainer isDone={isDone} bgColor={itemBgColorP}>
+    <$ItemContainer
+      isDone={isDone}
+      bgColor={itemBgColorP}
+      style={{
+        borderTopLeftRadius: current === 0 ? `var(--roundness)` : 0,
+        borderTopRightRadius: current === 0 ? `var(--roundness)` : 0,
+        borderBottomLeftRadius: current === last ? `var(--roundness)` : 0,
+        borderBottomRightRadius: current === last ? `var(--roundness)` : 0,
+      }}
+    >
       <$Item style={{flex: 1}} isDone={isDone}>
-        {itemQuantityP && itemQuantityP} {itemNameP}
+        {itemQuantityP > 0 && itemQuantityP} {itemNameP}
       </$Item>
-      <ButtonGroup size="small" aria-label="small outlined button group">
-        <EditItem>
-          <AddStuff
-            idx={124}
-            isEdit
-            listName={listName}
-            itemNameE={itemNameP}
-            itemBgColorE={itemBgColorP}
-            itemQuantityE={itemQuantityP}
-            itemPriorityE={itemPriorityP}
-            itemIsDoneE={itemIsDoneP}
+      <EditItem>
+        <AddStuff
+          idx={124}
+          isEdit
+          listName={listName}
+          itemNameE={itemNameP}
+          itemBgColorE={itemBgColorP}
+          itemQuantityE={itemQuantityP}
+          itemPriorityE={itemPriorityP}
+          itemIsDoneE={itemIsDoneP}
+        />
+      </EditItem>
+      <Button
+        type="button"
+        onClick={() => {
+          setPending(!isPending)
+          mutateAsync({
+            list: listName,
+            itemName: itemNameP,
+            data: {isDone: !isDone},
+          })
+          setDone(!isDone)
+          setPending(!isPending)
+        }}
+        style={{
+          color: 'var(--black)',
+          borderLeft: 'none',
+          borderRight: 'none',
+          borderRadius: 0,
+        }}
+        disabled={isPending}
+      >
+        {isPending ? (
+          <Spinner
+            mount={isPending}
+            size={30}
+            styling={{position: 'relative'}}
           />
-        </EditItem>
-        <Button
-          onClick={async () => {
-            setPending(!isPending)
-            await mutateAsync({
-              list: listName,
-              itemName: itemNameP,
-              data: {isDone: !isDone},
-            })
-            setDone(!isDone)
-            setPending(!isPending)
-          }}
-          style={{width: '50px', color: 'var(--black)'}}
-          variant="outlined"
-          disabled={isPending}
-        >
-          {isPending ? (
-            <Spinner
-              mount={isPending}
-              size={30}
-              styling={{position: 'relative'}}
-            />
-          ) : (
-            '✔'
-          )}
-        </Button>
-        {children}
-      </ButtonGroup>
+        ) : (
+          '✔'
+        )}
+      </Button>
+      {children}
     </$ItemContainer>
   )
 }
@@ -313,15 +336,7 @@ function Items({listName}: {listName: string}) {
 
   const reArrangeItems = React.useCallback(
     (arr: Array<GroceryItemType>): Array<GroceryItemType> =>
-      arr.sort((a, b) => {
-        if (a.priority < 1) {
-          a.priority = 9999
-        }
-        if (b.priority < 1) {
-          b.priority = 9999
-        }
-        return a.priority - b.priority
-      }),
+      arr.sort((a, b) => a.priority - b.priority),
     [],
   )
 
@@ -336,7 +351,7 @@ function Items({listName}: {listName: string}) {
       />
       {!isLoading &&
         groceries &&
-        reArrangeItems(groceries).map(item => (
+        reArrangeItems(groceries).map((item, i, arr) => (
           <Item
             itemNameP={item.name}
             itemBgColorP={item.bgColor}
@@ -346,6 +361,8 @@ function Items({listName}: {listName: string}) {
             listName={listName}
             setResponse={setResponse}
             key={nanoid()}
+            current={i}
+            last={arr.length - 1}
           >
             <DeleteFromDB
               dialogTitle="Delete item from list"
@@ -413,18 +430,11 @@ function Grocery({userId}: {userId: string}) {
               userLists={userData.listName}
               setError={setError}
             />
-            {isFetching ? (
-              // The Height is to prevent the layout shifting
-              <div style={{height: '80px'}}>
-                <Spinner mount={isFetching} styling={{position: 'relative'}} />
-              </div>
-            ) : (
-              <ListName
-                index={i}
-                userID={userData.userId}
-                userLists={userData.listName}
-              />
-            )}
+            <ListName
+              index={i}
+              userID={userData.userId}
+              userLists={userData.listName}
+            />
             <Items listName={listName} />
             <AddStuff listName={listName} idx={i} />
           </div>
