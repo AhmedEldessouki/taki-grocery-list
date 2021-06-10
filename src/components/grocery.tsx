@@ -22,11 +22,6 @@ import Button from './button'
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
   text-transform: capitalize;
-  ${({isDone}) =>
-    isDone &&
-    `
-text-decoration-line: line-through;
-`}
 `
 const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   display: flex;
@@ -45,8 +40,11 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   ${
     isDone &&
     `
-    background-image: linear-gradient(to right, #000, #393939, #717171, #afafaf, #f1f1f1);
-    color: var(--white);
+    background-image: linear-gradient(to top, var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), 
+    var(--${bgColor}), var(--${bgColor}), var(--blackShade), var(--blackShade), 
+    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
+    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
+    var(--${bgColor}));
 `
   };
 `}
