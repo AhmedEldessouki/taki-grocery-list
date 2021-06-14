@@ -28,7 +28,7 @@ test('render without Items - [Create]', async () => {
     `0${item.priority}`,
   )
 
-  expect(screen.getByTestId('transparent')).toBeInTheDocument()
+  expect(screen.getByTestId('white')).toBeInTheDocument()
   expect(screen.getByTestId('mattBlue')).toBeInTheDocument()
   expect(screen.getByTestId('mattRed')).toBeInTheDocument()
   expect(screen.getByTestId('mattGray')).toBeInTheDocument()
