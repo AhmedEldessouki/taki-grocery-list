@@ -337,7 +337,7 @@ function Items({listName}: {listName: string}) {
 
   const reArrangeItems = React.useCallback(
     (arr: Array<GroceryItemType>): Array<GroceryItemType> =>
-      arr.sort((a, b) => a.priority ?? 0 - b.priority ?? 0),
+      arr.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0)),
     [],
   )
 
