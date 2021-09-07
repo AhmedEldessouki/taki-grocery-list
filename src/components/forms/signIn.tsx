@@ -32,31 +32,34 @@ const SignInForm = ({
 
   const closeDialog = () => setShowDialog(false)
 
-  async function handleSignInForm(e: React.SyntheticEvent) {
-    e.preventDefault()
+  const handleSignInForm = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault()
 
-    setPending(!isPending)
+      setPending(!isPending)
 
-    if (signInFailed) {
-      setSignInFailed('')
-    }
+      if (signInFailed) {
+        setSignInFailed('')
+      }
 
-    const {signInEmail, signInPassword} = e.target as typeof e.target & {
-      signInEmail: {value: string}
-      signInPassword: {value: string}
-    }
-    const credentials = {
-      email: signInEmail.value,
-      password: signInPassword.value,
-    }
+      const {signInEmail, signInPassword} = e.target as typeof e.target & {
+        signInEmail: {value: string}
+        signInPassword: {value: string}
+      }
+      const credentials = {
+        email: signInEmail.value,
+        password: signInPassword.value,
+      }
 
-    const {user, error} = await signIn(credentials)
-    if (error) {
-      setSignInFailed(error)
-    }
-    setUser(user?.user ?? null)
-    setPending(false)
-  }
+      const {user, error} = await signIn(credentials)
+      if (error) {
+        setSignInFailed(error)
+      }
+      setUser(user?.user ?? null)
+      setPending(false)
+    },
+    [isPending, setUser, signIn, signInFailed],
+  )
 
   return (
     <Dialog

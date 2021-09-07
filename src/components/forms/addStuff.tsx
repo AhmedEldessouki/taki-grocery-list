@@ -79,8 +79,9 @@ function AddStuff({
   const [priorityST, setPriority] = React.useState('0')
   const [qtyST, setQty] = React.useState('0')
   const [nameST, setName] = React.useState('')
-  const [oldNameST, setOldNameST] =
-    React.useState<string | undefined>(undefined)
+  const [oldNameST, setOldNameST] = React.useState<string | undefined>(
+    undefined,
+  )
   const [colorValue, setColorValue] = React.useState('white')
   const [responseST, setResponse] = React.useState<MyResponseType>({
     error: undefined,
@@ -139,34 +140,37 @@ function AddStuff({
     },
   )
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const handleSubmit = React.useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
 
-    setPending(!isPending)
-    if (submitFailed) {
-      setSubmitFailed('')
-    }
-
-    const {itemName, quantity, priority} =
-      e.currentTarget as typeof e.currentTarget & {
-        itemName: {value: string}
-        quantity: {value: number}
-        priority: {value: number}
+      setPending(!isPending)
+      if (submitFailed) {
+        setSubmitFailed('')
       }
 
-    await mutation.mutateAsync({
-      name: itemName.value,
-      quantity: quantity.value,
-      priority: priority.value,
-      bgColor: colorValue,
-    })
+      const {itemName, quantity, priority} =
+        e.currentTarget as typeof e.currentTarget & {
+          itemName: {value: string}
+          quantity: {value: number}
+          priority: {value: number}
+        }
 
-    setColorValue('white')
-    setQty('0')
-    setPriority('0')
-    setName('')
-    setPending(false)
-  }
+      await mutation.mutateAsync({
+        name: itemName.value,
+        quantity: quantity.value,
+        priority: priority.value,
+        bgColor: colorValue,
+      })
+
+      setColorValue('white')
+      setQty('0')
+      setPriority('0')
+      setName('')
+      setPending(false)
+    },
+    [colorValue, isPending, mutation, submitFailed],
+  )
 
   return (
     <div>

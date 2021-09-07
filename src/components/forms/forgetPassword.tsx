@@ -29,35 +29,39 @@ function ForgetPassword({onCancel}: {onCancel: () => void}) {
     useState<string>()
   const [isPending, setPending] = useState(false)
 
-  async function handleForgetPassword(e: React.SyntheticEvent) {
-    e.preventDefault()
+  const handleForgetPassword = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault()
 
-    setPending(!isPending)
+      setPending(!isPending)
 
-    const {signInEmail} = e.target as typeof e.target & {
-      signInEmail: {value: string}
-    }
+      const {signInEmail} = e.target as typeof e.target & {
+        signInEmail: {value: string}
+      }
 
-    await auth
-      .sendPasswordResetEmail(signInEmail.value)
-      .then(
-        () => {
-          setPasswordRecoveryFailed(undefined)
-          setPasswordRecoverySuccessful(
-            'Please check your email. You may find it in junk.',
-          )
-        },
-        err => {
+      await auth
+        .sendPasswordResetEmail(signInEmail.value)
+        .then(
+          () => {
+            setPasswordRecoveryFailed(undefined)
+            setPasswordRecoverySuccessful(
+              'Please check your email. You may find it in junk.',
+            )
+          },
+          err => {
+            setPasswordRecoverySuccessful(undefined)
+            setPasswordRecoveryFailed(err.message as string)
+          },
+        )
+        .catch(err => {
           setPasswordRecoverySuccessful(undefined)
           setPasswordRecoveryFailed(err.message as string)
-        },
-      )
-      .catch(err => {
-        setPasswordRecoverySuccessful(undefined)
-        setPasswordRecoveryFailed(err.message as string)
-      })
-    setPending(false)
-  }
+        })
+      setPending(false)
+    },
+    [isPending],
+  )
+
   return (
     <div>
       <DialogTitle style={{paddingBottom: '0'}} id="sign-in-dialog">

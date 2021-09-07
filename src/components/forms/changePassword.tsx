@@ -41,28 +41,40 @@ function ChangePassword() {
     [],
   )
 
-  async function handlePasswordUpdate(e: React.SyntheticEvent) {
-    e.preventDefault()
-    setResponse({error: undefined, isSuccessful: false})
-    let status: string = 'idle'
-    const {password} = e.currentTarget as typeof e.currentTarget & {
-      password: {value: string}
-    }
-    if (!userConfirmed) return 'unChanged'
-    setPending(true)
+  const handlePasswordUpdate = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault()
+      setResponse({error: undefined, isSuccessful: false})
+      let status: string = 'idle'
+      const {password} = e.currentTarget as typeof e.currentTarget & {
+        password: {value: string}
+      }
+      if (!userConfirmed) return 'unChanged'
+      setPending(true)
 
-    await user
-      ?.updatePassword(password.value)
-      .then(
-        () => {
-          notify('✔', `Password Updated!`, {
-            color: 'var(--green)',
-          })
-          setResponse({error: undefined, isSuccessful: true})
-          status = 'resolved'
-          setPasswordDialog(false)
-        },
-        (err: Error) => {
+      await user
+        ?.updatePassword(password.value)
+        .then(
+          () => {
+            notify('✔', `Password Updated!`, {
+              color: 'var(--green)',
+            })
+            setResponse({error: undefined, isSuccessful: true})
+            status = 'resolved'
+            setPasswordDialog(false)
+          },
+          (err: Error) => {
+            notify('❌', `Update Failed!`, {
+              color: 'var(--red)',
+            })
+            setResponse({isSuccessful: false, error: err})
+            status = 'rejected'
+            if (err.message === 'CREDENTIAL_TOO_OLD_LOGIN_AGAIN') {
+              setUserConfirmed(false)
+            }
+          },
+        )
+        .catch((err: Error) => {
           notify('❌', `Update Failed!`, {
             color: 'var(--red)',
           })
@@ -71,22 +83,13 @@ function ChangePassword() {
           if (err.message === 'CREDENTIAL_TOO_OLD_LOGIN_AGAIN') {
             setUserConfirmed(false)
           }
-        },
-      )
-      .catch((err: Error) => {
-        notify('❌', `Update Failed!`, {
-          color: 'var(--red)',
         })
-        setResponse({isSuccessful: false, error: err})
-        status = 'rejected'
-        if (err.message === 'CREDENTIAL_TOO_OLD_LOGIN_AGAIN') {
-          setUserConfirmed(false)
-        }
-      })
 
-    setPending(false)
-    return status
-  }
+      setPending(false)
+      return status
+    },
+    [user, userConfirmed],
+  )
 
   return (
     <div style={{margin: '5px 22px 10px'}}>

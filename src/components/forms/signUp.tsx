@@ -52,66 +52,69 @@ function SignUpForm({
     setPending(false)
   }, [])
 
-  async function handleSubmit(e: React.SyntheticEvent) {
-    e.preventDefault()
-    setDidSignUpFailed('')
+  const handleSubmit = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault()
+      setDidSignUpFailed('')
 
-    setPending(!isPending)
+      setPending(!isPending)
 
-    const {email, password, name, listName} = e.target as typeof e.target & {
-      email: {value: string}
-      password: {value: string}
-      name: {value: string}
-      listName: {value: string}
-    }
-    const newUserCred = {
-      email: email.value,
-      password: password.value,
-    }
-    if (!isPasswordConfirmed) return
+      const {email, password, name, listName} = e.target as typeof e.target & {
+        email: {value: string}
+        password: {value: string}
+        name: {value: string}
+        listName: {value: string}
+      }
+      const newUserCred = {
+        email: email.value,
+        password: password.value,
+      }
+      if (!isPasswordConfirmed) return
 
-    const {user, error} = await signUp(newUserCred)
+      const {user, error} = await signUp(newUserCred)
 
-    if (error) {
-      setDidSignUpFailed(error)
+      if (error) {
+        setDidSignUpFailed(error)
+        setPending(false)
+        return
+      }
+      if (user) {
+        notify('🙂', `Hello, ${name.value}!`, {
+          color: 'var(--white)',
+        })
+      }
+      if (!user?.user?.uid) {
+        return
+      }
+      const newUserData: UserDataType = {
+        name: name.value,
+        listName: [listName.value],
+        email: email.value,
+        userId: user.user.uid,
+        timeStamp: myFirebase.firestore.Timestamp.now().toDate(),
+      }
+
+      await user.user.updateProfile({displayName: name.value})
+
+      const {error: err, isSuccessful} = await postOneLevelDeep<UserDataType>({
+        collection: 'users',
+        doc: user.user.uid,
+        data: newUserData,
+      })
+
+      if (err) {
+        setDidSignUpFailed(err.message)
+        notify('❌', `Update Failed!`, {
+          color: 'var(--red)',
+        })
+      } else if (isSuccessful) {
+        notify('✔', `Your info Updated!`, {color: 'var(--green)'})
+      }
       setPending(false)
-      return
-    }
-    if (user) {
-      notify('🙂', `Hello, ${name.value}!`, {
-        color: 'var(--white)',
-      })
-    }
-    if (!user?.user?.uid) {
-      return
-    }
-    const newUserData: UserDataType = {
-      name: name.value,
-      listName: [listName.value],
-      email: email.value,
-      userId: user.user.uid,
-      timeStamp: myFirebase.firestore.Timestamp.now().toDate(),
-    }
-
-    await user.user.updateProfile({displayName: name.value})
-
-    const {error: err, isSuccessful} = await postOneLevelDeep<UserDataType>({
-      collection: 'users',
-      doc: user.user.uid,
-      data: newUserData,
-    })
-
-    if (err) {
-      setDidSignUpFailed(err.message)
-      notify('❌', `Update Failed!`, {
-        color: 'var(--red)',
-      })
-    } else if (isSuccessful) {
-      notify('✔', `Your info Updated!`, {color: 'var(--green)'})
-    }
-    setPending(false)
-    onClose()
-  }
+      onClose()
+    },
+    [isPasswordConfirmed, isPending, onClose, signUp],
+  )
 
   return (
     <Dialog
