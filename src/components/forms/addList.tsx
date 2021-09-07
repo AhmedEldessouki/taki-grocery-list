@@ -102,43 +102,46 @@ function AddList({
     },
   )
 
-  async function handleSubmit(e: React.SyntheticEvent) {
-    e.preventDefault()
-    setResponse({error: undefined, isSuccessful: false})
+  const handleSubmit = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault()
+      setResponse({error: undefined, isSuccessful: false})
 
-    if (listArray[listArray.length - 1] === '') {
-      // This Is for bypassing on enter submit because
-      // the value of Inputs is being set onBlur
-      return
-    }
-    if (
-      oldList.find(oldItem => listArray.find(newItem => newItem === oldItem))
-    ) {
-      setResponse({error: {message: 'List Already Exists.'} as Error})
-      return
-    }
+      if (listArray[listArray.length - 1] === '') {
+        // This Is for bypassing on enter submit because
+        // the value of Inputs is being set onBlur
+        return
+      }
+      if (
+        oldList.find(oldItem => listArray.find(newItem => newItem === oldItem))
+      ) {
+        setResponse({error: {message: 'List Already Exists.'} as Error})
+        return
+      }
 
-    setPending(true)
+      setPending(true)
 
-    const newList = new Set([...oldList, ...listArray])
-    await mutateAsync({
-      listName: [...(newList as unknown as string[])],
-    })
+      const newList = new Set([...oldList, ...listArray])
+      await mutateAsync({
+        listName: [...(newList as unknown as string[])],
+      })
 
-    setPending(false)
+      setPending(false)
 
-    if (responseST.error) {
-      notify('❌', `Update Failed!`, {
-        color: 'var(--red)',
+      if (responseST.error) {
+        notify('❌', `Update Failed!`, {
+          color: 'var(--red)',
+        })
+        setPending(false)
+        return
+      }
+      notify('✔', `List Name Updated!`, {
+        color: 'var(--green)',
       })
       setPending(false)
-      return
-    }
-    notify('✔', `List Name Updated!`, {
-      color: 'var(--green)',
-    })
-    setPending(false)
-  }
+    },
+    [listArray, mutateAsync, oldList, responseST.error],
+  )
 
   React.useEffect(() => {
     if (oldList.length < 3) return

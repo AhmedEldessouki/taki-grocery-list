@@ -46,30 +46,41 @@ function ListName({
     },
   )
 
-  async function handleListNameUpdate(e: React.SyntheticEvent) {
-    setResponse({error: undefined, isSuccessful: false})
+  const handleListNameUpdate = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      setResponse({error: undefined, isSuccessful: false})
 
-    if (userLists[index] === listNameST) return 'unChanged'
-    if (!userConfirmed) return 'unChanged'
+      if (userLists[index] === listNameST) return 'unChanged'
+      if (!userConfirmed) return 'unChanged'
 
-    setPending(true)
-    const {groceryListName} = e.currentTarget as typeof e.currentTarget & {
-      groceryListName: {value: string}
-    }
+      setPending(true)
+      const {groceryListName} = e.currentTarget as typeof e.currentTarget & {
+        groceryListName: {value: string}
+      }
 
-    userLists.splice(index, 1, groceryListName.value)
-    const newListName: string[] = userLists
-    setPending(false)
-    await mutateAsync(newListName)
-    if (responseST.error) {
-      notify('❌', `Update Failed!`, {
-        color: 'var(--red)',
-      })
-      return 'rejected'
-    }
+      userLists.splice(index, 1, groceryListName.value)
+      const newListName: string[] = userLists
+      setPending(false)
+      await mutateAsync(newListName)
+      if (responseST.error) {
+        notify('❌', `Update Failed!`, {
+          color: 'var(--red)',
+        })
+        return 'rejected'
+      }
 
-    return 'resolved'
-  }
+      return 'resolved'
+    },
+    [
+      index,
+      listNameST,
+      mutateAsync,
+      responseST.error,
+      userConfirmed,
+      userLists,
+    ],
+  )
+
   return (
     <div
       style={{

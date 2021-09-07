@@ -96,101 +96,106 @@ function Settings({
     },
   })
 
-  function onEditStart() {
+  const onEditStart = React.useCallback(() => {
     setIsEditActive(true)
-  }
-  function onEditEnd() {
+  }, [setIsEditActive])
+  const onEditEnd = React.useCallback(() => {
     setIsEditActive(false)
-  }
+  }, [setIsEditActive])
 
-  async function handleNameUpdate(e: React.SyntheticEvent) {
-    setResponse({error: undefined, isSuccessful: false})
+  const handleNameUpdate = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      setResponse({error: undefined, isSuccessful: false})
 
-    const {name} = e.currentTarget as typeof e.currentTarget & {
-      name: {value: string}
-    }
+      const {name} = e.currentTarget as typeof e.currentTarget & {
+        name: {value: string}
+      }
 
-    if (userST.name === name.value) return 'unChanged'
+      if (userST.name === name.value) return 'unChanged'
 
-    let status: string = 'idle'
-    setPending(true)
+      let status: string = 'idle'
+      setPending(true)
 
-    await user
-      ?.updateProfile({
-        displayName: name.value,
-      })
-      .then(
-        () => {
-          setResponse({error: undefined, isSuccessful: true})
-          status = 'resolved'
-        },
-        (err: Error) => {
+      await user
+        ?.updateProfile({
+          displayName: name.value,
+        })
+        .then(
+          () => {
+            setResponse({error: undefined, isSuccessful: true})
+            status = 'resolved'
+          },
+          (err: Error) => {
+            setResponse({isSuccessful: false, error: err})
+            status = 'rejected'
+          },
+        )
+        .catch((err: Error) => {
           setResponse({isSuccessful: false, error: err})
           status = 'rejected'
-        },
-      )
-      .catch((err: Error) => {
-        setResponse({isSuccessful: false, error: err})
-        status = 'rejected'
-      })
-    await mutateAsync({name: name.value})
+        })
+      await mutateAsync({name: name.value})
 
-    setPending(false)
+      setPending(false)
 
-    if (responseST.error) {
-      notify('❌', `Update Failed!`, {
-        color: 'var(--red)',
+      if (responseST.error) {
+        notify('❌', `Update Failed!`, {
+          color: 'var(--red)',
+        })
+        return status
+      }
+      notify('✔', `Name Updated!`, {
+        color: 'var(--green)',
       })
       return status
-    }
+    },
+    [mutateAsync, responseST.error, user, userST.name],
+  )
 
-    notify('✔', `Name Updated!`, {
-      color: 'var(--green)',
-    })
-    return status
-  }
+  const handleEmailUpdate = React.useCallback(
+    async (e: React.SyntheticEvent) => {
+      setResponse({error: undefined, isSuccessful: false})
+      if (!userConfirmed) return 'unChanged'
+      let status: string = 'idle'
+      const {email} = e.currentTarget as typeof e.currentTarget & {
+        email: {value: string}
+      }
+      if (userST.email === email.value) return 'unChanged'
+      setPending(true)
 
-  async function handleEmailUpdate(e: React.SyntheticEvent) {
-    setResponse({error: undefined, isSuccessful: false})
-    if (!userConfirmed) return 'unChanged'
-    let status: string = 'idle'
-    const {email} = e.currentTarget as typeof e.currentTarget & {
-      email: {value: string}
-    }
-    if (userST.email === email.value) return 'unChanged'
-    setPending(true)
-
-    await user
-      ?.updateEmail(email.value)
-      .then(
-        () => {
-          setResponse({error: undefined, isSuccessful: true})
-          status = 'resolved'
-        },
-        (err: Error) => {
+      await user
+        ?.updateEmail(email.value)
+        .then(
+          () => {
+            setResponse({error: undefined, isSuccessful: true})
+            status = 'resolved'
+          },
+          (err: Error) => {
+            setResponse({isSuccessful: false, error: err})
+            status = 'rejected'
+          },
+        )
+        .catch((err: Error) => {
           setResponse({isSuccessful: false, error: err})
           status = 'rejected'
-        },
-      )
-      .catch((err: Error) => {
-        setResponse({isSuccessful: false, error: err})
-        status = 'rejected'
-      })
-    await mutateAsync({email: email.value})
+        })
+      await mutateAsync({email: email.value})
 
-    setPending(false)
+      setPending(false)
 
-    if (responseST.error) {
-      notify('❌', `Update Failed!`, {
-        color: 'var(--red)',
+      if (responseST.error) {
+        notify('❌', `Update Failed!`, {
+          color: 'var(--red)',
+        })
+        return status
+      }
+      notify('✔', `email Updated!`, {
+        color: 'var(--green)',
       })
       return status
-    }
-    notify('✔', `email Updated!`, {
-      color: 'var(--green)',
-    })
-    return status
-  }
+    },
+    [mutateAsync, responseST.error, user, userConfirmed, userST.email],
+  )
 
   return (
     <Dialog
