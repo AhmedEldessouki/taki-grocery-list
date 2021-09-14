@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import {nanoid} from 'nanoid'
 import React from 'react'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {FormattedMessage} from 'react-intl'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
 import {deleteTwoLevelDeep} from '../lib/delete'
@@ -19,6 +20,7 @@ import DeleteConfirmationDialog from './deleteConfirmationDialog'
 import EditItem from './forms/editItem'
 import Button from './button'
 
+const numChecker = RegExp(/[0-9]/g)
 const $Item = styled.span<{isDone: boolean}>`
   font-size: larger;
   text-transform: capitalize;
@@ -134,7 +136,7 @@ function ListCleanUp({
           type="button"
           onClick={() => setWantToDelete('clean')}
         >
-          Clean
+          <FormattedMessage id="clean" />
         </Button>
         <Button
           bgColor="var(--redTwo)"
@@ -142,7 +144,7 @@ function ListCleanUp({
           type="button"
           onClick={() => setWantToDelete('delete')}
         >
-          Delete
+          <FormattedMessage id="delete" />
         </Button>
       </$CleanUpBtnsWrapper>
       <DeleteConfirmationDialog
@@ -231,7 +233,12 @@ function Item({
       }}
     >
       <$Item style={{flex: 1}} isDone={isDone}>
-        {itemQuantityP > 0 && itemQuantityP} {itemNameP}
+        {itemQuantityP > 0 && itemQuantityP}{' '}
+        {numChecker.test(itemNameP) ? (
+          itemNameP
+        ) : (
+          <FormattedMessage id={itemNameP} defaultMessage={itemNameP} />
+        )}
       </$Item>
       <EditItem>
         <AddStuff
