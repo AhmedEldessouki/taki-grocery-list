@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import {FormattedMessage} from 'react-intl'
 import myFirebase from '../../lib/firebase'
 import Settings from './settings'
 import Button from '../button'
@@ -39,7 +40,7 @@ function User({user}: {user: myFirebase.User}) {
             openDialog()
           }}
         >
-          Settings
+          <FormattedMessage id="nav.account" />
         </Button>
       </$UserContainer>
       {showDialog && (
