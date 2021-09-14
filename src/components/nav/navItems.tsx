@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import {FormattedMessage} from 'react-intl'
 import {useAuth} from '../../context/auth'
 import {mqMax} from '../../shared/utils'
 import User from '../user/user'
@@ -28,7 +29,9 @@ function NavItems({signOut}: {signOut: () => Promise<void> | null}) {
   return user ? (
     <$NavItemsContainer>
       <User user={user} />
-      <NavItem onClick={signOut} title="SignOut" />
+      <NavItem onClick={signOut}>
+        <FormattedMessage id="sign.out" />
+      </NavItem>
     </$NavItemsContainer>
   ) : (
     <div />
