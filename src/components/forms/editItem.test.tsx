@@ -28,8 +28,7 @@ test('render EditItem: check that the Edit Form is not visible', async () => {
     </EditItem>,
   )
   expect(screen.queryByLabelText(/qty/i)).not.toBeInTheDocument()
-  expect(screen.queryByLabelText(/new grocery item/i)).not.toBeInTheDocument()
-  expect(screen.queryByLabelText(/priority no/i)).not.toBeInTheDocument()
+  expect(screen.queryByLabelText('name')).not.toBeInTheDocument()
 
   expect(screen.getByLabelText(/click to edit item/i)).toBeInTheDocument()
 })
@@ -60,21 +59,8 @@ test("render EditItem: Edit Form's values", async () => {
     `${itemTwo.quantity}`,
   )
 
-  expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
-    item.name,
-  )
-  userEvent.clear(screen.getByLabelText(/new grocery item/i))
-  userEvent.type(screen.getByLabelText(/new grocery item/i), itemTwo.name)
-  expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
-    itemTwo.name,
-  )
-
-  expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue(
-    `${item.priority}`,
-  )
-  userEvent.clear(screen.getByLabelText(/priority no/i))
-  userEvent.type(screen.getByLabelText(/priority no/i), `${itemTwo.priority}`)
-  expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue(
-    `${itemTwo.priority}`,
-  )
+  expect(screen.getByLabelText('name')).toHaveDisplayValue(item.name)
+  userEvent.clear(screen.getByLabelText('name'))
+  userEvent.type(screen.getByLabelText('name'), itemTwo.name)
+  expect(screen.getByLabelText('name')).toHaveDisplayValue(itemTwo.name)
 })
