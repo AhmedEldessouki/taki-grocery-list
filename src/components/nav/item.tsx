@@ -29,21 +29,21 @@ const $ItemContainer = styled.div`
 function Item({
   onClick,
   href = '/',
-  title,
+  children,
 }: {
   onClick?: () => void
   href?: string
-  title?: string
+  children: React.ReactChild
 }) {
   // Checks If It's a Button
   return (
     <$ItemContainer>
       {onClick ? (
         <Button type="button" onClick={onClick}>
-          {title ?? ''}
+          {children}
         </Button>
       ) : (
-        <a href={href}>{title}</a>
+        <a href={href}>{children}</a>
       )}
     </$ItemContainer>
   )
