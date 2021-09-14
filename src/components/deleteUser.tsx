@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react'
+import {FormattedMessage} from 'react-intl'
 import {useAuth} from '../context/auth'
 import {$Warning} from '../shared/utils'
 import type {MyResponseType} from '../../types/api'
@@ -81,7 +82,7 @@ function DeleteUser() {
         style={{color: 'var(--white)'}}
         onClick={() => setWantToDelete(true)}
       >
-        Delete Account
+        <FormattedMessage id="account.delete" />
       </Button>
       {responseST.error && (
         <$Warning role="alert">{responseST.error.message}</$Warning>
