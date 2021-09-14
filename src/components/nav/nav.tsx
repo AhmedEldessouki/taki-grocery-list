@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import {FormattedMessage} from 'react-intl'
 import {mqMax} from '../../shared/utils'
 import LangSelect from '../langSelect'
 
@@ -44,7 +45,9 @@ const $Nav = styled.nav`
 function Nav() {
   return (
     <$Nav>
-      <$Logo>Grocery List</$Logo>
+      <$Logo>
+        <FormattedMessage id="nav.title" />
+      </$Logo>
       <React.Suspense fallback={<div>...</div>}>
         <NavBar />
       </React.Suspense>
