@@ -48,7 +48,7 @@ function Nav() {
   return (
     <$Nav>
       <$Logo>
-        <FormattedMessage id="nav.title" />
+        <FormattedMessage id="nav.title" defaultMessage="Grocery List" />
       </$Logo>
       <React.Suspense fallback={<div>...</div>}>
         <NavBar />
