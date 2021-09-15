@@ -147,22 +147,38 @@ function ListCleanUp({
           <FormattedMessage id="delete" />
         </Button>
       </$CleanUpBtnsWrapper>
-      <DeleteConfirmationDialog
-        dialogTitle={`${wantToDelete}`}
-        showDialog={wantToDelete !== undefined}
-        deleting={wantToDelete === 'clean' ? 'all list items' : `this list`}
-        labelledBy={`${wantToDelete}-list-dialog`}
-        onReject={() => {
-          setWantToDelete(undefined)
-        }}
-        onAccept={async () => {
-          await mutateAsync({
-            listNameFn: listName,
-            userIdFn: userID,
-            cleanUpType: wantToDelete,
-          })
-        }}
-      />
+      {wantToDelete && (
+        <DeleteConfirmationDialog
+          DialogTitleCh={
+            <FormattedMessage id={wantToDelete} defaultMessage={wantToDelete} />
+          }
+          showDialog={wantToDelete !== undefined}
+          DeletingMessage={
+            wantToDelete === 'clean' ? (
+              <FormattedMessage
+                id="message.deleteItems"
+                defaultMessage="Do you want to delete all list items?"
+              />
+            ) : (
+              <FormattedMessage
+                id="message.deleteList"
+                defaultMessage="Do you want to delete this list?"
+              />
+            )
+          }
+          labelledBy={`${wantToDelete}-list-dialog`}
+          onReject={() => {
+            setWantToDelete(undefined)
+          }}
+          onAccept={async () => {
+            await mutateAsync({
+              listNameFn: listName,
+              userIdFn: userID,
+              cleanUpType: wantToDelete,
+            })
+          }}
+        />
+      )}
     </>
   )
 }
@@ -373,9 +389,19 @@ function Items({listName}: {listName: string}) {
             last={arr.length - 1}
           >
             <DeleteFromDB
-              dialogTitle="Delete item from list"
+              DialogTitle={
+                <FormattedMessage
+                  id="head.deleteItem"
+                  defaultMessage="Delete item from list"
+                />
+              }
               deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
-              dialogDeleting={item.name}
+              DeletingMessage={
+                <FormattedMessage
+                  id="message.deleteItem"
+                  values={{item: item.name}}
+                />
+              }
               dialogLabelledBy="delete-from-grocery-list"
             />
           </Item>
