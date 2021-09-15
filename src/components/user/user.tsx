@@ -40,7 +40,7 @@ function User({user}: {user: myFirebase.User}) {
             openDialog()
           }}
         >
-          <FormattedMessage id="nav.account" />
+          <FormattedMessage id="nav.account" defaultMessage="Account Info" />
         </Button>
       </$UserContainer>
       {showDialog && (
