@@ -13,6 +13,7 @@ import SignIn from './components/forms/signIn'
 import SignUp from './components/forms/signUp'
 import Grocery from './components/grocery'
 import 'react-toastify/dist/ReactToastify.css'
+import {mqMax} from './shared/utils'
 
 const $AppContainer = styled.div`
   background: var(--white);
@@ -49,6 +50,12 @@ const $WelcomeMessage = styled.span`
   text-align: center;
   padding: 15px;
   letter-spacing: 0.04rem;
+  ${mqMax.phoneLarge} {
+    font-size: 4rem;
+  }
+  ${mqMax.s} {
+    font-size: 3rem;
+  }
 `
 
 function App() {
