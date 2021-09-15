@@ -26,12 +26,17 @@
   "password.check3": "Must contain a number",
   "password.check4": "Must contain a special character",
 
+  "addList.new": "New List Name",
+  "addList.check1": "Name should be unique",
+  "addList.check2": "Max of 3 lists per user",
+
   "sign.in": "SignIn",
   "sign.up": "SignUp",
   "sign.out": "SignOut",
 
   "exit": "Done",
   "confirm": "Confirm",
+  "submit": "Submit",
   "close": "Close",
   "save": "Save",
   "clean": "Clean",

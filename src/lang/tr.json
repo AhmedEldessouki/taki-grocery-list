@@ -26,12 +26,17 @@
   "password.check3": "Bir sayı içermelidir",
   "password.check4": "Özel bir karakter içermelidir",
 
+  "addList.new": "Yeni Liste Adı",
+  "addList.check1": "Ad benzersiz olmalıdır",
+  "addList.check2": "Maksimum 3 liste oluşturabilirsiniz",
+
   "sign.in": "Giriş Yap",
   "sign.up": "Üye Ol",
   "sign.out": "Çıkış Yap",
 
   "save": "Kaydet",
   "confirm": "Onayla",
+  "submit": "Gönder",
   "close": "Kapat",
   "exit": "Çıkış",
   "clean": "Temizle",
