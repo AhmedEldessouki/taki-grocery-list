@@ -2,7 +2,6 @@ import React from 'react'
 import styled from '@emotion/styled'
 import {FormattedMessage} from 'react-intl'
 import {mqMax} from '../../shared/utils'
-import LangSelect from '../langSelect'
 
 const NavBar = React.lazy(() => import('./navBar'))
 
@@ -51,7 +50,6 @@ function Nav() {
       <React.Suspense fallback={<div>...</div>}>
         <NavBar />
       </React.Suspense>
-      <LangSelect />
     </$Nav>
   )
 }

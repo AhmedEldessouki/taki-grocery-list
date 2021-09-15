@@ -5,6 +5,7 @@ import {useAuth} from '../../context/auth'
 import {mqMax} from '../../shared/utils'
 import User from '../user/user'
 import NavItem from './item'
+import LangSelect from '../langSelect'
 
 const $NavItemsContainer = styled.div`
   display: flex;
@@ -32,9 +33,10 @@ function NavItems({signOut}: {signOut: () => Promise<void> | null}) {
       <NavItem onClick={signOut}>
         <FormattedMessage id="sign.out" />
       </NavItem>
+      <LangSelect />
     </$NavItemsContainer>
   ) : (
-    <div />
+    <LangSelect />
   )
 }
 
