@@ -1,6 +1,7 @@
 {
   "head.welcome": "Welcome",
   "head.deleteItem": "Delete from list",
+  "head.deleteAccount": "Delete Account",
 
   "nav.title": "Grocery List",
   "nav.account": "User Info",
@@ -8,7 +9,6 @@
   "account.name": "Name",
   "account.email": "Email",
   "account.lists": "Lists",
-  "account.delete": "Delete Account",
 
   "message.deleteAccount": "Do you want to delete your account?",
   "message.deleteList": "Do you want to delete this list?",

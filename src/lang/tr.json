@@ -1,6 +1,7 @@
 {
   "head.welcome": "Hoş Geldiniz",
   "head.deleteItem": "Listeden sil",
+  "head.deleteAccount": "Hesabı sil",
 
   "nav.title": "Alışveriş listesi",
   "nav.account": "Kullanici Bilgileri",
@@ -8,7 +9,6 @@
   "account.name": "Ad Soyad",
   "account.email": "Email",
   "account.lists": "listeler",
-  "account.delete": "Hesabı sil",
 
   "message.deleteAccount": "Hesabınızı silmek istiyor musunuz?",
   "message.deleteList": "Listeyi silmek istiyor musunuz?",
