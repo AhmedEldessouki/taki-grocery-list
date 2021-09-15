@@ -82,15 +82,28 @@ function DeleteUser() {
         style={{color: 'var(--white)'}}
         onClick={() => setWantToDelete(true)}
       >
-        <FormattedMessage id="account.delete" />
+        <FormattedMessage
+          id="head.deleteAccount"
+          defaultMessage="Delete Account"
+        />
       </Button>
       {responseST.error && (
         <$Warning role="alert">{responseST.error.message}</$Warning>
       )}
       <DeleteConfirmationDialog
-        dialogTitle="Delete Account"
+        DialogTitleCh={
+          <FormattedMessage
+            id="head.deleteAccount"
+            defaultMessage="Delete Account"
+          />
+        }
         showDialog={wantToDelete}
-        deleting="your account"
+        DeletingMessage={
+          <FormattedMessage
+            id="message.deleteAccount"
+            defaultMessage="Do you want to delete your account?"
+          />
+        }
         labelledBy="delete-user-dialog"
         onReject={() => {
           setWantToDelete(false)
