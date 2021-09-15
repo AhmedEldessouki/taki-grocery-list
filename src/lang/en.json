@@ -26,6 +26,7 @@
   "password.check3": "Must contain a number",
   "password.check4": "Must contain a special character",
 
+  "addList.add": "Add Grocery list",
   "addList.new": "New List Name",
   "addList.check1": "Name should be unique",
   "addList.check2": "Max of 3 lists per user",

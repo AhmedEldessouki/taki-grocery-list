@@ -26,6 +26,7 @@
   "password.check3": "Bir sayı içermelidir",
   "password.check4": "Özel bir karakter içermelidir",
 
+  "addList.add": "Bakkal listesi ekle",
   "addList.new": "Yeni Liste Adı",
   "addList.check1": "Ad benzersiz olmalıdır",
   "addList.check2": "Maksimum 3 liste oluşturabilirsiniz",
