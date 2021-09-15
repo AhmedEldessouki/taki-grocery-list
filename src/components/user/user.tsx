@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import {FormattedMessage} from 'react-intl'
 import myFirebase from '../../lib/firebase'
-import Settings from './settings'
+import UserInfo from './userInfo'
 import Button from '../button'
 
 const $UserContainer = styled.div`
@@ -44,7 +44,7 @@ function User({user}: {user: myFirebase.User}) {
         </Button>
       </$UserContainer>
       {showDialog && (
-        <Settings
+        <UserInfo
           showDialog={showDialog}
           user={user}
           closeDialog={closeDialog}
