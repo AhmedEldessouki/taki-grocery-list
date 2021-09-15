@@ -3,12 +3,13 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import {FormattedMessage} from 'react-intl'
 import Spinner from './spinner'
 import Button from './button'
 
 type DeleteConfirmationDialogPropType = {
-  deleting: string
-  dialogTitle: string
+  DeletingMessage: JSX.Element
+  DialogTitleCh: JSX.Element
   labelledBy: string
   showDialog: boolean
   onReject: () => void
@@ -16,8 +17,8 @@ type DeleteConfirmationDialogPropType = {
 }
 
 function DeleteConfirmationDialog({
-  dialogTitle,
-  deleting,
+  DialogTitleCh,
+  DeletingMessage,
   labelledBy,
   showDialog,
   onReject,
@@ -35,11 +36,9 @@ function DeleteConfirmationDialog({
       aria-labelledby={labelledBy}
     >
       <DialogTitle id={labelledBy} style={{textTransform: 'capitalize'}}>
-        {dialogTitle}
+        {DialogTitleCh}
       </DialogTitle>
-      <DialogContent>
-        <span>Do you want to delete {deleting}?</span>
-      </DialogContent>
+      <DialogContent>{DeletingMessage}</DialogContent>
       <DialogActions
         style={{
           justifyContent: 'space-evenly',
@@ -58,7 +57,7 @@ function DeleteConfirmationDialog({
           onClick={onReject}
           aria-label="no"
         >
-          No
+          <FormattedMessage id="no" defaultMessage="No" />
         </Button>
         <Button
           type="button"
@@ -83,7 +82,7 @@ function DeleteConfirmationDialog({
               }}
             />
           ) : (
-            'yes'
+            <FormattedMessage id="yes" defaultMessage="yes" />
           )}
         </Button>
       </DialogActions>

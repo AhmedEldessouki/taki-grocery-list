@@ -5,6 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import EditIcon from '@material-ui/icons/Edit'
 import CloseIcon from '@material-ui/icons/Close'
 import styled from '@emotion/styled'
+import {FormattedMessage} from 'react-intl'
 import Button from '../button'
 
 const $CloseBtnWrapper = styled.div`
@@ -40,7 +41,9 @@ function EditItem({children}: {children: React.ReactNode}) {
         onClose={handleClose}
         aria-labelledby="Edit List Item"
       >
-        <DialogTitle>Edit Item</DialogTitle>
+        <DialogTitle>
+          <FormattedMessage id="edit" defaultMessage="Edit" />
+        </DialogTitle>
         <$CloseBtnWrapper>
           <Button
             type="button"

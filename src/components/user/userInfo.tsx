@@ -4,6 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {FormattedMessage} from 'react-intl'
 import {postOneLevelDeep} from '../../lib/post'
 import myFirebase, {auth} from '../../lib/firebase'
 import {getOneLevelDeepDoc} from '../../lib/get'
@@ -20,7 +21,7 @@ import Spinner from '../spinner'
 import Button from '../button'
 
 // TODO: Find a good way to only do the success animation once after it succeeds not after it succeeds and when the next field is open
-function Settings({
+function UserInfo({
   showDialog,
   user,
   closeDialog,
@@ -210,8 +211,8 @@ function Settings({
         <$Warning> User Doesn&apos;t Exist</$Warning>
       ) : (
         <div>
-          <DialogTitle style={{paddingBottom: '0'}} id="sign-in-dialog">
-            Settings
+          <DialogTitle id="sign-in-dialog">
+            <FormattedMessage id="nav.account" defaultMessage="User Info" />
             <Spinner
               mount={isFetching || isLoading}
               styling={{
@@ -256,7 +257,7 @@ function Settings({
               isPending
               submitFunction={async () => 'unchanged'}
               placeholder="enter a grocery list name"
-              name="listName"
+              name="lists"
               type="text"
               value={listNameST.join(', ')}
             />
@@ -293,7 +294,7 @@ function Settings({
               }}
               aria-label="close model"
             >
-              Done
+              <FormattedMessage id="close" defaultMessage="Close" />
             </Button>
           </DialogActions>
         </div>
@@ -302,4 +303,4 @@ function Settings({
   )
 }
 
-export default Settings
+export default UserInfo

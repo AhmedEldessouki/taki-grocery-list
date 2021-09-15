@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import {useMutation, useQueryClient} from 'react-query'
+import {FormattedMessage} from 'react-intl'
+import English from '../../lang/en.json'
 import {$Warning, mqMax} from '../../shared/utils'
 import type {GroceryItemType, MyResponseType} from '../../../types/api'
 import spacefy from '../../lib/spacefy'
@@ -22,20 +24,19 @@ const $Form = styled.form`
 const $RowWrapper = styled.div`
   display: grid;
   gap: 10px;
-  grid-template-columns: 0.5fr 2fr 1fr;
-  width: 450px;
+  grid-template-columns: 0.5fr 1.5fr;
+  max-width: 450px;
   ${mqMax.s} {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    width: 257px;
+    max-width: 350px;
   }
   ${mqMax.xs} {
-    width: 217px;
+    max-width: 300px;
   }
 `
 const $Pallet = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 5px;
@@ -46,11 +47,16 @@ border: 3px solid var(--blackShade);
 border-radius: var(--roundness);
 width: 25px;
 height: 25px;
-margin: 5px;
+margin: 2px;
 cursor: pointer;
 ${({checked, bgColor}) => `
 background-color: var(--${bgColor});
-${checked && `border-color: var(--green)`}`}}
+${checked && `border-color: var(--green)`}
+`}}
+:hover, :focus {
+  border-color: dodgerblue;
+  outline: none !important;
+}
 `
 
 type AddStuffPropsType = {
@@ -76,7 +82,8 @@ function AddStuff({
 }: AddStuffPropsType) {
   const [isPending, setPending] = React.useState(false)
   const [submitFailed, setSubmitFailed] = React.useState('')
-  const [priorityST, setPriority] = React.useState('0')
+  // * by default [4] add it to the end of the list
+  const [priorityST, setPriority] = React.useState(4)
   const [qtyST, setQty] = React.useState('0')
   const [nameST, setName] = React.useState('')
   const [oldNameST, setOldNameST] = React.useState<string | undefined>(
@@ -90,9 +97,7 @@ function AddStuff({
 
   React.useEffect(() => {
     if (!isEdit) return
-    setPriority(
-      itemPriorityE === 9999 || !itemPriorityE ? '0' : `${itemPriorityE}`,
-    )
+    setPriority(Number(itemPriorityE) ?? 4)
     setQty(`${itemQuantityE ?? 0}`)
     setName(itemNameE ?? '')
     setOldNameST(itemNameE)
@@ -149,27 +154,31 @@ function AddStuff({
         setSubmitFailed('')
       }
 
-      const {itemName, quantity, priority} =
-        e.currentTarget as typeof e.currentTarget & {
-          itemName: {value: string}
-          quantity: {value: number}
-          priority: {value: number}
-        }
+      const {itemName, quantity} = e.currentTarget as typeof e.currentTarget & {
+        itemName: {value: string}
+        quantity: {value: number}
+      }
+
+      let itemNameEn = itemName.value
+
+      if (itemName.value in English) {
+        itemNameEn = (English as {[key: string]: string})[itemName.value]
+      }
 
       await mutation.mutateAsync({
-        name: itemName.value,
+        name: itemNameEn,
         quantity: quantity.value,
-        priority: priority.value,
+        priority: priorityST,
         bgColor: colorValue,
       })
 
       setColorValue('white')
       setQty('0')
-      setPriority('0')
+      setPriority(4)
       setName('')
       setPending(false)
     },
-    [colorValue, isPending, mutation, submitFailed],
+    [colorValue, isPending, mutation, priorityST, submitFailed],
   )
 
   return (
@@ -185,7 +194,9 @@ function AddStuff({
               value={qtyST}
               onChange={e => setQty(e.target.value)}
             />
-            <label htmlFor={`quantity-${idx}`}>Qty</label>
+            <label htmlFor={`quantity-${idx}`}>
+              <FormattedMessage id="qty" defaultMessage="qty" />
+            </label>
           </$Field>
           <$Field>
             <input
@@ -197,52 +208,54 @@ function AddStuff({
               value={nameST}
               onChange={e => setName(e.target.value)}
             />
-            <label htmlFor={`itemName-${idx}`}>New Grocery Item</label>
+            <label htmlFor={`itemName-${idx}`}>
+              <FormattedMessage id="name" defaultMessage="Name" />
+            </label>
           </$Field>
         </$RowWrapper>
         <$RowWrapper>
           <$Pallet>
             <$PalletBtns
               type="button"
-              bgColor="white"
-              data-testid="white"
-              checked={colorValue === 'white'}
-              onClick={() => setColorValue('white')}
-            />
-            <$PalletBtns
-              type="button"
               bgColor="mattBlue"
               data-testid="mattBlue"
               checked={colorValue === 'mattBlue'}
-              onClick={() => setColorValue('mattBlue')}
-            />
-            <$PalletBtns
-              type="button"
-              bgColor="mattRed"
-              data-testid="mattRed"
-              checked={colorValue === 'mattRed'}
-              onClick={() => setColorValue('mattRed')}
+              onClick={() => {
+                setColorValue('mattBlue')
+                setPriority(1)
+              }}
             />
             <$PalletBtns
               type="button"
               bgColor="mattGray"
               data-testid="mattGray"
               checked={colorValue === 'mattGray'}
-              onClick={() => setColorValue('mattGray')}
+              onClick={() => {
+                setColorValue('mattGray')
+                setPriority(2)
+              }}
+            />
+            <$PalletBtns
+              type="button"
+              bgColor="mattRed"
+              data-testid="mattRed"
+              checked={colorValue === 'mattRed'}
+              onClick={() => {
+                setColorValue('mattRed')
+                setPriority(3)
+              }}
+            />
+            <$PalletBtns
+              type="button"
+              bgColor="white"
+              data-testid="white"
+              checked={colorValue === 'white'}
+              onClick={() => {
+                setColorValue('white')
+                setPriority(4)
+              }}
             />
           </$Pallet>
-          <$Field>
-            <input
-              type="number"
-              name="priority"
-              id={`priority-${idx}`}
-              required
-              placeholder="enter priority Number"
-              value={priorityST}
-              onChange={e => setPriority(e.target.value)}
-            />
-            <label htmlFor={`priority-${idx}`}>priority no.</label>
-          </$Field>
           <Button
             type="submit"
             style={{
@@ -251,7 +264,7 @@ function AddStuff({
               minWidth: '88px',
             }}
           >
-            Add Item
+            <FormattedMessage id="add" />
           </Button>
         </$RowWrapper>
       </$Form>

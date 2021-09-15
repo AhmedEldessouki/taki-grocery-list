@@ -2,6 +2,7 @@ import {css} from '@emotion/react'
 import React, {useEffect, useState} from 'react'
 import styled from '@emotion/styled'
 
+import {FormattedMessage} from 'react-intl'
 import {$Warning, mqMax} from '../../shared/utils'
 import $Field from './sharedCss/field'
 
@@ -137,7 +138,9 @@ function PasswordFields({
             setIsPasswordConfirmed(e.target.value === confirmPassword)
           }}
         />
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">
+          <FormattedMessage id="password.new" defaultMessage="Password" />
+        </label>
       </$Field>
       <$Field>
         <input
@@ -154,13 +157,21 @@ function PasswordFields({
           minLength={6}
           required
         />
-        <label htmlFor="confirmPassword">Confirm Password</label>
+        <label htmlFor="confirmPassword">
+          <FormattedMessage
+            id="password.repeat"
+            defaultMessage="Confirm Password"
+          />
+        </label>
       </$Field>
       {password !== confirmPassword &&
       password.length > 5 &&
       confirmPassword.length > 5 ? (
         <$Warning role="alert" marginBottom="2px">
-          Password Don&apos;t Match
+          <FormattedMessage
+            id="password.match"
+            defaultMessage="Password Doesn't Match"
+          />
         </$Warning>
       ) : null}
       <$Bars>
@@ -183,16 +194,28 @@ function PasswordFields({
       <$ValidationContainer>
         <$Validation>
           <$Validation1 hasPassed={passwordValidation[0]}>
-            Must be at least 6 characters
+            <FormattedMessage
+              id="password.check1"
+              defaultMessage="Must be at least 6 characters"
+            />
           </$Validation1>
           <$Validation2 hasPassed={passwordValidation[1]}>
-            Must contain a capital letter
+            <FormattedMessage
+              id="password.check2"
+              defaultMessage="Must contain a capital letter"
+            />
           </$Validation2>
           <$Validation3 hasPassed={passwordValidation[2]}>
-            Must contain a number
+            <FormattedMessage
+              id="password.check3"
+              defaultMessage="Must contain a number"
+            />
           </$Validation3>
           <$Validation4 hasPassed={passwordValidation[3]}>
-            Must contain a special character
+            <FormattedMessage
+              id="password.check4"
+              defaultMessage="Must contain a special character"
+            />
           </$Validation4>
         </$Validation>
       </$ValidationContainer>

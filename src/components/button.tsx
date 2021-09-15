@@ -30,7 +30,7 @@ function Button({
   ...overRide
 }: {
   bgColor?: string
-  children: string | JSX.Element
+  children: React.ReactChild
   overRide?: React.ButtonHTMLAttributes<HTMLButtonElement>
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (

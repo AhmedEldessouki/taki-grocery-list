@@ -6,16 +6,16 @@ import Button from './button'
 
 type DeleteFromDBPropType = {
   dialogLabelledBy: string
-  dialogTitle: string
-  dialogDeleting: string
+  DialogTitle: JSX.Element
+  DeletingMessage: JSX.Element
   deleteFn: () => void
 }
 
 function DeleteFromDB({
-  dialogTitle,
+  DialogTitle,
   deleteFn,
   dialogLabelledBy,
-  dialogDeleting,
+  DeletingMessage,
 }: DeleteFromDBPropType) {
   const {user} = useAuth()
   const [showDialog, setShowDialog] = useState(false)
@@ -37,10 +37,10 @@ function DeleteFromDB({
         <DeleteForeverIcon style={{fill: 'red', height: '33px'}} />
       </Button>
       <DeleteConfirmationDialog
-        dialogTitle={dialogTitle}
+        DialogTitleCh={DialogTitle}
         showDialog={showDialog}
         labelledBy={dialogLabelledBy}
-        deleting={dialogDeleting}
+        DeletingMessage={DeletingMessage}
         onReject={() => setShowDialog(false)}
         onAccept={() => {
           deleteFn()
