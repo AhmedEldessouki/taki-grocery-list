@@ -73,11 +73,7 @@ function App() {
       ) : (
         <$AppContainer>
           <$WelcomeMessage>
-            <FormattedMessage
-              id="welcome"
-              defaultMessage="Default Message"
-              description="messing around"
-            />
+            <FormattedMessage id="head.welcome" defaultMessage="Welcome" />
           </$WelcomeMessage>
           <$UnAuthContainer>
             <SignIn />
