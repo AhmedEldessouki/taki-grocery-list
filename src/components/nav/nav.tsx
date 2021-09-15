@@ -37,7 +37,7 @@ const $Nav = styled.nav`
   ${mqMax.xs} {
     flex-wrap: wrap;
     height: auto;
-    padding: 1rem 0;
+    padding: 1rem 0.2rem;
     a {
       padding-top: 2px;
     }
