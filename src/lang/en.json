@@ -34,9 +34,9 @@
   "addList.check1": "Name should be unique",
   "addList.check2": "Max of 3 lists per user",
 
-  "sign.in": "SignIn",
-  "sign.up": "SignUp",
-  "sign.out": "SignOut",
+  "sign.in": "Sign In",
+  "sign.up": "Sign Up",
+  "sign.out": "Sign Out",
 
   "newList": "Grocery List Name",
   "exit": "Done",
