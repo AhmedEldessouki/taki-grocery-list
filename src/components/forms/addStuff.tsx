@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import React from 'react'
 import {useMutation, useQueryClient} from 'react-query'
 import {FormattedMessage} from 'react-intl'
+import English from '../../lang/en.json'
 import {$Warning, mqMax} from '../../shared/utils'
 import type {GroceryItemType, MyResponseType} from '../../../types/api'
 import spacefy from '../../lib/spacefy'
@@ -94,7 +95,7 @@ function AddStuff({
 
   React.useEffect(() => {
     if (!isEdit) return
-    setPriority(Number(itemPriorityE))
+    setPriority(Number(itemPriorityE) ?? 4)
     setQty(`${itemQuantityE ?? 0}`)
     setName(itemNameE ?? '')
     setOldNameST(itemNameE)
@@ -156,8 +157,14 @@ function AddStuff({
         quantity: {value: number}
       }
 
+      let itemNameEn = itemName.value
+
+      if (itemName.value in English) {
+        itemNameEn = (English as {[key: string]: string})[itemName.value]
+      }
+
       await mutation.mutateAsync({
-        name: itemName.value,
+        name: itemNameEn,
         quantity: quantity.value,
         priority: priorityST,
         bgColor: colorValue,
@@ -165,7 +172,7 @@ function AddStuff({
 
       setColorValue('white')
       setQty('0')
-      setPriority(0)
+      setPriority(4)
       setName('')
       setPending(false)
     },
@@ -186,7 +193,6 @@ function AddStuff({
               onChange={e => setQty(e.target.value)}
             />
             <label htmlFor={`quantity-${idx}`}>
-              {' '}
               <FormattedMessage id="qty" defaultMessage="qty" />
             </label>
           </$Field>
@@ -209,22 +215,22 @@ function AddStuff({
           <$Pallet>
             <$PalletBtns
               type="button"
-              bgColor="white"
-              data-testid="white"
-              checked={colorValue === 'white'}
-              onClick={() => {
-                setColorValue('white')
-                setPriority(4)
-              }}
-            />
-            <$PalletBtns
-              type="button"
               bgColor="mattBlue"
               data-testid="mattBlue"
               checked={colorValue === 'mattBlue'}
               onClick={() => {
                 setColorValue('mattBlue')
                 setPriority(1)
+              }}
+            />
+            <$PalletBtns
+              type="button"
+              bgColor="mattGray"
+              data-testid="mattGray"
+              checked={colorValue === 'mattGray'}
+              onClick={() => {
+                setColorValue('mattGray')
+                setPriority(2)
               }}
             />
             <$PalletBtns
@@ -239,16 +245,15 @@ function AddStuff({
             />
             <$PalletBtns
               type="button"
-              bgColor="mattGray"
-              data-testid="mattGray"
-              checked={colorValue === 'mattGray'}
+              bgColor="white"
+              data-testid="white"
+              checked={colorValue === 'white'}
               onClick={() => {
-                setColorValue('mattGray')
-                setPriority(2)
+                setColorValue('white')
+                setPriority(4)
               }}
             />
           </$Pallet>
-
           <Button
             type="submit"
             style={{
