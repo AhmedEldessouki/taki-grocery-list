@@ -1,9 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-param-reassign */
 import React from 'react'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
-import {nanoid} from 'nanoid'
 import {postOneLevelDeep} from '../../lib/post'
 import type {MyResponseType} from '../../../types/api'
 import notify from '../../lib/notify'
@@ -12,30 +12,26 @@ import Spinner from '../spinner'
 import whiteSpaceCleaner from '../../lib/whiteSpaceCleaner'
 import $Field from './sharedCss/field'
 import Button from '../button'
+import {FormattedMessage} from 'react-intl'
 
 function ListInput({
-  componentName,
-  handleBlur,
   idx,
+  ...overRide
 }: {
-  componentName: string
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void
   idx: number
-}) {
-  const [state, setState] = React.useState('')
-
+} & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <$Field>
       <input
         placeholder="this is to help control label"
         type="text"
         name={`list${idx}`}
-        value={state}
-        onChange={e => setState(e.target.value)}
-        onBlur={handleBlur}
         id={`list${idx}`}
+        {...overRide}
       />
-      <label htmlFor={`list${idx}`}>{componentName} list</label>
+      <label htmlFor={`list${idx}`}>
+        <FormattedMessage id="addList.new" defaultMessage="Submit" />
+      </label>
     </$Field>
   )
 }
@@ -64,13 +60,11 @@ const $BtnWrapper = styled.div`
   }
 `
 function AddList({
-  componentName,
   userId,
   listArray,
   oldList,
   setArrayChange,
 }: {
-  componentName: string
   userId: string
   listArray: string[]
   oldList: string[]
@@ -107,13 +101,14 @@ function AddList({
       e.preventDefault()
       setResponse({error: undefined, isSuccessful: false})
 
-      if (listArray[listArray.length - 1] === '') {
-        // This Is for bypassing on enter submit because
-        // the value of Inputs is being set onBlur
-        return
-      }
+      const newInputList = listArray.map(inputVal =>
+        whiteSpaceCleaner(inputVal.toLowerCase()),
+      )
+
       if (
-        oldList.find(oldItem => listArray.find(newItem => newItem === oldItem))
+        oldList.find(oldItem =>
+          newInputList.find(newItem => newItem === oldItem),
+        )
       ) {
         setResponse({error: {message: 'List Already Exists.'} as Error})
         return
@@ -121,7 +116,7 @@ function AddList({
 
       setPending(true)
 
-      const newList = new Set([...oldList, ...listArray])
+      const newList = new Set([...oldList, ...newInputList])
       await mutateAsync({
         listName: [...(newList as unknown as string[])],
       })
@@ -129,18 +124,22 @@ function AddList({
       setPending(false)
 
       if (responseST.error) {
-        notify('❌', `Update Failed!`, {
+        notify('❌', `Lists Update Failed!`, {
           color: 'var(--red)',
         })
         setPending(false)
         return
       }
-      notify('✔', `List Name Updated!`, {
+
+      notify('✔', `Lists Updated Succeeded!`, {
         color: 'var(--green)',
       })
+      if (newList.size < 3) {
+        setArrayChange([''])
+      }
       setPending(false)
     },
-    [listArray, mutateAsync, oldList, responseST.error],
+    [listArray, mutateAsync, oldList, responseST.error, setArrayChange],
   )
 
   React.useEffect(() => {
@@ -169,7 +168,10 @@ function AddList({
               aria-label="add icon"
               style={{paddingRight: '15px'}}
             />
-            Add {componentName} list
+            <FormattedMessage
+              id="addList.new"
+              defaultMessage="Add Grocery list"
+            />
           </>
         </Button>
         {isShow && (
@@ -194,19 +196,34 @@ function AddList({
             }
             return (
               <ListInput
-                key={nanoid()}
+                // eslint-disable-next-line react/no-array-index-key
+                key={`add_list_${i} item`}
                 idx={i}
-                handleBlur={e => {
-                  listArray[i] = whiteSpaceCleaner(e.target.value.toLowerCase())
+                value={listArray[i]}
+                onChange={e => {
+                  listArray[i] = e.target.value
                   setArrayChange([...listArray])
                 }}
-                componentName={componentName}
               />
             )
           })}
           <$NoteContainer>
-            <span>✖ Name should be unique.</span>
-            <span>✖ Max of 3 lists per user.</span>
+            <span>
+              ✖{' '}
+              <FormattedMessage
+                id="addList.check1"
+                defaultMessage="Name should be unique"
+              />
+              .
+            </span>
+            <span>
+              ✖{' '}
+              <FormattedMessage
+                id="addList.check2"
+                defaultMessage="Max of 3 lists per user"
+              />
+              .
+            </span>
           </$NoteContainer>
           {responseST.error && (
             <$Warning marginBottom="10">{responseST.error.message}</$Warning>
@@ -231,7 +248,7 @@ function AddList({
                 }}
               />
             ) : (
-              'Submit'
+              <FormattedMessage id="submit" defaultMessage="Submit" />
             )}
           </Button>
         </$Form>
