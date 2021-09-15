@@ -5,6 +5,7 @@ import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {FormattedMessage} from 'react-intl'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
+import Turkish from '../lang/tr.json'
 import {deleteTwoLevelDeep} from '../lib/delete'
 import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
 import spacefy from '../lib/spacefy'
@@ -19,6 +20,7 @@ import Spinner from './spinner'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
 import EditItem from './forms/editItem'
 import Button from './button'
+import {useLang} from '../context/lang'
 
 const numChecker = RegExp(/[0-9]/g)
 const $Item = styled.span<{isDone: boolean}>`
@@ -314,6 +316,7 @@ function Items({listName}: {listName: string}) {
     error: undefined,
     isSuccessful: false,
   })
+  const {locale} = useLang()
   const {
     data: groceries,
     isLoading,
@@ -399,7 +402,12 @@ function Items({listName}: {listName: string}) {
               DeletingMessage={
                 <FormattedMessage
                   id="message.deleteItem"
-                  values={{item: item.name}}
+                  values={{
+                    item:
+                      locale === 'en'
+                        ? item.name
+                        : (Turkish as {[key: string]: string})[item.name],
+                  }}
                 />
               }
               dialogLabelledBy="delete-from-grocery-list"
