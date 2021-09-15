@@ -1,5 +1,6 @@
 {
   "head.welcome": "Welcome",
+  "head.deleteItem": "Delete from list",
 
   "nav.title": "Grocery List",
   "nav.account": "User Info",
@@ -11,6 +12,8 @@
 
   "message.deleteAccount": "Do you want to delete your account?",
   "message.deleteList": "Do you want to delete this list?",
+  "message.deleteItem": "Do you want to delete {item}?",
+  "message.deleteItems": "Do you want to delete all list items?",
 
   "password.change": "Change Password",
   "password.confirm": "Confirm Password",
@@ -37,6 +40,8 @@
   "add": "add",
   "name": "name",
   "edit": "Edit",
+  "no": "No",
+  "yes": "Yes",
 
   "fruit": "fruit",
   "apple": "apple",
@@ -123,6 +128,7 @@
   "ice cream": "ice cream",
   "sugar bowl": "sugar bowl",
   "ice": "ice",
+  "rice": "rice",
 
   "meyve": "fruit",
   "elma": "apple",
@@ -206,5 +212,6 @@
   "tepsi ": "tray",
   "dondurma": "ice cream",
   "şekerlik": "sugar bowl",
-  "buz": "ice"
+  "buz": "ice",
+  "pilav": "rice"
 }
