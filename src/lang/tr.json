@@ -15,8 +15,11 @@
   "message.deleteItem": "{item} silmek istiyor musunuz?",
   "message.deleteItems": "Tüm liste öğelerini silmek istiyor musunuz?",
 
+  "password": "Şifre",
+  "password.match": "Parola eşleşmiyor",
   "password.change": "Şifreyi Değiştir",
   "password.confirm": "Şifreyi Onayla",
+  "password.current": "Şimdiki Şifre",
   "password.update": "Şifreyi Güncelle",
   "password.old": "Şu Anki Şifre",
   "password.new": "Yeni Şifre",
