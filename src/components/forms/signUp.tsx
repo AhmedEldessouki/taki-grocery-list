@@ -143,6 +143,19 @@ function SignUpForm({
               <FormattedMessage id="name" defaultMessage="Name" />
             </label>
           </$Field>
+
+          <$Field>
+            <input
+              name="email"
+              id="email"
+              type="email"
+              required
+              placeholder="Email Address"
+            />
+            <label htmlFor="email">
+              <FormattedMessage id="email" defaultMessage="Email" />
+            </label>
+          </$Field>
           <$Field>
             <input
               name="listName"
@@ -158,21 +171,8 @@ function SignUpForm({
               />
             </label>
           </$Field>
-          <$Field>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              required
-              placeholder="Email Address"
-            />
-            <label htmlFor="email">
-              <FormattedMessage id="email" defaultMessage="Email" />
-            </label>
-          </$Field>
           <PasswordFields setIsPasswordConfirmed={setIsPasswordConfirmed} />
         </DialogContent>
-
         {didSignUpFailed ? (
           <$Warning role="alert">{didSignUpFailed}</$Warning>
         ) : null}
