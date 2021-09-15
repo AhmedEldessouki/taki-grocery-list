@@ -4,6 +4,7 @@ import EditIcon from '@material-ui/icons/Edit'
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import styled from '@emotion/styled'
 import {keyframes} from '@emotion/react'
+import {FormattedMessage} from 'react-intl'
 import spacefy from '../../lib/spacefy'
 import {mqMax} from '../../shared/utils'
 import Spinner from '../spinner'
@@ -144,7 +145,9 @@ function SingleFieldForm({
     <>
       {isEditActive ? (
         <form onSubmit={handleSubmit}>
-          <$Label htmlFor={id ?? name}>{label}</$Label>
+          <$Label htmlFor={id ?? name}>
+            <FormattedMessage id={label} defaultMessage={label} />
+          </$Label>
           <$EditFormContainer successful={isSuccess}>
             <input name={name} id={id ?? name} {...inputOverrides} />
             <Button
@@ -177,7 +180,9 @@ function SingleFieldForm({
         </form>
       ) : (
         <>
-          <$Label htmlFor={id ?? name}>{label}</$Label>
+          <$Label htmlFor={id ?? name}>
+            <FormattedMessage id={label} defaultMessage={label} />
+          </$Label>
           <$EditFormContainer successful={isSuccess}>
             <input name={name} id={id ?? name} readOnly {...inputOverrides} />
             <Button
