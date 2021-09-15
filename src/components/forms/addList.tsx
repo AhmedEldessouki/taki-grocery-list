@@ -4,6 +4,7 @@ import React from 'react'
 import AddIcon from '@material-ui/icons/Add'
 import {useMutation, useQueryClient} from 'react-query'
 import styled from '@emotion/styled'
+import {FormattedMessage} from 'react-intl'
 import {postOneLevelDeep} from '../../lib/post'
 import type {MyResponseType} from '../../../types/api'
 import notify from '../../lib/notify'
@@ -12,7 +13,6 @@ import Spinner from '../spinner'
 import whiteSpaceCleaner from '../../lib/whiteSpaceCleaner'
 import $Field from './sharedCss/field'
 import Button from '../button'
-import {FormattedMessage} from 'react-intl'
 
 function ListInput({
   idx,
@@ -169,7 +169,7 @@ function AddList({
               style={{paddingRight: '15px'}}
             />
             <FormattedMessage
-              id="addList.new"
+              id="addList.add"
               defaultMessage="Add Grocery list"
             />
           </>
