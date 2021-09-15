@@ -19,6 +19,7 @@
   "password.match": "Password Does not Match",
   "password.change": "Change Password",
   "password.confirm": "Confirm Password",
+  "password.forget": "Forget Password",
   "password.update": "Update Password",
   "password.current": "Current Password",
   "password.new": "New Password",
@@ -37,6 +38,7 @@
   "sign.up": "SignUp",
   "sign.out": "SignOut",
 
+  "newList": "Grocery List Name",
   "exit": "Done",
   "confirm": "Confirm",
   "submit": "Submit",

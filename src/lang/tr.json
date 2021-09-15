@@ -3,7 +3,7 @@
   "head.deleteItem": "Listeden sil",
   "head.deleteAccount": "Hesabı sil",
 
-  "nav.title": "Alışveriş listesi",
+  "nav.title": "Bakkal listesi",
   "nav.account": "Kullanici Bilgileri",
 
   "account.name": "Ad Soyad",
@@ -16,6 +16,7 @@
   "message.deleteItems": "Tüm liste öğelerini silmek istiyor musunuz?",
 
   "password": "Şifre",
+  "password.forget": "Şifreyi unuttum",
   "password.match": "Parola eşleşmiyor",
   "password.change": "Şifreyi Değiştir",
   "password.confirm": "Şifreyi Onayla",
@@ -38,6 +39,7 @@
   "sign.up": "Üye Ol",
   "sign.out": "Çıkış Yap",
 
+  "newList": "Bakkal Listesi Adı",
   "save": "Kaydet",
   "confirm": "Onayla",
   "submit": "Gönder",
