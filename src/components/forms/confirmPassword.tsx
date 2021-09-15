@@ -3,6 +3,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import {FormattedMessage} from 'react-intl'
 import {MyResponseType} from '../../../types/api'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
@@ -56,7 +57,10 @@ export default function ConfirmPassword({
   return (
     <Dialog open={showDialog} aria-labelledby="confirm-password-dialog">
       <DialogTitle style={{paddingBottom: '0'}} id="confirm-password-dialog">
-        Confirm Password
+        <FormattedMessage
+          id="password.confirm"
+          defaultMessage="Confirm Password"
+        />
       </DialogTitle>
       <form onSubmit={handleSubmit} style={{width: '300px'}}>
         <DialogContent style={{paddingTop: '0'}}>
@@ -74,7 +78,12 @@ export default function ConfirmPassword({
                 }
               }}
             />
-            <label htmlFor="current-password">Current Password</label>
+            <label htmlFor="current-password">
+              <FormattedMessage
+                id="password.current"
+                defaultMessage="Current Password"
+              />
+            </label>
           </$Field>
           {responseST.error && (
             <$Warning role="alert" marginBottom="10px">
@@ -108,7 +117,7 @@ export default function ConfirmPassword({
                 }}
               />
             ) : (
-              'Confirm'
+              <FormattedMessage id="confirm" defaultMessage="Confirm" />
             )}
           </Button>
           <Button
@@ -118,7 +127,7 @@ export default function ConfirmPassword({
               onDialogCancel()
             }}
           >
-            Close
+            <FormattedMessage id="close" defaultMessage="Close" />
           </Button>
         </DialogActions>
       </form>
