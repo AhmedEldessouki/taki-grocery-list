@@ -29,8 +29,10 @@ const $RowWrapper = styled.div`
   ${mqMax.s} {
     display: grid;
     grid-template-columns: 1fr 2fr;
+    max-width: 350px;
   }
   ${mqMax.xs} {
+    max-width: 300px;
   }
 `
 const $Pallet = styled.div`

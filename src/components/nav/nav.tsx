@@ -12,7 +12,7 @@ const $Logo = styled.h1`
   color: var(--white);
   ${mqMax.xs} {
     font-size: 20px;
-    margin: 30px auto;
+    margin: 10px auto;
   }
 `
 const $Nav = styled.nav`
@@ -35,6 +35,9 @@ const $Nav = styled.nav`
     }
   }
   ${mqMax.xs} {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 1rem 0;
     a {
       padding-top: 2px;
     }

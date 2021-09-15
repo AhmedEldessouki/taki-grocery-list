@@ -56,6 +56,7 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
 const $CleanUpBtnsWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin: 0 18px 25px;
 `
 
 function ListCleanUp({
@@ -453,7 +454,6 @@ function Grocery({userId}: {userId: string}) {
         userId={userData.userId}
         setArrayChange={setArray}
         oldList={userData.listName}
-        componentName="grocery"
         listArray={arrayST}
       />
       {errorST && <$Warning>{errorST.message}</$Warning>}
