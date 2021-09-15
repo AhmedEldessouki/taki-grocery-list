@@ -139,7 +139,7 @@ function ListCleanUp({
           type="button"
           onClick={() => setWantToDelete('clean')}
         >
-          <FormattedMessage id="clean" />
+          <FormattedMessage id="clean" defaultMessage="clean" />
         </Button>
         <Button
           bgColor="var(--redTwo)"
@@ -147,7 +147,7 @@ function ListCleanUp({
           type="button"
           onClick={() => setWantToDelete('delete')}
         >
-          <FormattedMessage id="delete" />
+          <FormattedMessage id="delete" defaultMessage="delete" />
         </Button>
       </$CleanUpBtnsWrapper>
       {wantToDelete && (
@@ -256,7 +256,10 @@ function Item({
         {numChecker.test(itemNameP) ? (
           itemNameP
         ) : (
-          <FormattedMessage id={itemNameP} defaultMessage={itemNameP} />
+          <FormattedMessage
+            id={itemNameP.toLocaleLowerCase()}
+            defaultMessage={itemNameP}
+          />
         )}
       </$Item>
       <EditItem>
