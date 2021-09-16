@@ -10,6 +10,7 @@ import {db} from '../../lib/firebase'
 import notify from '../../lib/notify'
 import $Field from './sharedCss/field'
 import Button from '../button'
+import unit from '../../lib/unit'
 
 const $Form = styled.form`
   display: flex;
@@ -51,10 +52,13 @@ margin: 2px;
 cursor: pointer;
 ${({checked, bgColor}) => `
 background-color: var(--${bgColor});
-${checked && `border-color: var(--green)`}
+${checked && `border-color: #000c;`}
 `}}
-:hover, :focus {
+:hover{
   border-color: dodgerblue;
+}
+:focus{
+  border-color: #000c;
   outline: none !important;
 }
 `
@@ -195,7 +199,9 @@ function AddStuff({
               onChange={e => setQty(e.target.value)}
             />
             <label htmlFor={`quantity-${idx}`}>
-              <FormattedMessage id="qty" defaultMessage="qty" />
+              {unit(colorValue) || (
+                <FormattedMessage id="qty" defaultMessage="qty" />
+              )}
             </label>
           </$Field>
           <$Field>
