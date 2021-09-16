@@ -10,6 +10,7 @@ import {db} from '../../lib/firebase'
 import notify from '../../lib/notify'
 import $Field from './sharedCss/field'
 import Button from '../button'
+import unit from '../../lib/unit'
 
 const $Form = styled.form`
   display: flex;
@@ -51,10 +52,13 @@ margin: 2px;
 cursor: pointer;
 ${({checked, bgColor}) => `
 background-color: var(--${bgColor});
-${checked && `border-color: var(--green)`}
+${checked && `border-color: #000c;`}
 `}}
-:hover, :focus {
+:hover{
   border-color: dodgerblue;
+}
+:focus{
+  border-color: #000c;
   outline: none !important;
 }
 `
@@ -84,7 +88,7 @@ function AddStuff({
   const [submitFailed, setSubmitFailed] = React.useState('')
   // * by default [4] add it to the end of the list
   const [priorityST, setPriority] = React.useState(4)
-  const [qtyST, setQty] = React.useState('0')
+  const [qtyST, setQty] = React.useState('1')
   const [nameST, setName] = React.useState('')
   const [oldNameST, setOldNameST] = React.useState<string | undefined>(
     undefined,
@@ -98,7 +102,7 @@ function AddStuff({
   React.useEffect(() => {
     if (!isEdit) return
     setPriority(Number(itemPriorityE) ?? 4)
-    setQty(`${itemQuantityE ?? 0}`)
+    setQty(`${itemQuantityE ?? 1}`)
     setName(itemNameE ?? '')
     setOldNameST(itemNameE)
     setColorValue(itemBgColorE ?? '')
@@ -173,7 +177,7 @@ function AddStuff({
       })
 
       setColorValue('white')
-      setQty('0')
+      setQty('1')
       setPriority(4)
       setName('')
       setPending(false)
@@ -192,10 +196,14 @@ function AddStuff({
               id={`quantity-${idx}`}
               placeholder="enter quantity"
               value={qtyST}
+              min={1}
+              max={99}
               onChange={e => setQty(e.target.value)}
             />
             <label htmlFor={`quantity-${idx}`}>
-              <FormattedMessage id="qty" defaultMessage="qty" />
+              {unit(colorValue) || (
+                <FormattedMessage id="qty" defaultMessage="qty" />
+              )}
             </label>
           </$Field>
           <$Field>

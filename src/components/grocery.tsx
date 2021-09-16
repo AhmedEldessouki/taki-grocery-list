@@ -21,11 +21,21 @@ import DeleteConfirmationDialog from './deleteConfirmationDialog'
 import EditItem from './forms/editItem'
 import Button from './button'
 import {useLang} from '../context/lang'
+import unit from '../lib/unit'
 
 const numChecker = RegExp(/[0-9]/g)
-const $Item = styled.span<{isDone: boolean}>`
+
+const $TextContainer = styled.div`
+  display: grid;
+  grid-template-columns: 70px 1fr;
+`
+const $Item = styled.span<{
+  separator?: boolean
+}>`
   font-size: larger;
   text-transform: capitalize;
+  margin: 0 5px;
+  ${({separator}) => separator && `border-right: 2px solid #0001;`}
 `
 const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   display: flex;
@@ -40,15 +50,17 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   }
   ${({isDone, bgColor}) =>
     `
-  background: ${isDone ? `transparent` : `var(--${bgColor})`};
+  background: ${
+    bgColor && bgColor !== 'white' ? `var(--${bgColor})` : `#00000008`
+  };
   ${
     isDone &&
     `
-    background-image: linear-gradient(to top, var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), 
-    var(--${bgColor}), var(--${bgColor}), var(--blackShade), var(--blackShade), 
-    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
-    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
-    var(--${bgColor}));
+    background: #000c;
+    color: #fff2;
+    button{
+      background: #0001;
+    }
 `
   };
 `}
@@ -251,17 +263,22 @@ function Item({
         borderBottomRightRadius: current === last ? `var(--roundness)` : 0,
       }}
     >
-      <$Item style={{flex: 1}} isDone={isDone}>
-        {itemQuantityP > 0 && itemQuantityP}{' '}
-        {numChecker.test(itemNameP) ? (
-          itemNameP
-        ) : (
-          <FormattedMessage
-            id={itemNameP.toLocaleLowerCase()}
-            defaultMessage={itemNameP}
-          />
-        )}
-      </$Item>
+      <$TextContainer style={{flex: 1}}>
+        <$Item separator style={{textAlign: 'center'}}>
+          {itemQuantityP > 0 ? Number(itemQuantityP) : 1} {unit(itemBgColorP)}
+        </$Item>
+
+        <$Item>
+          {numChecker.test(itemNameP) ? (
+            itemNameP
+          ) : (
+            <FormattedMessage
+              id={itemNameP.toLocaleLowerCase().trim()}
+              defaultMessage={itemNameP}
+            />
+          )}
+        </$Item>
+      </$TextContainer>
       <EditItem>
         <AddStuff
           idx={124}
