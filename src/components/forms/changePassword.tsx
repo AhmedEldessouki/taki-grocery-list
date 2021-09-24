@@ -4,6 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import styled from '@emotion/styled'
+import {FormattedMessage} from 'react-intl'
 import {useAuth} from '../../context/auth'
 import {$Warning} from '../../shared/utils'
 import type {MyResponseType} from '../../../types/api'
@@ -98,10 +99,18 @@ function ChangePassword() {
         onClick={() => setShowDialog(true)}
         aria-label="change password"
       >
-        Change Password
+        <FormattedMessage
+          id="password.change"
+          defaultMessage="Change Password"
+        />
       </Button>
       <Dialog open={passwordDialog} aria-labelledby="change-password-dialog">
-        <DialogTitle id="change-password-dialog">Delete Account</DialogTitle>
+        <DialogTitle id="change-password-dialog">
+          <FormattedMessage
+            id="password.update"
+            defaultMessage="Update Password"
+          />
+        </DialogTitle>
         <$Form id="change-password" onSubmit={handlePasswordUpdate}>
           <DialogContent style={{paddingTop: '0'}}>
             <PasswordFields setIsPasswordConfirmed={setIsPasswordConfirmed} />
@@ -137,7 +146,7 @@ function ChangePassword() {
                   }}
                 />
               ) : (
-                'Submit'
+                <FormattedMessage id="submit" defaultMessage="Submit" />
               )}
             </Button>
             <Button
@@ -145,7 +154,7 @@ function ChangePassword() {
               type="button"
               onClick={() => setPasswordDialog(false)}
             >
-              Close
+              <FormattedMessage id="close" defaultMessage="Close" />
             </Button>
           </DialogActions>
         </$Form>

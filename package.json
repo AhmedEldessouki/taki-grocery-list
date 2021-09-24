@@ -1,6 +1,6 @@
 {
   "name": "taki-grocery-list",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "dev": "react-scripts start",
@@ -32,6 +32,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
+    "react-intl": "^5.20.10",
     "react-query": "^3.22.0",
     "react-scripts": "4.0.3",
     "react-toastify": "^8.0.2",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@emotion/eslint-plugin": "^11.2.0",
+    "@formatjs/ts-transformer": "^3.4.10",
     "@types/faker": "^5.5.8",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.6.0",
@@ -61,6 +63,7 @@
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-formatjs": "^2.17.6",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.4.0",

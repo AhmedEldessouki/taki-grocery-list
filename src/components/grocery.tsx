@@ -2,8 +2,10 @@ import styled from '@emotion/styled'
 import {nanoid} from 'nanoid'
 import React from 'react'
 import {useMutation, useQuery, useQueryClient} from 'react-query'
+import {FormattedMessage} from 'react-intl'
 import type {GroceryItemType, MyResponseType} from '../../types/api'
 import type UserDataType from '../../types/user'
+import Turkish from '../lang/tr.json'
 import {deleteTwoLevelDeep} from '../lib/delete'
 import {getOneLevelDeepDoc, getTwoLevelDeep} from '../lib/get'
 import spacefy from '../lib/spacefy'
@@ -18,10 +20,22 @@ import Spinner from './spinner'
 import DeleteConfirmationDialog from './deleteConfirmationDialog'
 import EditItem from './forms/editItem'
 import Button from './button'
+import {useLang} from '../context/lang'
+import unit from '../lib/unit'
 
-const $Item = styled.span<{isDone: boolean}>`
+const numChecker = RegExp(/[0-9]/g)
+
+const $TextContainer = styled.div`
+  display: grid;
+  grid-template-columns: 70px 1fr;
+`
+const $Item = styled.span<{
+  separator?: boolean
+}>`
   font-size: larger;
   text-transform: capitalize;
+  margin: 0 5px;
+  ${({separator}) => separator && `border-right: 2px solid #0001;`}
 `
 const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   display: flex;
@@ -36,15 +50,17 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
   }
   ${({isDone, bgColor}) =>
     `
-  background: ${isDone ? `transparent` : `var(--${bgColor})`};
+  background: ${
+    bgColor && bgColor !== 'white' ? `var(--${bgColor})` : `#00000008`
+  };
   ${
     isDone &&
     `
-    background-image: linear-gradient(to top, var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), var(--${bgColor}), 
-    var(--${bgColor}), var(--${bgColor}), var(--blackShade), var(--blackShade), 
-    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
-    var(--${bgColor}), var(--${bgColor}), var(--${bgColor}),
-    var(--${bgColor}));
+    background: #000c;
+    color: #fff2;
+    button{
+      background: #0001;
+    }
 `
   };
 `}
@@ -52,6 +68,7 @@ const $ItemContainer = styled.div<{isDone: boolean; bgColor: string}>`
 const $CleanUpBtnsWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin: 0 18px 25px;
 `
 
 function ListCleanUp({
@@ -134,7 +151,7 @@ function ListCleanUp({
           type="button"
           onClick={() => setWantToDelete('clean')}
         >
-          Clean
+          <FormattedMessage id="clean" defaultMessage="clean" />
         </Button>
         <Button
           bgColor="var(--redTwo)"
@@ -142,25 +159,41 @@ function ListCleanUp({
           type="button"
           onClick={() => setWantToDelete('delete')}
         >
-          Delete
+          <FormattedMessage id="delete" defaultMessage="delete" />
         </Button>
       </$CleanUpBtnsWrapper>
-      <DeleteConfirmationDialog
-        dialogTitle={`${wantToDelete}`}
-        showDialog={wantToDelete !== undefined}
-        deleting={wantToDelete === 'clean' ? 'all list items' : `this list`}
-        labelledBy={`${wantToDelete}-list-dialog`}
-        onReject={() => {
-          setWantToDelete(undefined)
-        }}
-        onAccept={async () => {
-          await mutateAsync({
-            listNameFn: listName,
-            userIdFn: userID,
-            cleanUpType: wantToDelete,
-          })
-        }}
-      />
+      {wantToDelete && (
+        <DeleteConfirmationDialog
+          DialogTitleCh={
+            <FormattedMessage id={wantToDelete} defaultMessage={wantToDelete} />
+          }
+          showDialog={wantToDelete !== undefined}
+          DeletingMessage={
+            wantToDelete === 'clean' ? (
+              <FormattedMessage
+                id="message.deleteItems"
+                defaultMessage="Do you want to delete all list items?"
+              />
+            ) : (
+              <FormattedMessage
+                id="message.deleteList"
+                defaultMessage="Do you want to delete this list?"
+              />
+            )
+          }
+          labelledBy={`${wantToDelete}-list-dialog`}
+          onReject={() => {
+            setWantToDelete(undefined)
+          }}
+          onAccept={async () => {
+            await mutateAsync({
+              listNameFn: listName,
+              userIdFn: userID,
+              cleanUpType: wantToDelete,
+            })
+          }}
+        />
+      )}
     </>
   )
 }
@@ -230,9 +263,22 @@ function Item({
         borderBottomRightRadius: current === last ? `var(--roundness)` : 0,
       }}
     >
-      <$Item style={{flex: 1}} isDone={isDone}>
-        {itemQuantityP > 0 && itemQuantityP} {itemNameP}
-      </$Item>
+      <$TextContainer style={{flex: 1}}>
+        <$Item separator style={{textAlign: 'center'}}>
+          {itemQuantityP > 0 ? Number(itemQuantityP) : 1} {unit(itemBgColorP)}
+        </$Item>
+
+        <$Item>
+          {numChecker.test(itemNameP) ? (
+            itemNameP
+          ) : (
+            <FormattedMessage
+              id={itemNameP.toLocaleLowerCase().trim()}
+              defaultMessage={itemNameP}
+            />
+          )}
+        </$Item>
+      </$TextContainer>
       <EditItem>
         <AddStuff
           idx={124}
@@ -291,6 +337,7 @@ function Items({listName}: {listName: string}) {
     error: undefined,
     isSuccessful: false,
   })
+  const {locale} = useLang()
   const {
     data: groceries,
     isLoading,
@@ -366,9 +413,24 @@ function Items({listName}: {listName: string}) {
             last={arr.length - 1}
           >
             <DeleteFromDB
-              dialogTitle="Delete item from list"
+              DialogTitle={
+                <FormattedMessage
+                  id="head.deleteItem"
+                  defaultMessage="Delete item from list"
+                />
+              }
               deleteFn={() => deleteItem(spacefy(item.name, {reverse: true}))}
-              dialogDeleting={item.name}
+              DeletingMessage={
+                <FormattedMessage
+                  id="message.deleteItem"
+                  values={{
+                    item:
+                      locale === 'en'
+                        ? item.name
+                        : (Turkish as {[key: string]: string})[item.name],
+                  }}
+                />
+              }
               dialogLabelledBy="delete-from-grocery-list"
             />
           </Item>
@@ -412,7 +474,6 @@ function Grocery({userId}: {userId: string}) {
         userId={userData.userId}
         setArrayChange={setArray}
         oldList={userData.listName}
-        componentName="grocery"
         listArray={arrayST}
       />
       {errorST && <$Warning>{errorST.message}</$Warning>}

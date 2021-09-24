@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event'
 
 import {QueryClient, QueryClientProvider} from 'react-query'
 import {AuthProvider} from '../context/auth'
+import LangProvider from '../context/lang'
 
 const waitForLoadingToFinish = () =>
   waitForElementToBeRemoved(
@@ -24,7 +25,9 @@ const queryClient = new QueryClient()
 function AllProviders({children}) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>{children}</AuthProvider>
+      <LangProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </LangProvider>
     </QueryClientProvider>
   )
 }

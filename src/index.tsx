@@ -4,6 +4,7 @@ import {QueryClient, QueryClientProvider} from 'react-query'
 import App from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {AuthProvider} from './context/auth'
+import LangProvider from './context/lang'
 
 const queryClient = new QueryClient()
 
@@ -11,7 +12,9 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <App />
+        <LangProvider>
+          <App />
+        </LangProvider>
       </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>,

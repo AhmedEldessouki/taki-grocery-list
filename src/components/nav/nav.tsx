@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import {FormattedMessage} from 'react-intl'
 import {mqMax} from '../../shared/utils'
 
 const NavBar = React.lazy(() => import('./navBar'))
@@ -11,7 +12,7 @@ const $Logo = styled.h1`
   color: var(--white);
   ${mqMax.xs} {
     font-size: 20px;
-    margin: 30px auto;
+    margin: 10px auto;
   }
 `
 const $Nav = styled.nav`
@@ -34,6 +35,9 @@ const $Nav = styled.nav`
     }
   }
   ${mqMax.xs} {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 1rem 0.2rem;
     a {
       padding-top: 2px;
     }
@@ -43,7 +47,9 @@ const $Nav = styled.nav`
 function Nav() {
   return (
     <$Nav>
-      <$Logo>Grocery List</$Logo>
+      <$Logo>
+        <FormattedMessage id="nav.title" defaultMessage="Grocery List" />
+      </$Logo>
       <React.Suspense fallback={<div>...</div>}>
         <NavBar />
       </React.Suspense>

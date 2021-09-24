@@ -4,6 +4,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import {FormattedMessage} from 'react-intl'
 import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
 import Spinner from '../spinner'
@@ -72,7 +73,7 @@ const SignInForm = ({
       ) : (
         <div>
           <DialogTitle style={{paddingBottom: '0'}} id="sign-in-dialog">
-            Sign In
+            <FormattedMessage id="sign.in" defaultMessage="Sign In" />
           </DialogTitle>
           <$Form onSubmit={handleSignInForm}>
             <DialogContent style={{paddingTop: '0'}}>
@@ -85,7 +86,9 @@ const SignInForm = ({
                   autoComplete="email"
                   required
                 />
-                <label htmlFor="signInEmail">Email</label>
+                <label htmlFor="signInEmail">
+                  <FormattedMessage id="email" defaultMessage="Email" />
+                </label>
               </$Field>
               <$Field>
                 <input
@@ -96,7 +99,9 @@ const SignInForm = ({
                   required
                   placeholder="Enter password"
                 />
-                <label htmlFor="signInPassword">Password</label>
+                <label htmlFor="signInPassword">
+                  <FormattedMessage id="password" defaultMessage="Password" />
+                </label>
               </$Field>
             </DialogContent>
             <Button
@@ -104,7 +109,10 @@ const SignInForm = ({
               type="button"
               style={{marginLeft: '15px'}}
             >
-              Forget Password
+              <FormattedMessage
+                id="password.forget"
+                defaultMessage="Forget Password"
+              />
             </Button>
             {signInFailed && <$Warning role="alert">{signInFailed}</$Warning>}
             <DialogActions
@@ -133,11 +141,11 @@ const SignInForm = ({
                     }}
                   />
                 ) : (
-                  'Submit'
+                  <FormattedMessage id="submit" defaultMessage="Submit" />
                 )}
               </Button>
               <Button type="button" onClick={closeDialog}>
-                Close
+                <FormattedMessage id="close" defaultMessage="Close" />
               </Button>
             </DialogActions>
           </$Form>
@@ -160,7 +168,7 @@ const SignIn = () => {
         bgColor="var(--blue)"
         style={{color: 'var(--white)'}}
       >
-        Sign In
+        <FormattedMessage id="sign.in" defaultMessage="Sign In" />
       </Button>
       {showDialog && (
         <SignInForm showDialog={showDialog} setShowDialog={setShowDialog} />

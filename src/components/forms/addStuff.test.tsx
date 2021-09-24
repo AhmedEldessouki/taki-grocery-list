@@ -16,17 +16,8 @@ test('render without Items - [Create]', async () => {
   userEvent.type(screen.getByLabelText(/qty/i), `${item.quantity}`)
   expect(screen.getByLabelText(/qty/i)).toHaveDisplayValue(`0${item.quantity}`)
 
-  expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue('')
-  userEvent.type(screen.getByLabelText(/new grocery item/i), item.name)
-  expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
-    item.name,
-  )
-
-  expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue('0')
-  userEvent.type(screen.getByLabelText(/priority no/i), `${item.priority}`)
-  expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue(
-    `0${item.priority}`,
-  )
+  expect(screen.getByLabelText('name')).toHaveDisplayValue('')
+  userEvent.type(screen.getByLabelText('name'), item.name)
 
   expect(screen.getByTestId('white')).toBeInTheDocument()
   expect(screen.getByTestId('mattBlue')).toBeInTheDocument()
@@ -34,7 +25,7 @@ test('render without Items - [Create]', async () => {
   expect(screen.getByTestId('mattGray')).toBeInTheDocument()
   expect(
     screen.getByRole('button', {
-      name: /add item/i,
+      name: /add/i,
     }),
   ).toHaveAttribute('type', 'submit')
 })
@@ -53,12 +44,7 @@ test('render with Items - [Edit]', async () => {
     />,
   )
   expect(screen.getByLabelText(/qty/i)).toHaveDisplayValue(`${item.quantity}`)
-  expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
-    item.name,
-  )
-  expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue(
-    `${item.priority}`,
-  )
+  expect(screen.getByLabelText('name')).toHaveDisplayValue(item.name)
 })
 
 test('render with Items and edit value - [Edit]', async () => {
@@ -81,15 +67,7 @@ test('render with Items and edit value - [Edit]', async () => {
     `${itemTwo.quantity}`,
   )
 
-  userEvent.clear(screen.getByLabelText(/new grocery item/i))
-  userEvent.type(screen.getByLabelText(/new grocery item/i), itemTwo.name)
-  expect(screen.getByLabelText(/new grocery item/i)).toHaveDisplayValue(
-    itemTwo.name,
-  )
-
-  userEvent.clear(screen.getByLabelText(/priority no/i))
-  userEvent.type(screen.getByLabelText(/priority no/i), `${itemTwo.priority}`)
-  expect(screen.getByLabelText(/priority no/i)).toHaveDisplayValue(
-    `${itemTwo.priority}`,
-  )
+  userEvent.clear(screen.getByLabelText('name'))
+  userEvent.type(screen.getByLabelText('name'), itemTwo.name)
+  expect(screen.getByLabelText('name')).toHaveDisplayValue(itemTwo.name)
 })

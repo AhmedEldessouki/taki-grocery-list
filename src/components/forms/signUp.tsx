@@ -4,6 +4,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import {FormattedMessage} from 'react-intl'
 import {useAuth} from '../../context/auth'
 import {$Warning, mqMax} from '../../shared/utils'
 import {namePattern} from '../../lib/patterns'
@@ -22,6 +23,7 @@ const $Container = styled.form`
   flex-direction: column;
   place-content: center;
   margin: 0rem auto 1rem;
+  overflow: auto;
   width: 500px;
   ${mqMax.phoneLarge} {
     width: 400px;
@@ -123,7 +125,7 @@ function SignUpForm({
       aria-labelledby="sign-in-dialog"
     >
       <DialogTitle style={{paddingBottom: '0'}} id="sign-in-dialog">
-        Sign up
+        <FormattedMessage id="sign.up" defaultMessage="Sign Up" />
       </DialogTitle>
       <$Container id="sign-up" onSubmit={handleSubmit}>
         <DialogContent style={{paddingTop: '0'}}>
@@ -137,7 +139,22 @@ function SignUpForm({
               minLength={3}
               type="text"
             />
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">
+              <FormattedMessage id="name" defaultMessage="Name" />
+            </label>
+          </$Field>
+
+          <$Field>
+            <input
+              name="email"
+              id="email"
+              type="email"
+              required
+              placeholder="Email Address"
+            />
+            <label htmlFor="email">
+              <FormattedMessage id="email" defaultMessage="Email" />
+            </label>
           </$Field>
           <$Field>
             <input
@@ -147,21 +164,15 @@ function SignUpForm({
               placeholder="Enter grocery list name"
               required
             />
-            <label htmlFor="listName">Grocery List Name</label>
-          </$Field>
-          <$Field>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              required
-              placeholder="Email Address"
-            />
-            <label htmlFor="email">Email</label>
+            <label htmlFor="listName">
+              <FormattedMessage
+                id="newList"
+                defaultMessage="Grocery List Name"
+              />
+            </label>
           </$Field>
           <PasswordFields setIsPasswordConfirmed={setIsPasswordConfirmed} />
         </DialogContent>
-
         {didSignUpFailed ? (
           <$Warning role="alert">{didSignUpFailed}</$Warning>
         ) : null}
@@ -191,11 +202,11 @@ function SignUpForm({
                 }}
               />
             ) : (
-              'Submit'
+              <FormattedMessage id="submit" defaultMessage="Submit" />
             )}
           </Button>
           <Button disabled={isPending} type="button" onClick={onClose}>
-            Close
+            <FormattedMessage id="close" defaultMessage="Close" />
           </Button>
         </DialogActions>
       </$Container>
@@ -211,7 +222,7 @@ function SignUp() {
   return (
     <>
       <Button type="button" onClick={openDialog}>
-        Sign Up
+        <FormattedMessage id="sign.up" defaultMessage="Sign Up" />
       </Button>
       {showDialog && (
         <SignUpForm
